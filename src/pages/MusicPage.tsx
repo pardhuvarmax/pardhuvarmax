@@ -26,7 +26,6 @@ function Bars({ active, color }: { active: boolean; color: string }) {
     </div>
   );
 }
-
 export default function MusicPage() {
   const { tracks, currentIndex, isPlaying, progress, currentTime, duration, volume, currentTrack, toggle, next, prev, play, seek, setVolume } = useMusic();
   const accent = currentTrack?.color ?? "#e2e8f0";
