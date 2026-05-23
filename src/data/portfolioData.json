@@ -1,9 +1,8 @@
 {
-    "version": "1.0.15",
+    "version": "1.0.16",
     "profile": {
         "name": "Pardhu Sri Rushi Varma Konduru",
         "title": "Independent ML Researcher in Reversible Neural Adaptation and Statistical Machine Learning",
-        "subtitle": "Perhaps we are only vessels of a greater curiosity",
         "location": "Hyderabad, India",
         "email": "pardhuvarma.cs [at] gmail [dot] com",
         "bio": "Exploring statistical machine learning, autonomous systems, and runtime-governed learning architectures. Building modular, interpretable, and compositionally safe intelligence systems with a focus on behavioral robustness, reversibility, adaptation, and stability in autonomous driving and adaptive world models.",
@@ -113,7 +112,9 @@
             "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/Project-Ouroboros"
         }
     ],
-    "notes": [],
+    "notes": [
+        "Perhaps we are only vessels of a greater curiosity"
+    ],
     "contact": {
         "collaborationText": "Open to research collaboration and academic discussion. Focused on contributing to machine learning research and advancing the field through robust, trustworthy, and adaptive systems.",
         "links": [
