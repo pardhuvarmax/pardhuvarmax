@@ -1,7 +1,7 @@
 // src/components/FloatingPlayer.tsx
 
 import { useState } from "react";
-import { useMusic } from "../context/MusicContext";
+import { useMusic } from "../../context/MusicContext";
 
 function fmt(s: number) {
   if (!s || isNaN(s)) return "0:00";
