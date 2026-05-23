@@ -6,12 +6,14 @@ import { AdminBar } from './components/AdminBar';
 import { LoginModal } from './components/LoginModal';
 import { EditModal } from './components/EditModal';
 import initialData from '../data/portfolioData.json';
+import FloatingPlayer from "./components/FloatingPlayer";
 
 type ProfileLink = {
   label: string;
   href: string;
   download?: string;
 };
+
 
 const isSafeHref = (href: string) => {
   if (href.startsWith('/') || href.startsWith('#')) return true;
@@ -615,6 +617,7 @@ export default function App() {
       {isAdmin && <AdminBar editMode={editMode} onToggleEdit={() => setEditMode(!editMode)} onSave={exportJSON} onReset={handleResetData} onLogout={() => { setIsAdmin(false); setEditMode(false); }} />}
       {editingItem && <EditModal title={editingItem.title} data={editingItem.data} fields={editingItem.fields} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />}
       <Analytics />
+      <FloatingPlayer />
     </div>
   );
 }
