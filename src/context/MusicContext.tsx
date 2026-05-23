@@ -50,7 +50,7 @@ const DEFAULT_TRACKS: Track[] = [
     title: "Friends",
     artist: "Chase Atlantic",
     src: "/music/friends-chasholic.mp3",
-    genre: "Alternative",
+    genre: "Synth R&B",
     color: "#a855f7",
   },
   {
