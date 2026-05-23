@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import path from 'path'
+import { resolve } from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
@@ -14,14 +15,11 @@ const securityHeaders = {
 
 export default defineConfig({
   plugins: [
-    // The React and Tailwind plugins are both required for Make, even if
-    // Tailwind is not being actively used – do not remove them
     react(),
     tailwindcss(),
   ],
   resolve: {
     alias: {
-      // Alias @ to the src directory
       '@': path.resolve(__dirname, './src'),
     },
   },
@@ -31,7 +29,13 @@ export default defineConfig({
   preview: {
     headers: securityHeaders,
   },
-
-  // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        music: resolve(__dirname, 'music.html'),
+      },
+    },
+  },
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
