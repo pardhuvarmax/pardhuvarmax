@@ -1,5 +1,5 @@
 {
-    "version": "1.0.17",
+    "version": "1.0.20",
     "profile": {
         "name": "Pardhu Sri Rushi Varma Konduru",
         "title": "Independent ML Researcher in Reversible Neural Adaptation and Statistical Machine Learning",
@@ -112,9 +112,7 @@
             "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/Project-Ouroboros"
         }
     ],
-    "notes": [
-        "Perhaps we are only vessels of a greater curiosity"
-    ],
+    "notes": [],
     "contact": {
         "collaborationText": "Open to research collaboration and academic discussion. Focused on contributing to machine learning research and advancing the field through robust, trustworthy, and adaptive systems.",
         "links": [
@@ -135,6 +133,7 @@
                 "href": "https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279"
             }
         ],
-        "footerNote": "Available for research collaboration and academic partnerships."
+        "footerNote": "Available for research collaboration and academic partnerships.",
+        "quote":"Perhaps we are only vessels of a greater curiosity"
     }
 }
