@@ -25,10 +25,10 @@ My research interests include statistical and robust machine learning, adversari
 
 - Machine Learning (adaptive & robust systems)  
 - Systems & Distributed Architectures  
-- AI Security & Adversarial ML  
+- AI Safety & Statistical ML  
 - Cyber-Physical & Autonomous Systems  
 
-Aiming toward MSc → PhD focused on ML Research & Security, Systems & Adaptive Intelligence.
+Aiming toward MSc → PhD focused on ML Research & AI Safety, Systems & Adaptive Intelligence.
 
 ---
 
