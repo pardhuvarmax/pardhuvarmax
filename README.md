@@ -50,6 +50,9 @@ Aiming toward MSc → PhD focused on ML Research & AI Safety, Systems & Adaptive
   <a href="https://orcid.org/0009-0005-3251-9944">
     <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/ORCID_iD.svg" width="40">
   </a>
+    <a href="https://pardhuvarma.tech/">
+    <img src="https://github.com/user-attachments/assets/904f2882-979a-4bf1-baa5-ce553cd3c38a" width="40">
+  </a>
 </div>
 
 ---
