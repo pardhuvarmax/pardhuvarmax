@@ -1,20 +1,10 @@
 # Hi, I'm PardhuVarma!
 
-I am an independent researcher and final-year cybersecurity student working across machine learning research, systems, and distributed architectures.
+I am an independent researcher and final-year cybersecurity undergrad working at the intersection of machine learning, AI safety and adaptive systems. My research focuses on how machine learning systems behave under long-term adaptation, distributional shifts, and changing optimization dynamics. I study the statistical and structural properties of adaptive learning systems, investigating how architectural and training design choices influence robustness, generalization, controllability, and behavioral recoverability.
 
-My work focuses on how intelligent systems behave under adversarial pressure, long-term adaptation, and real-world deployment constraints. I study attacker–defender dynamics in learning systems while also exploring the systems-level realities that shape them — runtime environments, distributed coordination, and failure modes.
+My recent work introduces Reversible Neural Adaptation (RLAE), a structural paradigm that separates behavioral learning from model identity, enabling deterministic rollback and addressing irreversible behavioral drift in weight-based adaptation. This work formalizes concepts such as structural irreversibility, recoverability, and behavioral divergence, supported by empirical evaluation across adaptation regimes and model scales. In parallel, I am developing a strong foundation in statistical machine learning and applied mathematics—particularly probability theory, optimization, and information theory—and applying these concepts to my research on latent behavioral structures in low-dimensional statistical manifolds for autonomous driving systems. My work explores how learning dynamics, manifold geometry, and distributional shifts shape behavioral adaptation, stability, interpretability, and robustness in autonomous world models and decision-making driving agents.
 
-My recent work introduces Reversible Neural Adaptation (RLAE), a structural paradigm that separates behavioral learning from model identity, enabling deterministic rollback and addressing irreversible behavioral drift in weight-based systems. This work formalizes concepts such as structural irreversibility, recoverability, and behavioral divergence.
-
-Alongside this, I design and build systems that host and stress these ideas in practice — from kernel-level thinking and runtime safety to distributed multi-agent infrastructures. My work spans AI security, adversarial & statistical machine learning, and the engineering of controllable, observable, and fault-tolerant systems.
-
-I am particularly interested in the intersection of:
-- learning dynamics under adversarial conditions  
-- systems and runtime constraints shaping intelligence  
-- distributed autonomous agents and coordination  
-- safety, control, and recoverability in adaptive systems  
-
-My goal is to contribute to the design of systems that are not only intelligent, but **structurally reliable, observable, and governable** — from model behavior to system runtime.
+My research interests include statistical and robust machine learning, adversarial machine learning, structural robustness of adaptive models, AI safety and controllability, and runtime-governed modular learning systems. My goal is to contribute to the design of trustworthy machine learning systems that remain stable, interpretable, and controllable under continuous adaptation.
 
 ---
 
