@@ -1,5 +1,5 @@
 {
-  "version": "1.0.24",
+  "version": "1.0.25",
   "profile": {
     "name": "Pardhu Sri Rushi Varma Konduru",
     "location": "Hyderabad, India",
@@ -33,7 +33,7 @@
     "title": "Research Philosophy",
     "paragraphs": [
       "I am an independent researcher and final-year cybersecurity undergrad working at the intersection of machine learning, AI security, and adaptive systems.",
-      "I am developing a strong foundation in statistical machine learning and applied mathematics—particularly probability theory, optimization, and information theory—and applying these concepts to my research on latent behavioral structures in low-dimensional statistical manifolds for autonomous driving systems. My work explores how learning dynamics, manifold geometry, and distributional shifts shape behavioral adaptation, stability, interpretability, and robustness in autonomous world models and decision-making driving agents.",
+      "I am developing a strong foundation in statistical machine learning and applied mathematics, particularly probability theory, optimization, and information theory and applying these concepts to my research on latent behavioral structures in low-dimensional statistical manifolds for autonomous driving systems. My work explores how learning dynamics, manifold geometry, and distributional shifts shape behavioral adaptation, stability, interpretability, and robustness in autonomous world models and decision-making driving agents.",
       "My research interests include statistical and robust machine learning, adversarial machine learning, structural robustness of adaptive models, AI safety and controllability, and reliable learning systems.",
       "My goal is to contribute to the design of trustworthy machine learning systems that remain stable, interpretable, and controllable under continuous adaptation."
     ]
