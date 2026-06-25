@@ -16,7 +16,6 @@ My research interests include statistical and robust machine learning, adversari
 - **Researching RLAE / reversible learning systems**  
 - Papers:
   - *On the Structural Limitations of Weight-Based Neural Adaptation...* — [arXiv](https://arxiv.org/abs/2603.02934)  
-  - *Formal Theory of Reversible Behavioral Learning...* — in progress
   - *Temporal & Adaptive Dynamics of Latent Behavioral...* — in progress
 
 ---
