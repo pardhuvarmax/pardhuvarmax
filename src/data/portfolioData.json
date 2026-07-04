@@ -1,5 +1,5 @@
 {
-  "version": "1.0.25",
+  "version": "1.0.26",
   "profile": {
     "name": "Pardhu Sri Rushi Varma Konduru",
     "location": "Hyderabad, India",
@@ -17,6 +17,10 @@
       {
         "label": "LinkedIn",
         "href": "https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279"
+      },
+      {
+        "label": "Google Scholar",
+        "href":"https://scholar.google.com/citations?user=Chrj-G0AAAAJ&hl=en"
       },
       {
         "label": "Resume",
@@ -40,6 +44,12 @@
   },
   "researchAreas": [
     {
+      "title": "Reversible Behavioral Learning",
+      "subtitle": "Structural Identity Preservation",
+      "description": "Reversible Behavioral Learning (RBL) is a structurally separated adaptation paradigm where adaptive behaviors are encoded in removable behavioral parameterizations while the core identity parameters remain frozen, enabling deterministic rollback and exact recoverability through explicit behavioral unloading.",
+      "keywords": "reversibility • identity preservation • recoverability"
+    },
+    {
       "title": "Latent Behavioral Statistical Manifolds",
       "subtitle": "Statistical Learning & Behavioral Manifolds",
       "description": "Investigating the manifold geometry of adaptive agent telemetry through statistical learning, latent state-space modeling, regime separability, and behavioral dynamics in evolving autonomous systems.",
@@ -47,6 +57,41 @@
     }
   ],
   "publications": [
+    {
+      "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",
+      "metadata": "Preprint • arXiv: arXiv:2603.02934 • DOI: 10.5281/zenodo.18761938, 10.48550/arXiv.2603.02934 • 2026 • AI Safety / Machine Learning",
+      "abstract": "Modern neural models are typically adapted by updating parameters through fine-tuning or alignment. While effective for task performance, such updates can degrade reasoning, overwrite capabilities, or alter functional identity. We examine this as structural irreversibility and propose reversible adaptation frameworks that isolate learned behaviors from core parameters, enabling deterministic rollback with measurable recoverability guarantees.",
+      "links": [
+        {
+          "label": "Zenodo DOI",
+          "href": "https://doi.org/10.5281/zenodo.18761938"
+        },
+        {
+          "label": "arXiv",
+          "href": "https://arxiv.org/abs/2603.02934"
+        },
+        {
+          "label": "ResearchGate",
+          "href": "https://www.researchgate.net/publication/401523515_On_the_Structural_Limitations_of_Weight-Based_Neural_Adaptation_and_the_Role_of_Reversible_Behavioral_Learning"
+        },
+        {
+          "label": "Semantic Scholar",
+          "href": "https://www.semanticscholar.org/paper/On-the-Structural-Limitations-of-Weight-Based-and-Konduru/2417710e9f0bb70f1bb37361d52fd4c04e1e3b75"
+        },
+        {
+          "label": "Google Scholar",
+          "href": "https://scholar.google.com/scholar?q=On+the+Structural+Limitations+of+Weight-Based+Neural+Adaptation+and+the+Role+of+Reversible+Behavioral+Learning"
+        },
+        {
+          "label": "Connected Papers",
+          "href": "https://www.connectedpapers.com/main/2417710e9f0bb70f1bb37361d52fd4c04e1e3b75"
+        },
+        {
+          "label": "PDF",
+          "href": "https://arxiv.org/pdf/2603.02934"
+        }  
+      ]
+    },      
     {
       "title": "Latent Behavioral Structures in Low Dimensional Statistical Manifolds",
       "metadata": "Ongoing Research",
@@ -61,10 +106,22 @@
   ],
   "systems": [
     {
+      "name": "RLAE (REVA4)",
+      "description": "Runtime-Governed Intelligence Systems for modular, reversible, and compositionally safe behaviors. Enables dynamic loading of behavioral LoRA patches with deterministic rollback capabilities. Implements behavioral governance and runtime safety constraints for adversarial resilience.",
+      "diagram": true,
+      "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/rlae-research"
+    },
+    {
       "name": "LBSM",
       "description": "Latent Behavioral State Machines: A statistical learning and behavioral manifold research framework for modeling adaptive agent telemetry. Explores latent state-space geometry, regime separability, behavioral transitions, and manifold dynamics in evolving autonomous systems through dimensionality reduction, clustering, and telemetry-driven analysis.",
       "diagram": true,
       "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/lbsm-research"
+    },
+    {
+      "name": "Kernel Borderlands",
+      "description": "Kernel Borderlands (KB) is a kernel-level runtime defense framework designed to detect, classify, and contain anomalous process behavior directly at Ring 0 on Linux systems.",
+      "diagram": true,
+      "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/kernel-borderlands"
     },
     {
       "name": "Project Ouroboros",
