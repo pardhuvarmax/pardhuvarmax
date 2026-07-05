@@ -1,5 +1,5 @@
 {
-  "version": "1.0.26",
+  "version": "1.0.27",
   "profile": {
     "name": "Pardhu Sri Rushi Varma Konduru",
     "location": "Hyderabad, India",
@@ -12,7 +12,7 @@
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/PardhuSreeRushiVarma20060119"
+        "href": "https://github.com/pardhuvarmax"
       },
       {
         "label": "LinkedIn",
@@ -99,7 +99,7 @@
       "links": [
         {
           "label": "GitHub",
-          "href": "https://github.com/PardhuSreeRushiVarma20060119/lbsm-research"
+          "href": "https://github.com/pardhuvarmax/lbsm-research"
         }
       ]
     }
@@ -109,25 +109,25 @@
       "name": "RLAE (REVA4)",
       "description": "Runtime-Governed Intelligence Systems for modular, reversible, and compositionally safe behaviors. Enables dynamic loading of behavioral LoRA patches with deterministic rollback capabilities. Implements behavioral governance and runtime safety constraints for adversarial resilience.",
       "diagram": true,
-      "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/rlae-research"
+      "repoUrl": "https://github.com/pardhuvarmax/rlae-research"
     },
     {
       "name": "LBSM",
       "description": "Latent Behavioral State Machines: A statistical learning and behavioral manifold research framework for modeling adaptive agent telemetry. Explores latent state-space geometry, regime separability, behavioral transitions, and manifold dynamics in evolving autonomous systems through dimensionality reduction, clustering, and telemetry-driven analysis.",
       "diagram": true,
-      "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/lbsm-research"
+      "repoUrl": "https://github.com/pardhuvarmax/lbsm-research"
     },
     {
       "name": "Kernel Borderlands",
       "description": "Kernel Borderlands (KB) is a kernel-level runtime defense framework designed to detect, classify, and contain anomalous process behavior directly at Ring 0 on Linux systems.",
       "diagram": true,
-      "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/kernel-borderlands"
+      "repoUrl": "https://github.com/pardhuvarmax/kernel-borderlands"
     },
     {
       "name": "Project Ouroboros",
       "description": "Modular ESP32-based cybersecurity platform for wireless defense, monitoring, and controlled research. Hardware and firmware modules for cyber-physical security experimentation, featuring embedded systems integration and real-time RF threat response capabilities.",
       "diagram": true,
-      "repoUrl": "https://github.com/PardhuSreeRushiVarma20060119/Project-Ouroboros"
+      "repoUrl": "https://github.com/pardhuvarmax/Project-Ouroboros"
     }
   ],
   "notes": [
@@ -152,7 +152,7 @@
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/PardhuSreeRushiVarma20060119"
+        "href": "https://github.com/pardhuvarmax"
       },
       {
         "label": "LinkedIn",

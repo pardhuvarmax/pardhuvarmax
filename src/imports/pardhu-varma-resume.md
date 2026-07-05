@@ -59,7 +59,7 @@ I am particularly interested in pursuing research pathways & research careers at
   <a href="https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279">
     <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="40">
   </a>
-  <a href="https://github.com/PardhuSreeRushiVarma20060119">
+  <a href="https://github.com/pardhuvarmax">
     <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" width="40">
   </a>
   <a href="https://www.instagram.com/pardhu.varma_x/">
@@ -75,7 +75,7 @@ I am particularly interested in pursuing research pathways & research careers at
 ## ❤️ Sponsor My Work
 If my research or experiments contribute to your projects or spark ideas, you can support my work here:
 
-[![Sponsor](https://img.shields.io/badge/Sponsor-PardhuVarma-blue?style=for-the-badge&logo=github-sponsors&logoColor=white)](https://github.com/sponsors/PardhuSreeRushiVarma20060119)
+[![Sponsor](https://img.shields.io/badge/Sponsor-PardhuVarma-blue?style=for-the-badge&logo=github-sponsors&logoColor=white)](https://github.com/sponsors/pardhuvarmax)
 
 ---
 
