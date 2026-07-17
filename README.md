@@ -10,11 +10,7 @@ and I guess it was only a matter of time before that curiosity turned into resea
 
 I hope to contribute to both trustworthy machine learning and the open-source ecosystem by building software that's transparent, reliable, and enjoyable to hack on. At the end of the day, whether it's a research paper, a side project, or another late-night rabbit hole through the source code, **it's all for the love of the game.**
 
-**Research Interests:** Statistical Machine Learning • AI Safety • Robust & Adversarial ML • Adaptive Systems • Linux Systems • Systems Programming • Open Source • Developer Tooling
-
-> *I use Arch, btw. &*
-> *The world is open source.*
-> *All this, for the love of the game.*
+**Research Interests:** Machine Learning • Adaptive Systems • Linux • Systems Programming • Open Source • Developer Tooling.
 
 ---
 
