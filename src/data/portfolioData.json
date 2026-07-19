@@ -1,5 +1,5 @@
 {
-  "version": "1.0.30",
+  "version": "1.0.31",
   "profile": {
     "name": "Pardhu Sri Rushi Varma Konduru",
     "location": "Hyderabad, India",
@@ -31,8 +31,8 @@
   "research": {
     "title": "Related & Ongoing Work",
     "paragraphs": [
-      "The author's first preprint [1] examines the ==structural limitations of weight-based neural adaptation== — what a network can and cannot become by adjusting weights alone. A second manuscript, on the temporal and adaptive dynamics of latent behavioral state machines, is in preparation.",
-      "Active research areas include ML robustness and drift, AI safety, latent behavioral state machines, and systems programming. The unifying question: ==to learn without the possibility of undoing is not intelligence — it is a surrender to emergence.=="
+      "The author's first preprint [1] explores the structural limitations of weight-based neural adaptation—what a network can and cannot become by adjusting weights alone. A second manuscript, on the temporal and adaptive dynamics of latent behavioral state machines, is currently in preparation.",
+      "Research interests wander comfortably between machine learning and low-level systems. Some days that means thinking about adaptive learning dynamics and AI safety; other days it means reading kernel source code, experimenting with Linux internals, or building developer tools in Rust and Go. The constant has never really been a field—it's curiosity. If a system is interesting, there's a good chance it ends with reading the source code, asking too many questions, and wondering how it could be made just a little better."
     ]
   },
   "systems": [
