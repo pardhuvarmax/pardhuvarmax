@@ -53,7 +53,7 @@ export default function App() {
   // GitHub contribution graph SVG (fetched inline to avoid CORS/CSP img blocks)
   const [contributionSvg, setContributionSvg] = useState<string>('');
   useEffect(() => {
-    fetch('https://github-readme-activity-graph.vercel.app/graph?username=pardhuvarmax&bg_color=0a0f1e&color=00b4d8&line=00b4d8&point=ffffff&area=true&area_color=00b4d8&hide_border=true&radius=4')
+    fetch('https://ghchart.rshah.org/pardhuvarmax')
       .then(r => r.text())
       .then(svg => setContributionSvg(svg))
       .catch(() => setContributionSvg(''));
