@@ -50,14 +50,6 @@ export default function App() {
   // Expanded diagram state
   const [expandedDiagram, setExpandedDiagram] = useState<string | null>(null);
 
-  // GitHub contribution graph SVG (fetched inline to avoid CORS/CSP img blocks)
-  const [contributionSvg, setContributionSvg] = useState<string>('');
-  useEffect(() => {
-    fetch('https://ghchart.rshah.org/pardhuvarmax')
-      .then(r => r.text())
-      .then(svg => setContributionSvg(svg))
-      .catch(() => setContributionSvg(''));
-  }, []);
 
 
   // Hover diagram states
@@ -756,10 +748,12 @@ export default function App() {
               padding: '20px 16px 16px',
               overflowX: 'auto'
             }}>
-              {contributionSvg
-                ? <div dangerouslySetInnerHTML={{ __html: contributionSvg }} style={{ width: '100%', minWidth: '600px' }} />
-                : <div style={{ color: 'oklch(0.5 0.01 250)', fontFamily: 'var(--font-mono)', fontSize: '12px', textAlign: 'center', padding: '32px 0' }}>loading contribution graph...</div>
-              }
+              <img
+  src="https://ghchart.rshah.org/pardhuvarmax"
+  alt="GitHub Contribution Graph"
+  className="w-full rounded-xl"
+  loading="lazy"
+/>
             </div>
             <div style={{ fontSize: '11.5px', fontStyle: 'italic', color: 'oklch(0.5 0.01 250)', marginTop: '10px', textAlign: 'center' }}>
               Fig. 4. GitHub contribution calendar — live, as rendered at page load.
