@@ -748,12 +748,13 @@ export default function App() {
               padding: '20px 16px 16px',
               overflowX: 'auto'
             }}>
-              <img
-  src="https://ghchart.rshah.org/00ff00/pardhuvarmax"
-  alt="GitHub Contribution Graph"
-  className="w-full rounded-xl"
-  loading="lazy"
-/>
+              <div className="bg-black p-4 rounded-xl">
+  <img
+    src="https://ghchart.rshah.org/ffffff/pardhuvarmax"
+    alt="GitHub Contribution Graph"
+    className="w-full"
+  />
+</div>
             </div>
             <div style={{ fontSize: '11.5px', fontStyle: 'italic', color: 'oklch(0.5 0.01 250)', marginTop: '10px', textAlign: 'center' }}>
               Fig. 4. GitHub contribution calendar — live, as rendered at page load.
