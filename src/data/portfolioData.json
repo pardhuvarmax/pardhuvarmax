@@ -1,5 +1,5 @@
 {
-  "version": "1.0.28",
+  "version": "1.0.30",
   "profile": {
     "name": "Pardhu Sri Rushi Varma Konduru",
     "location": "Hyderabad, India",
@@ -103,10 +103,6 @@
     { "id": "4", "text": "Professional record: ", "linkText": "linkedin.com/in/pardhu-sri-rushi-varma-konduru", "href": "https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279", "suffix": "." },
     { "id": "5", "text": "ORCID: ", "linkText": "0009-0005-3251-9944", "href": "https://orcid.org/0009-0005-3251-9944", "suffix": "." },
     { "id": "6", "text": "Field notes: ", "linkText": "@pardhu.varma_x", "href": "https://www.instagram.com/pardhu.varma_x/", "suffix": "." },
-    { "id": "7", "text": "Correspondence: ", "linkText": "pardhusreerushivarma@gmail.com", "href": "mailto:pardhusreerushivarma@gmail.com", "suffix": "." }
-  ],
-  "contact": {
-    "collaborationText": "Open to research collaboration and academic discussion. Focused on contributing to machine learning research and advancing the field through robust, trustworthy, and adaptive systems.",
-    "footerNote": "Available for research collaboration and academic partnerships."
-  }
+    { "id": "7", "text": "Correspondence: ", "linkText": "pardhuvarma.cs@gmail.com", "href": "mailto:pardhuvarma.cs@gmail.com", "suffix": "." }
+  ]
 }
