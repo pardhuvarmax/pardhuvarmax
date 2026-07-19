@@ -1,164 +1,112 @@
 {
-  "version": "1.0.27",
+  "version": "1.0.28",
   "profile": {
     "name": "Pardhu Sri Rushi Varma Konduru",
     "location": "Hyderabad, India",
     "email": "pardhuvarma.cs [at] gmail [dot] com",
-    "bio": "Exploring statistical machine learning, autonomous systems. Building modular, interpretable, and compositionally safe intelligence systems with a focus on behavioral robustness, reversibility, adaptation, and stability in autonomous driving and adaptive world models.",
+    "bio": "We present the author — a final-year cybersecurity undergraduate and independent researcher operating out of Hyderabad, India. The subject exhibits a persistent tendency to disassemble working systems in order to understand why they work: kernels, package managers, and machine-learning models alike. Current research examines how learned systems behave after deployment — how they adapt, drift, and occasionally surprise their creators. Secondary findings include a fondness for the Unix philosophy, keyboard-driven workflows, and Arch Linux. The author remains, at time of writing, merely a vessel of a greater curiosity.",
+    "title": "Curiosity-Driven Research in Machine Learning & Systems Security",
     "links": [
       {
-        "label": "ORCID",
-        "href": "https://orcid.org/0009-0005-3251-9944"
-      },
-      {
-        "label": "GitHub",
+        "label": "Code",
         "href": "https://github.com/pardhuvarmax"
       },
       {
         "label": "LinkedIn",
-        "href": "https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279"
+        "href": "https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279/"
       },
       {
-        "label": "Google Scholar",
-        "href":"https://scholar.google.com/citations?user=Chrj-G0AAAAJ&hl=en"
-      },
-      {
-        "label": "Resume",
-        "href": "/resume/pardhu.pdf"
-      },
-      {
-        "label": "Download Resume",
-        "href": "/resume/pardhu.pdf",
-        "download": "pardhu.pdf"
+        "label": "Contact",
+        "href": "#contact"
       }
     ]
   },
   "about": {
-    "title": "Research Philosophy",
+    "title": "Introduction",
     "paragraphs": [
-      "I am an independent researcher and final-year cybersecurity undergrad working at the intersection of machine learning, AI security, and adaptive systems.",
-      "I am developing a strong foundation in statistical machine learning and applied mathematics, particularly probability theory, optimization, and information theory and applying these concepts to my research on latent behavioral structures in low-dimensional statistical manifolds for autonomous driving systems. My work explores how learning dynamics, manifold geometry, and distributional shifts shape behavioral adaptation, stability, interpretability, and robustness in autonomous world models and decision-making driving agents.",
-      "My research interests include statistical and robust machine learning, adversarial machine learning, structural robustness of adaptive models, AI safety and controllability, and reliable learning systems.",
-      "My goal is to contribute to the design of trustworthy machine learning systems that remain stable, interpretable, and controllable under continuous adaptation."
+      "The author's work sits at the intersection of ==machine learning reliability== and ==low-level systems security==. Most days are spent reading research papers, building in Rust or Go, or tweaking an Arch Linux setup. The underlying hypothesis, held since childhood, is that the world is open source: everything can be read, understood, and — with one more tweak — improved.",
+      "This curiosity has produced kernel-level defense frameworks, a package manager, hardware security platforms, and two research manuscripts. It has also produced a strong preference for ==software simple enough to understand yet powerful enough to grow with its users==."
     ]
   },
-  "researchAreas": [
-    {
-      "title": "Reversible Behavioral Learning",
-      "subtitle": "Structural Identity Preservation",
-      "description": "Reversible Behavioral Learning (RBL) is a structurally separated adaptation paradigm where adaptive behaviors are encoded in removable behavioral parameterizations while the core identity parameters remain frozen, enabling deterministic rollback and exact recoverability through explicit behavioral unloading.",
-      "keywords": "reversibility • identity preservation • recoverability"
-    },
-    {
-      "title": "Latent Behavioral Statistical Manifolds",
-      "subtitle": "Statistical Learning & Behavioral Manifolds",
-      "description": "Investigating the manifold geometry of adaptive agent telemetry through statistical learning, latent state-space modeling, regime separability, and behavioral dynamics in evolving autonomous systems.",
-      "keywords": "latent manifolds • statistical learning • regime separability • behavioral telemetry"
-    }
-  ],
-  "publications": [
-    {
-      "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",
-      "metadata": "Preprint • arXiv: arXiv:2603.02934 • DOI: 10.5281/zenodo.18761938, 10.48550/arXiv.2603.02934 • 2026 • AI Safety / Machine Learning",
-      "abstract": "Modern neural models are typically adapted by updating parameters through fine-tuning or alignment. While effective for task performance, such updates can degrade reasoning, overwrite capabilities, or alter functional identity. We examine this as structural irreversibility and propose reversible adaptation frameworks that isolate learned behaviors from core parameters, enabling deterministic rollback with measurable recoverability guarantees.",
-      "links": [
-        {
-          "label": "Zenodo DOI",
-          "href": "https://doi.org/10.5281/zenodo.18761938"
-        },
-        {
-          "label": "arXiv",
-          "href": "https://arxiv.org/abs/2603.02934"
-        },
-        {
-          "label": "ResearchGate",
-          "href": "https://www.researchgate.net/publication/401523515_On_the_Structural_Limitations_of_Weight-Based_Neural_Adaptation_and_the_Role_of_Reversible_Behavioral_Learning"
-        },
-        {
-          "label": "Semantic Scholar",
-          "href": "https://www.semanticscholar.org/paper/On-the-Structural-Limitations-of-Weight-Based-and-Konduru/2417710e9f0bb70f1bb37361d52fd4c04e1e3b75"
-        },
-        {
-          "label": "Google Scholar",
-          "href": "https://scholar.google.com/scholar?q=On+the+Structural+Limitations+of+Weight-Based+Neural+Adaptation+and+the+Role+of+Reversible+Behavioral+Learning"
-        },
-        {
-          "label": "Connected Papers",
-          "href": "https://www.connectedpapers.com/main/2417710e9f0bb70f1bb37361d52fd4c04e1e3b75"
-        },
-        {
-          "label": "PDF",
-          "href": "https://arxiv.org/pdf/2603.02934"
-        }  
-      ]
-    },      
-    {
-      "title": "Latent Behavioral Structures in Low Dimensional Statistical Manifolds",
-      "metadata": "Ongoing Research",
-      "abstract": "LBSM is an ongoing statistical machine learning research investigating whether adaptive behavioral telemetry generated by autonomous systems exhibits structured low-dimensional latent organization despite high-dimensional observable dynamics.",
-      "links": [
-        {
-          "label": "GitHub",
-          "href": "https://github.com/pardhuvarmax/lbsm-research"
-        }
-      ]
-    }
-  ],
+  "research": {
+    "title": "Related & Ongoing Work",
+    "paragraphs": [
+      "The author's first preprint [1] examines the ==structural limitations of weight-based neural adaptation== — what a network can and cannot become by adjusting weights alone. A second manuscript, on the temporal and adaptive dynamics of latent behavioral state machines, is in preparation.",
+      "Active research areas include ML robustness and drift, AI safety, latent behavioral state machines, and systems programming. The unifying question: ==to learn without the possibility of undoing is not intelligence — it is a surrender to emergence.=="
+    ]
+  },
   "systems": [
     {
-      "name": "RLAE (REVA4)",
-      "description": "Runtime-Governed Intelligence Systems for modular, reversible, and compositionally safe behaviors. Enables dynamic loading of behavioral LoRA patches with deterministic rollback capabilities. Implements behavioral governance and runtime safety constraints for adversarial resilience.",
-      "diagram": true,
-      "repoUrl": "https://github.com/pardhuvarmax/rlae-research"
-    },
-    {
-      "name": "LBSM",
-      "description": "Latent Behavioral State Machines: A statistical learning and behavioral manifold research framework for modeling adaptive agent telemetry. Explores latent state-space geometry, regime separability, behavioral transitions, and manifold dynamics in evolving autonomous systems through dimensionality reduction, clustering, and telemetry-driven analysis.",
-      "diagram": true,
-      "repoUrl": "https://github.com/pardhuvarmax/lbsm-research"
-    },
-    {
-      "name": "Kernel Borderlands",
-      "description": "Kernel Borderlands (KB) is a kernel-level runtime defense framework designed to detect, classify, and contain anomalous process behavior directly at Ring 0 on Linux systems.",
+      "name": "kernel-borderlands",
+      "lang": "C",
+      "description": "Kernel-level runtime defense: detects and contains anomalous process behavior at Ring 0 on Linux.",
       "diagram": true,
       "repoUrl": "https://github.com/pardhuvarmax/kernel-borderlands"
     },
     {
+      "name": "emrac",
+      "lang": "Rust",
+      "description": "Source-first package management platform for the Arch Linux ecosystem.",
+      "diagram": true,
+      "repoUrl": "https://github.com/pardhuvarmax/emrac"
+    },
+    {
       "name": "Project Ouroboros",
-      "description": "Modular ESP32-based cybersecurity platform for wireless defense, monitoring, and controlled research. Hardware and firmware modules for cyber-physical security experimentation, featuring embedded systems integration and real-time RF threat response capabilities.",
+      "lang": "C++",
+      "description": "Dual-use ESP32 hardware/firmware platform for wireless defense, monitoring, and research.",
       "diagram": true,
       "repoUrl": "https://github.com/pardhuvarmax/Project-Ouroboros"
+    },
+    {
+      "name": "lbsm-research",
+      "lang": "Jupyter/Python",
+      "description": "Latent Behavioral State Machines and statistical manifolds.",
+      "diagram": true,
+      "repoUrl": "https://github.com/pardhuvarmax/lbsm-research"
+    },
+    {
+      "name": "rlae-research",
+      "lang": "Jupyter/Python",
+      "description": "Adaptive learning and emergence — reversibility in learned systems.",
+      "diagram": true,
+      "repoUrl": "https://github.com/pardhuvarmax/rlae-research"
     }
   ],
-  "notes": [
-    {
-      "title": "Thought..",
-      "description": "Perhaps we are only vessels of a greater curiosity..",
-      "date": "2026-05-23",
-      "href": "#"
-    }
+  "ghStats": [
+    { "value": "25", "label": "repositories" },
+    { "value": "20", "label": "followers" },
+    { "value": "27", "label": "following" }
+  ],
+  "certs": [
+    { "n": "1", "name": "Certified Red Team Infra Developer (CRT-ID)", "issuer": "CyberWarFare Labs, 2026" },
+    { "n": "2", "name": "Active Directory Red Team Specialist (AD-RTS)", "issuer": "CyberWarFare Labs, 2026" },
+    { "n": "3", "name": "Multi-Cloud Red Teaming Analyst (MCRTA)", "issuer": "CyberWarFare Labs, 2025" },
+    { "n": "4", "name": "ISC2 Candidate", "issuer": "ISC2, 2025" },
+    { "n": "5", "name": "LEGEND — Top 2% Globally", "issuer": "TryHackMe, 2025" },
+    { "n": "6", "name": "Big IAM Challenge", "issuer": "Wiz, 2025" },
+    { "n": "7", "name": "API Security Fundamentals + OWASP API Top 10", "issuer": "APIsec University, 2025" },
+    { "n": "8", "name": "Cyber Security Fundamentals", "issuer": "Palo Alto Networks, 2025" },
+    { "n": "9", "name": "Foundations of Cybersecurity", "issuer": "Google, 2025" },
+    { "n": "10", "name": "CY4RT Cyber Fortress CTF", "issuer": "Malla Reddy University, 2025" }
+  ],
+  "skillsLine": [
+    "C", "Rust", "Go", "Python", "Linux Internals", "Arch Linux", "eBPF", "Machine Learning", "AI Safety", "ESP32 / Firmware", "CLI Tooling"
+  ],
+  "ctfParagraphs": [
+    "As Technical Challenge Author & Cloud Deployment Operations (Feb–Mar 2026), the author designed challenges spanning ==binary exploitation, cryptography, reverse engineering, blockchain, mobile security, and steganography== for a national-level student-led CTF run with the National Cyber Security Research Council and EC-Council — implemented across Python, C, C++, Rust, Zig, Go, Kotlin, Solidity, and x86 assembly — and architected the containerized infrastructure for reproducible live deployment.",
+    "In parallel evaluation environments, the author holds ==LEGEND rank on TryHackMe — top 2% globally== [3], with ongoing practice tracks on Hack The Box."
+  ],
+  "references": [
+    { "id": "1", "text": "P. S. R. V. Konduru, “On the Structural Limitations of Weight-Based Neural Adaptation,” ", "linkText": "arXiv:2603.02934", "href": "https://arxiv.org/abs/2603.02934", "suffix": ", 2026." },
+    { "id": "2", "text": "Code & systems: ", "linkText": "github.com/pardhuvarmax", "href": "https://github.com/pardhuvarmax", "suffix": "." },
+    { "id": "3", "text": "TryHackMe: LEGEND tier, top 2% global, 2025.", "linkText": "", "href": "", "suffix": "" },
+    { "id": "4", "text": "Professional record: ", "linkText": "linkedin.com/in/pardhu-sri-rushi-varma-konduru", "href": "https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279", "suffix": "." },
+    { "id": "5", "text": "ORCID: ", "linkText": "0009-0005-3251-9944", "href": "https://orcid.org/0009-0005-3251-9944", "suffix": "." },
+    { "id": "6", "text": "Field notes: ", "linkText": "@pardhu.varma_x", "href": "https://www.instagram.com/pardhu.varma_x/", "suffix": "." },
+    { "id": "7", "text": "Correspondence: ", "linkText": "pardhusreerushivarma@gmail.com", "href": "mailto:pardhusreerushivarma@gmail.com", "suffix": "." }
   ],
   "contact": {
     "collaborationText": "Open to research collaboration and academic discussion. Focused on contributing to machine learning research and advancing the field through robust, trustworthy, and adaptive systems.",
-    "notes": "Perhaps we are only vessels of a greater curiosity",
-    "links": [
-      {
-        "label": "pardhuvarma.cs [at] gmail [dot] com",
-        "href": "#"
-      },
-      {
-        "label": "ORCID",
-        "href": "https://orcid.org/0009-0005-3251-9944"
-      },
-      {
-        "label": "GitHub",
-        "href": "https://github.com/pardhuvarmax"
-      },
-      {
-        "label": "LinkedIn",
-        "href": "https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279"
-      }
-    ],
     "footerNote": "Available for research collaboration and academic partnerships."
   }
 }

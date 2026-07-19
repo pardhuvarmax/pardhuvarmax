@@ -2,3 +2,7 @@ node_modules
 dist
 npm-debug.log*
 .vite
+
+# Design handoff files
+*.zip
+portfolio_design_extracted/
