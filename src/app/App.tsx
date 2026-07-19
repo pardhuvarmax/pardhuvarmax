@@ -749,7 +749,7 @@ export default function App() {
               overflowX: 'auto'
             }}>
               <img
-  src="https://github-readme-activity-graph.vercel.app/graph?username=pardhuvarmax&theme=github-dark"
+  src="https://ghchart.rshah.org/00ff00/pardhuvarmax"
   alt="GitHub Contribution Graph"
   className="w-full rounded-xl"
   loading="lazy"
