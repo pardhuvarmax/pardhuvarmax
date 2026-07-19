@@ -750,7 +750,7 @@ export default function App() {
             }}>
               <div className="bg-black p-4 rounded-xl">
   <img
-    src="https://ghchart.rshah.org/ffffff/pardhuvarmax"
+    src="https://ghchart.rshah.org/pardhuvarmax"
     alt="GitHub Contribution Graph"
     className="w-full"
   />
