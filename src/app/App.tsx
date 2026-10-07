@@ -360,12 +360,13 @@ export default function App() {
             {data.profile.links.map((link: ProfileLink, i: number) => {
               const safeHref = getSafeHref(link.href);
               const isAnchor = safeHref.startsWith('#');
+              const isInternalRoute = safeHref.startsWith('/');
               return (
                 <a
                   key={i}
                   href={safeHref}
-                  target={isAnchor ? undefined : "_blank"}
-                  rel="noopener noreferrer"
+                  target={isAnchor || isInternalRoute ? undefined : "_blank"}
+                  rel={isAnchor || isInternalRoute ? undefined : "noopener noreferrer"}
                   onClick={isAnchor ? (e) => { e.preventDefault(); scrollToSection(safeHref.slice(1)); } : undefined}
                   style={{ borderBottom: 'none' }}
                 >
