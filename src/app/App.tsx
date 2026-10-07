@@ -361,12 +361,13 @@ export default function App() {
               const safeHref = getSafeHref(link.href);
               const isAnchor = safeHref.startsWith('#');
               const isInternalRoute = safeHref.startsWith('/');
+              const isZenRageSameTabLink = link.label === 'Identity as ZenRage';
               return (
                 <a
                   key={i}
                   href={safeHref}
-                  target={isAnchor || isInternalRoute ? undefined : "_blank"}
-                  rel={isAnchor || isInternalRoute ? undefined : "noopener noreferrer"}
+                  target={isAnchor || isInternalRoute || isZenRageSameTabLink ? undefined : "_blank"}
+                  rel={isAnchor || isInternalRoute || isZenRageSameTabLink ? undefined : "noopener noreferrer"}
                   onClick={isAnchor ? (e) => { e.preventDefault(); scrollToSection(safeHref.slice(1)); } : undefined}
                   style={{ borderBottom: 'none' }}
                 >
