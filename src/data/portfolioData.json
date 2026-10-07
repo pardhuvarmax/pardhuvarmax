@@ -18,6 +18,10 @@
       {
         "label": "Contact",
         "href": "#contact"
+      },
+      {
+        "label": "Identity as ZenRage",
+        "href": "/identity-as-zenrage"
       }
     ]
   },
