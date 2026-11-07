@@ -1,0 +1,66 @@
+{
+  "honors": [
+    {
+      "title": "Technical Challenge Author, Breachpoint CTF 2026",
+      "detail": "National-level student-led CTF",
+      "date": "2026"
+    },
+    {
+      "title": "LEGEND rank — top 2% globally, TryHackMe",
+      "detail": "",
+      "date": "2025"
+    },
+    {
+      "title": "2nd Place, GrowthNinja Hackathon",
+      "detail": "IIT Hyderabad, Tinkers Lab IITH",
+      "date": "Mar 2025"
+    },
+    {
+      "title": "15th of 50 teams, CY4TF Cyber Fortress CTF",
+      "detail": "Team captain (ZenRage); 1200 points",
+      "date": "Mar 2025"
+    }
+  ],
+  "certs": [
+    {
+      "name": "Certified Red Team Infra Developer (CRT-ID)",
+      "issuer": "CyberWarFare Labs, 2026"
+    },
+    {
+      "name": "Active Directory Red Team Specialist (AD-RTS)",
+      "issuer": "CyberWarFare Labs, 2026"
+    },
+    {
+      "name": "Multi-Cloud Red Teaming Analyst (MCRTA)",
+      "issuer": "CyberWarFare Labs, 2025"
+    },
+    {
+      "name": "ISC2 Candidate",
+      "issuer": "ISC2, 2025"
+    },
+    {
+      "name": "LEGEND — Top 2% Globally",
+      "issuer": "TryHackMe, 2025"
+    },
+    {
+      "name": "Big IAM Challenge",
+      "issuer": "Wiz, 2025"
+    },
+    {
+      "name": "API Security Fundamentals + OWASP API Top 10",
+      "issuer": "APIsec University, 2025"
+    },
+    {
+      "name": "Cyber Security Fundamentals",
+      "issuer": "Palo Alto Networks, 2025"
+    },
+    {
+      "name": "Foundations of Cybersecurity",
+      "issuer": "Google, 2025"
+    },
+    {
+      "name": "CY4RT Cyber Fortress CTF",
+      "issuer": "Malla Reddy University, 2025"
+    }
+  ]
+}

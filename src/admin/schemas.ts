@@ -1,0 +1,221 @@
+export type FieldType = 'text' | 'textarea' | 'url' | 'date' | 'select' | 'boolean' | 'strings' | 'list' | 'image';
+
+export interface Field {
+  key: string;
+  label: string;
+  type: FieldType;
+  help?: string;
+  options?: string[];
+  fields?: Field[]; // for type "list": the fields of each item
+  multiline?: boolean; // for type "strings": each entry is a textarea
+  titleKey?: string; // for type "list": which item field names the row
+}
+
+export interface FileCollection {
+  id: string;
+  label: string;
+  kind: 'file';
+  path: string;
+  fields: Field[];
+}
+export interface PostsCollection {
+  id: 'posts';
+  label: string;
+  kind: 'posts';
+  dir: string;
+}
+export type Collection = FileCollection | PostsCollection;
+
+const link: Field[] = [
+  { key: 'label', label: 'Label', type: 'text' },
+  { key: 'href', label: 'URL', type: 'url' },
+  { key: 'pop', label: 'Pop-up joke (optional)', type: 'text', help: 'If set, clicking shows these comic bubbles instead of opening the link. Separate several with |' },
+];
+
+export const COLLECTIONS: Collection[] = [
+  { id: 'posts', label: 'Blog posts', kind: 'posts', dir: 'src/content/posts' },
+  {
+    id: 'site',
+    label: 'Profile & About',
+    kind: 'file',
+    path: 'src/content/site.json',
+    fields: [
+      { key: 'name', label: 'Full name', type: 'text' },
+      { key: 'shortName', label: 'Short name (nav bar)', type: 'text' },
+      { key: 'role', label: 'Role', type: 'text' },
+      { key: 'headline', label: 'Headline', type: 'textarea', help: 'One sentence shown under your name.' },
+      { key: 'affiliation', label: 'Affiliation', type: 'text' },
+      { key: 'location', label: 'Location', type: 'text' },
+      { key: 'email', label: 'Email', type: 'text' },
+      {
+        key: 'media',
+        label: 'Hero media (click-through slider)',
+        type: 'list',
+        titleKey: 'pop',
+        fields: [
+          { key: 'src', label: 'File path or URL (image or video)', type: 'text', help: 'e.g. /assets/photo.png or /uploads/clip.mp4 — images can be uploaded below in Blog posts.' },
+          { key: 'type', label: 'Type', type: 'select', options: ['image', 'video'] },
+          { key: 'pop', label: 'Pop-up bubble text', type: 'text', help: 'Short comic-style text that pops over the media.' },
+          { key: 'effect', label: 'Extra effect', type: 'select', options: ['none', 'bullet', 'camera', 'web'] },
+        ],
+      },
+      { key: 'cvUrl', label: 'CV link', type: 'url' },
+      { key: 'bio', label: 'About paragraphs', type: 'strings', multiline: true },
+      { key: 'links', label: 'Profile links', type: 'list', fields: link, titleKey: 'label' },
+      { key: 'interests', label: 'Research interests', type: 'strings' },
+      { key: 'researchStatement', label: 'Research statement paragraphs', type: 'strings', multiline: true },
+      { key: 'keywords', label: 'Scrolling keywords', type: 'strings' },
+      {
+        key: 'stats',
+        label: 'Highlight stats',
+        type: 'list',
+        titleKey: 'label',
+        fields: [
+          { key: 'value', label: 'Value', type: 'text' },
+          { key: 'label', label: 'Label', type: 'text' },
+        ],
+      },
+      { key: 'contactText', label: 'Contact blurb', type: 'textarea' },
+    ],
+  },
+  {
+    id: 'publications',
+    label: 'Publications',
+    kind: 'file',
+    path: 'src/content/publications.json',
+    fields: [
+      {
+        key: 'items',
+        label: 'Publications',
+        type: 'list',
+        titleKey: 'title',
+        fields: [
+          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'authors', label: 'Authors', type: 'text' },
+          { key: 'venue', label: 'Venue / details', type: 'text' },
+          { key: 'year', label: 'Year', type: 'text' },
+          { key: 'status', label: 'Status', type: 'select', options: ['Preprint', 'In preparation', 'Published', 'Under review'] },
+          { key: 'url', label: 'Link', type: 'url' },
+          { key: 'linkLabel', label: 'Link label', type: 'text' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'projects',
+    label: 'Projects',
+    kind: 'file',
+    path: 'src/content/projects.json',
+    fields: [
+      {
+        key: 'items',
+        label: 'Projects',
+        type: 'list',
+        titleKey: 'name',
+        fields: [
+          { key: 'name', label: 'Name', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' },
+          { key: 'lang', label: 'Languages (2-4, comma separated)', type: 'text' },
+          { key: 'url', label: 'Repository URL', type: 'url' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'experience',
+    label: 'Education & Experience',
+    kind: 'file',
+    path: 'src/content/experience.json',
+    fields: [
+      {
+        key: 'experience',
+        label: 'Experience',
+        type: 'list',
+        titleKey: 'role',
+        fields: [
+          { key: 'role', label: 'Role', type: 'text' },
+          { key: 'org', label: 'Organisation', type: 'text' },
+          { key: 'dates', label: 'Dates', type: 'text' },
+          { key: 'points', label: 'Highlights', type: 'strings', multiline: true },
+        ],
+      },
+      {
+        key: 'education',
+        label: 'Education',
+        type: 'list',
+        titleKey: 'degree',
+        fields: [
+          { key: 'degree', label: 'Degree', type: 'text' },
+          { key: 'school', label: 'School', type: 'text' },
+          { key: 'dates', label: 'Dates', type: 'text' },
+          { key: 'note', label: 'Note', type: 'text' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'honors',
+    label: 'Honors & Certifications',
+    kind: 'file',
+    path: 'src/content/honors.json',
+    fields: [
+      {
+        key: 'honors',
+        label: 'Honors',
+        type: 'list',
+        titleKey: 'title',
+        fields: [
+          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'detail', label: 'Detail', type: 'text' },
+          { key: 'date', label: 'Date', type: 'text' },
+        ],
+      },
+      {
+        key: 'certs',
+        label: 'Certifications',
+        type: 'list',
+        titleKey: 'name',
+        fields: [
+          { key: 'name', label: 'Name', type: 'text' },
+          { key: 'issuer', label: 'Issuer & year', type: 'text' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'skills',
+    label: 'Skills',
+    kind: 'file',
+    path: 'src/content/skills.json',
+    fields: [
+      {
+        key: 'groups',
+        label: 'Skill groups',
+        type: 'list',
+        titleKey: 'label',
+        fields: [
+          { key: 'label', label: 'Group', type: 'text' },
+          { key: 'items', label: 'Items (comma separated)', type: 'textarea' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'news',
+    label: 'Latest news',
+    kind: 'file',
+    path: 'src/content/news.json',
+    fields: [
+      {
+        key: 'items',
+        label: 'News items',
+        type: 'list',
+        titleKey: 'text',
+        fields: [
+          { key: 'date', label: 'Date (YYYY-MM)', type: 'text' },
+          { key: 'text', label: 'Text', type: 'textarea' },
+        ],
+      },
+    ],
+  },
+];

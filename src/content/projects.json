@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "name": "kernel-borderlands",
+      "description": "Kernel-level runtime defense framework that detects, classifies and contains anomalous process behaviour at Ring 0 on Linux.",
+      "lang": "C, Go, Python, Rust",
+      "url": "https://github.com/pardhuvarmax/kernel-borderlands"
+    },
+    {
+      "name": "kblinuxv-archives",
+      "description": "Archive of Linux vulnerability reproduction artifacts preserved for research, analysis and reproducibility.",
+      "lang": "C, Go, Python, Shell",
+      "url": "https://github.com/pardhuvarmax/kblinuxv-archives"
+    },
+    {
+      "name": "emrac",
+      "description": "Hybrid package-management platform for Arch Linux covering discovery, build, install and maintenance across repositories and the AUR.",
+      "lang": "Rust, Shell, HTML",
+      "url": "https://github.com/pardhuvarmax/emrac"
+    },
+    {
+      "name": "rlae-research",
+      "description": "Runtime low-rank adaptive environments: reversible, modular learning with externalised, auditable behavioural adaptation.",
+      "lang": "Python, Jupyter, LaTeX",
+      "url": "https://github.com/pardhuvarmax/rlae-research"
+    },
+    {
+      "name": "lbsm-research",
+      "description": "Latent behavioural state machines and statistical manifolds; research notebooks and telemetry.",
+      "lang": "Python, Jupyter, LaTeX",
+      "url": "https://github.com/pardhuvarmax/lbsm-research"
+    },
+    {
+      "name": "lease-manager-bpctf2",
+      "description": "Self-service cloud provisioning and lease management for CTF challenge infrastructure.",
+      "lang": "Python, HTML, Shell",
+      "url": "https://github.com/pardhuvarmax/lease-manager-bpctf2"
+    }
+  ]
+}
