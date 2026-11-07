@@ -287,6 +287,7 @@ export default function Admin() {
   return (
     <div className="site adm">
       <aside className="side">
+       <div className="side-inner">
         <strong className="logo">Content admin</strong>
         {status.local && <span className="tag">Local mode</span>}
         <nav>
@@ -300,6 +301,7 @@ export default function Admin() {
             <button onClick={async () => { await api('logout', { body: {} }); refresh(); }}><LogOut size={14} /> Sign out</button>
           )}
         </div>
+       </div>
       </aside>
       <section className="main">
         {col.kind === 'posts' ? (

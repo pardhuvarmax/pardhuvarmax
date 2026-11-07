@@ -664,6 +664,7 @@
 .site .top-cue { transition: opacity 0.25s; }
 .site .top-cue.is-hidden { opacity: 0; pointer-events: none; }
 
-/* footer link that opens the sign-in / edit menu */
-.site .admin-link { margin-left: 14px; padding: 0 0 1px; border: 0; border-bottom: 1px dashed var(--muted); background: none; color: var(--muted); font: inherit; font-size: 0.85em; cursor: pointer; }
-.site .admin-link:hover { color: var(--accent-text); border-bottom-color: var(--accent-text); }
+/* tiny "e" button: five quick clicks open sign-in; signed in, one click opens the edit menu */
+.site .edit-dot { position: fixed; z-index: 240; left: 10px; bottom: 8px; display: grid; place-items: center; width: 20px; height: 20px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: transparent; color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1; opacity: 0.35; cursor: pointer; transition: opacity 0.2s, color 0.2s, border-color 0.2s; }
+.site .edit-dot:hover, .site .edit-dot:focus-visible { opacity: 1; }
+html[data-cms='on'] .site .edit-dot { opacity: 0.9; color: var(--accent-text); border-color: var(--accent-text); }

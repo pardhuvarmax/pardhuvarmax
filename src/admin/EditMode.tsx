@@ -33,7 +33,7 @@ const MORE = ['posts', 'projects', 'publications', 'experience', 'honors', 'skil
  * On-site editing. Loaded only for the owner (a saved hint, or the dev server) or when "Admin" in the footer is clicked.
  * Signed out: shows the TOTP sign-in dialog. Signed in: a floating Edit button, a menu, and a slide-in editor panel.
  */
-export default function EditMode({ openRequest }: { openRequest: number }) {
+export default function EditMode({ request }: { request: { n: number; kind: 'menu' | 'login' } }) {
   const { pathname } = useLocation();
   const [status, setStatus] = useState<Status | null>(null);
   const [menu, setMenu] = useState(false);
@@ -59,13 +59,22 @@ export default function EditMode({ openRequest }: { openRequest: number }) {
   useEffect(() => { refresh(); }, [refresh]);
 
   // footer "Admin" link: sign in, or open the menu when already signed in
+  // requests from the small "e" button: one click toggles the menu when signed in; five clicks open sign-in
   const handled = useRef(0);
   useEffect(() => {
-    if (!status || openRequest <= handled.current) return;
-    handled.current = openRequest;
-    if (status.authed) setMenu(true);
-    else setLogin(true);
-  }, [openRequest, status]);
+    if (!status || request.n <= handled.current) return;
+    handled.current = request.n;
+    if (request.kind === 'login') {
+      if (status.authed) setMenu(true);
+      else setLogin(true);
+    } else if (status.authed) setMenu((m) => !m);
+  }, [request, status]);
+
+  // lets the "e" button look "on" while signed in
+  useEffect(() => {
+    document.documentElement.dataset.cms = status?.authed ? 'on' : '';
+    return () => { document.documentElement.dataset.cms = ''; };
+  }, [status?.authed]);
 
   useEffect(() => {
     if (!toast) return;
@@ -104,6 +113,7 @@ export default function EditMode({ openRequest }: { openRequest: number }) {
       )}
 
       {/* floating edit button + menu */}
+      {status.authed && menu && <div className="em-catch" onClick={() => setMenu(false)} />}
       {status.authed && (
         <div className="em-bar">
           {menu && (
@@ -133,9 +143,6 @@ export default function EditMode({ openRequest }: { openRequest: number }) {
               )}
             </div>
           )}
-          <button className={`em-fab ${menu ? 'on' : ''}`} aria-expanded={menu} onClick={() => setMenu((m) => !m)}>
-            <Pencil size={16} /> Edit{status.local ? ' · local' : ''}
-          </button>
         </div>
       )}
 

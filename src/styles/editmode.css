@@ -32,3 +32,10 @@
 
 @media (prefers-reduced-motion: reduce) { .em-drawer { animation: none; } }
 @media (max-width: 640px) { .em-bar { left: 12px; bottom: 12px; } .em-adm.adm { padding: 18px 14px 80px; } }
+
+/* the menu sits just above the tiny "e" button; no big floating button any more */
+.em-bar { left: 10px; bottom: 36px; }
+.em-catch { position: fixed; inset: 0; z-index: 240; }
+.em-fab { display: none; }
+.em-menu { border-width: 1px; box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6); border-radius: 10px; border-color: var(--line); }
+.em-menu button, .em-menu a { border-radius: 6px; }

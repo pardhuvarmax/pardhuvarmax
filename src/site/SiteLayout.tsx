@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'motion/react';
 import { ArrowUp, Menu, Moon, Sun, X } from 'lucide-react';
@@ -65,7 +65,18 @@ export default function SiteLayout() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [editLoaded, setEditLoaded] = useState(isOwnerHint);
-  const [editRequest, setEditRequest] = useState(0);
+  const [editRequest, setEditRequest] = useState<{ n: number; kind: 'menu' | 'login' }>({ n: 0, kind: 'menu' });
+  const taps = useRef<number[]>([]);
+  // Tiny "e" button: five quick clicks open sign-in; once signed in, one click opens the edit menu.
+  const onEditDot = () => {
+    const now = Date.now();
+    taps.current = [...taps.current.filter((t) => now - t < 4000), now];
+    const five = taps.current.length >= 5;
+    if (five) taps.current = [];
+    if (!five && !editLoaded) return;
+    setEditLoaded(true);
+    setEditRequest((r) => ({ n: r.n + 1, kind: five ? 'login' : 'menu' }));
+  };
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.2 });
 
@@ -137,16 +148,16 @@ export default function SiteLayout() {
         <div className="wrap footer-in">
           <span>
             &copy; {new Date().getFullYear()} {site.name} &middot; {site.location}
-            <button className="admin-link" onClick={() => { setEditLoaded(true); setEditRequest((n) => n + 1); }}>Admin</button>
           </span>
           <span className="footer-right">
             <TopCue />
           </span>
         </div>
       </footer>
+      <button className="edit-dot" aria-label="Site editor" onClick={onEditDot}>e</button>
       {editLoaded && (
         <Suspense fallback={null}>
-          <EditMode openRequest={editRequest} />
+          <EditMode request={editRequest} />
         </Suspense>
       )}
       <Analytics />

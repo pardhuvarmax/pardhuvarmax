@@ -75,3 +75,53 @@
   .adm .side-foot { margin: 0 0 0 auto; display: flex; }
   .adm .grid2 { grid-template-columns: 1fr; }
 }
+
+/* =====================================================================
+   CLEAN EDITOR — calmer than the public site: thin lines, soft corners,
+   no hard shadows, more air. (html prefix wins over the site's brutal layer.)
+   ===================================================================== */
+/* sidebar spans the whole page height; its content stays pinned while the page scrolls */
+html .adm { align-items: stretch; }
+html .adm .side { position: relative; top: auto; height: auto; align-self: stretch; padding: 0; box-shadow: none; border-right: 1px solid var(--line); background: var(--bg-2); }
+html .adm .side-inner { position: sticky; top: 0; display: flex; flex-direction: column; gap: 10px; min-height: 100vh; padding: 28px 18px; }
+html .adm .logo { font-size: 1.05rem; letter-spacing: 0; text-transform: none; font-weight: 700; }
+html .adm .side nav button { border-radius: 8px; font-weight: 500; font-size: 0.92rem; padding: 9px 12px; }
+html .adm .side nav button.on, html .adm .side nav button:hover { background: var(--accent-soft); color: var(--text); }
+html .adm .side nav button.on { font-weight: 700; box-shadow: inset 3px 0 0 var(--accent-text); }
+
+/* title bar: solid so scrolled content never shows through it */
+html .adm .bar { top: 0; margin: 0 0 28px; padding: 16px 0; background: var(--bg); border-bottom: 1px solid var(--line); backdrop-filter: none; z-index: 10; }
+html .adm .bar h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -0.01em; font-weight: 700; }
+html .adm .bar.tight { padding: 0; border: 0; margin-bottom: 10px; }
+
+/* buttons and inputs */
+html .adm .abtn { border: 1px solid var(--line); border-radius: 8px; box-shadow: none; font-weight: 600; font-size: 0.88rem; padding: 8px 14px; background: transparent; }
+html .adm .abtn:hover:not(:disabled) { transform: none; box-shadow: none; border-color: var(--text); }
+html .adm .abtn.primary { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+html .adm .abtn.danger { color: #e5566a; }
+html .adm .ibtn { border: 1px solid var(--line); border-radius: 6px; width: 30px; height: 30px; background: transparent; }
+html .adm .inp { border: 1px solid var(--line); border-radius: 8px; background: transparent; padding: 11px 13px; }
+html .adm .inp:focus { outline: 2px solid var(--accent-text); outline-offset: 0; border-color: transparent; }
+html .adm .inp.big { font-size: 1.25rem; font-weight: 700; }
+
+/* forms: more breathing room, quieter labels */
+html .adm .form { gap: 28px; }
+html .adm .fld { gap: 8px; }
+html .adm .fld > label { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+html .adm .fld > small { font-size: 0.82rem; margin-top: 0; }
+html .adm .strings, html .adm .list { gap: 10px; }
+html .adm .row { gap: 10px; }
+html .adm .row-btns { gap: 6px; }
+
+/* list items: plain rows instead of boxed cards */
+html .adm .item { border: 1px solid var(--line); border-radius: 10px; box-shadow: none; background: transparent; }
+html .adm .item > summary { padding: 14px 16px; font-weight: 600; font-size: 0.95rem; }
+html .adm .item[open] > summary { border-bottom: 1px solid var(--line); }
+html .adm .item > .form { padding: 22px 16px 24px; gap: 22px; }
+html .adm .plist button, html .adm .preview, html .adm .login { border: 1px solid var(--line); border-radius: 10px; box-shadow: none; }
+html .adm .plist button:hover { transform: none; box-shadow: none; border-color: var(--text); }
+html .adm .login { box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6); }
+html .adm .login h1 { text-transform: none; font-weight: 700; font-size: 1.6rem; }
+html .adm .img-field img { border: 1px solid var(--line); border-radius: 8px; }
+html .adm .toast { border: 0; border-radius: 10px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6); }
+html .adm .main { padding-top: 12px; }

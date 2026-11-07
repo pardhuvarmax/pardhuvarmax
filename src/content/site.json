@@ -1,12 +1,12 @@
 {
   "name": "Pardhu Sri Rushi Varma Konduru",
-  "shortName": "P. S. R. V. Konduru",
+  "shortName": "PSRVK",
   "role": "Independent Researcher",
   "headline": "HPC, systems research and the reliability of learned systems.",
   "affiliation": "B.Tech (CSE – Cybersecurity), Malla Reddy University",
   "location": "Hyderabad, India",
   "email": "pardhuvarma.cs@gmail.com",
-  "cvUrl": "/resume/pardhu.pdf",
+  "cvUrl": "/resume/resume-me.pdf",
   "bio": [
     "I'm an independent researcher and final-year cybersecurity undergraduate fascinated by HPC, systems research & engineering, machine learning & adaptive systems, and, of course, The Linux.",
     "Most days you'll find me reading research papers, building something in Rust, Go or C, tweaking my Arch Linux setup (I use Arch, btw.), experimenting in Python, or designing exploit challenges for CTF events under the author name \"ZenRage\". I've always enjoyed understanding how things work—from my roots in system security to HPC technology and machine learning models to open-source AI systems and operating systems to compilers, kernels, and package managers. If it's open source, there's a good chance I'll end up reading the code sooner or later.",
@@ -22,12 +22,12 @@
       "href": "https://www.linkedin.com/in/pardhu-sri-rushi-varma-konduru-696886279"
     },
     {
-      "label": "Google Scholar",
-      "href": "https://scholar.google.com/citations?user=Chrj-G0AAAAJ"
-    },
-    {
       "label": "ORCID",
       "href": "https://orcid.org/0009-0005-3251-9944"
+    },
+    {
+      "label": "Google Scholar",
+      "href": "https://scholar.google.com/citations?user=Chrj-G0AAAAJ"
     },
     {
       "label": "Website",
