@@ -19,7 +19,7 @@
 .em-x:hover { background: var(--accent); color: var(--on-accent); }
 
 .em-backdrop { position: fixed; inset: 0; z-index: 260; background: rgba(0, 0, 0, 0.55); }
-.em-drawer { position: fixed; z-index: 270; top: 0; right: 0; bottom: 0; width: min(780px, 100vw); display: flex; flex-direction: column; background: var(--bg); color: var(--text); border-left: 3px solid var(--ink); box-shadow: -10px 0 0 var(--accent); animation: emIn 0.22s cubic-bezier(.2, .8, .2, 1); }
+.em-drawer { position: fixed; z-index: 270; top: 0; right: 0; bottom: 0; width: min(780px, 100vw); display: flex; flex-direction: column; background: var(--bg); color: var(--text); box-shadow: -3px 0 0 var(--ink), -13px 0 0 var(--accent); animation: emIn 0.22s cubic-bezier(.2, .8, .2, 1); }
 @keyframes emIn { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
 .em-drawer > header { position: relative; flex: none; padding: 16px 64px 16px 24px; border-bottom: 3px solid var(--ink); font-family: 'Archivo', system-ui, sans-serif; font-size: 1.15rem; text-transform: uppercase; letter-spacing: -0.01em; }
 .em-drawer > header .em-x { top: 12px; right: 14px; }
