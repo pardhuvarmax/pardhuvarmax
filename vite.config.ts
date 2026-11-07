@@ -46,15 +46,15 @@ function adminDevApi(): Plugin {
   }
 }
 
-// Serve the standalone ZenRage page (zenrage.html) at /identity-as-zenrage in dev.
+// Serve the standalone ZenRage page (zenrage.html) at /zenrage in dev.
 function zenrageRoute(): Plugin {
   return {
     name: 'zenrage-route',
     configureServer(server) {
       server.middlewares.use((req, _res, next) => {
         if (!req.url) return next()
-        if (/^\/identity-as-zenrage\/?(\?.*)?$/.test(req.url)) req.url = '/zenrage.html'
-        else if (/^\/identity-as-zenrage-minimal\/?(\?.*)?$/.test(req.url)) req.url = '/zenrage-minimal.html'
+        if (/^\/zenrage\/?(\?.*)?$/.test(req.url)) req.url = '/zenrage.html'
+        else if (/^\/zenrage\/?(\?.*)?$/.test(req.url)) req.url = '/zenrage.html'
         next()
       })
     },
@@ -84,7 +84,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         zenrage: resolve(__dirname, 'zenrage.html'),
-        zenrageMinimal: resolve(__dirname, 'zenrage-minimal.html'),
+        zenrageMinimal: resolve(__dirname, 'zenrage.html'),
       },
     },
   },

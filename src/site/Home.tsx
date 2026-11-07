@@ -827,7 +827,7 @@ function Contact() {
           {site.links.map((l) => (
             <li key={l.label}><PopLink link={l} external={ext(l.href)}>{l.label}</PopLink></li>
           ))}
-          <li><a href="/identity-as-zenrage">ZenRage</a></li>
+          <li><a href="/zenrage">ZenRage</a></li>
         </ul>
       </Reveal>
     </section>

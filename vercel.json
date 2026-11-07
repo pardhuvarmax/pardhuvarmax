@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/identity-as-zenrage", "destination": "/zenrage.html" },
-    { "source": "/identity-as-zenrage-minimal", "destination": "/zenrage-minimal.html" },
+    { "source": "/zenrage", "destination": "/zenrage.html" },
+    { "source": "/zenrage", "destination": "/zenrage.html" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
