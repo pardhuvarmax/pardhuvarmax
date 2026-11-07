@@ -6,3 +6,4 @@ npm-debug.log*
 # Design handoff files
 *.zip
 portfolio_design_extracted/
+*.bak

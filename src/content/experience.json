@@ -1,0 +1,31 @@
+{
+  "education": [
+    {
+      "degree": "Bachelor of Technology, Computer Science & Engineering (Cybersecurity)",
+      "school": "Malla Reddy University, Hyderabad, India",
+      "dates": "Aug 2023 – Apr 2027 (expected)",
+      "note": "CGPA: 7.73"
+    }
+  ],
+  "experience": [
+    {
+      "role": "Independent Machine Learning Researcher",
+      "org": "Self-employed",
+      "dates": "Dec 2025 – Present",
+      "points": [
+        "Investigating structural robustness, reversible behavioural learning, and parameter-efficient adaptation in neural systems.",
+        "Developing frameworks for reversible adaptation, lifecycle governance, and stability analysis of learned behaviours, using modular low-rank adaptation (LoRA).",
+        "Publishing preprints and building experimental prototypes to evaluate the limits of weight-based learning."
+      ]
+    },
+    {
+      "role": "Technical Challenge Author & Cloud Deployment Operations",
+      "org": "Breachpoint CTF 2026 (national-level, student-led; with the National Cyber Security Research Council and EC-Council)",
+      "dates": "Dec 2025 –  Oct 2026",
+      "points": [
+        "Designed challenges in binary exploitation, cryptography, reverse engineering, blockchain, mobile security and steganography, implemented in Python, C/C++, Rust, Zig, Go, Kotlin, Solidity and x86 assembly.",
+        "Deployed and operated containerised competition infrastructure on GCP using Docker, CI/CD pipelines and GitHub workflows; maintained stability and access control during the live event."
+      ]
+    }
+  ]
+}

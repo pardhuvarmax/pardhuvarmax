@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/music", "destination": "/music.html" },
-    { "source": "/music/", "destination": "/music.html" }
+    { "source": "/zenrage", "destination": "/zenrage.html" },
+    { "source": "/zenrage", "destination": "/zenrage.html" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

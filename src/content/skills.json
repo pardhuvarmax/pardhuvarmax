@@ -1,0 +1,24 @@
+{
+  "groups": [
+    {
+      "label": "Languages",
+      "items": "C, C++, Rust, Go, Python, JavaScript/TypeScript, SQL, Bash, x86-64 assembly"
+    },
+    {
+      "label": "Systems & security",
+      "items": "Linux internals, eBPF, kernel security, reverse engineering, exploit development, VAPT, threat modelling"
+    },
+    {
+      "label": "Machine learning",
+      "items": "PyTorch, TensorFlow, scikit-learn, Hugging Face, reinforcement learning, LoRA, trustworthy ML"
+    },
+    {
+      "label": "Embedded",
+      "items": "ESP32, microcontroller firmware, Wi-Fi/BLE security"
+    },
+    {
+      "label": "Infrastructure",
+      "items": "Docker, Kubernetes, CI/CD, Git, GCP, AWS, Linux networking"
+    }
+  ]
+}

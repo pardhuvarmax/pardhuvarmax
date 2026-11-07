@@ -1,0 +1,41 @@
+/* On-site edit mode: floating Edit button, menu, sign-in dialog and the slide-in editor panel. */
+.em { font-family: 'Albert Sans', system-ui, sans-serif; }
+.em *, .em *::before, .em *::after { box-sizing: border-box; }
+
+.em-bar { position: fixed; left: 20px; bottom: 20px; z-index: 250; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.em-fab { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 3px solid var(--ink); background: var(--bg); color: var(--text); font: inherit; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; box-shadow: 4px 4px 0 var(--accent); cursor: pointer; }
+.em-fab:hover, .em-fab.on { background: var(--accent); color: var(--on-accent); }
+.em-menu { display: grid; min-width: 240px; padding: 8px; border: 3px solid var(--ink); background: var(--bg); box-shadow: 6px 6px 0 var(--ink); }
+.em-menu button, .em-menu a { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 10px; border: 0; background: none; color: var(--text); font: inherit; font-size: 0.92rem; text-align: left; text-decoration: none; cursor: pointer; }
+.em-menu button:hover, .em-menu a:hover { background: var(--accent); color: var(--on-accent); }
+.em-menu .em-primary { font-weight: 800; background: var(--accent-soft); }
+.em-menu .em-sub { padding-left: 35px; color: var(--muted); font-size: 0.86rem; }
+.em-menu hr { border: 0; border-top: 2px solid var(--line); margin: 6px 0; }
+
+.em-modal { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; background: rgba(0, 0, 0, 0.6); padding: 20px; }
+.em-login { position: relative; width: min(420px, 100%); }
+.em-login .login { margin: 0; width: 100%; }
+.em-x { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 34px; height: 34px; border: 2px solid var(--ink); background: var(--bg); color: var(--text); cursor: pointer; z-index: 2; }
+.em-x:hover { background: var(--accent); color: var(--on-accent); }
+
+.em-backdrop { position: fixed; inset: 0; z-index: 260; background: rgba(0, 0, 0, 0.55); }
+.em-drawer { position: fixed; z-index: 270; top: 0; right: 0; bottom: 0; width: min(780px, 100vw); display: flex; flex-direction: column; background: var(--bg); color: var(--text); box-shadow: -3px 0 0 var(--ink), -13px 0 0 var(--accent); animation: emIn 0.22s cubic-bezier(.2, .8, .2, 1); }
+@keyframes emIn { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+.em-drawer > header { position: relative; flex: none; padding: 16px 64px 16px 24px; border-bottom: 3px solid var(--ink); font-family: 'Archivo', system-ui, sans-serif; font-size: 1.15rem; text-transform: uppercase; letter-spacing: -0.01em; }
+.em-drawer > header .em-x { top: 12px; right: 14px; }
+.em-adm.adm { display: block; min-height: 0; flex: 1; overflow-y: auto; padding: 24px 24px 80px; background: transparent; }
+.em-adm .bar { top: -24px; margin-top: -12px; }
+
+.em-toast { position: fixed; z-index: 320; left: 50%; bottom: 24px; transform: translateX(-50%); padding: 12px 20px; border: 2px solid var(--ink); font-weight: 700; font-size: 0.92rem; box-shadow: 5px 5px 0 var(--ink); max-width: calc(100% - 32px); }
+.em-toast.ok { background: var(--accent); color: var(--on-accent); }
+.em-toast.err { background: #b3122f; color: #fff; }
+
+@media (prefers-reduced-motion: reduce) { .em-drawer { animation: none; } }
+@media (max-width: 640px) { .em-bar { left: 12px; bottom: 12px; } .em-adm.adm { padding: 18px 14px 80px; } }
+
+/* the menu sits just above the tiny "e" button; no big floating button any more */
+.em-bar { left: 10px; bottom: 36px; }
+.em-catch { position: fixed; inset: 0; z-index: 240; }
+.em-fab { display: none; }
+.em-menu { border-width: 1px; box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6); border-radius: 10px; border-color: var(--line); }
+.em-menu button, .em-menu a { border-radius: 6px; }

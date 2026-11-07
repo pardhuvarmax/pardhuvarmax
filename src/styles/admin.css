@@ -1,0 +1,127 @@
+.adm { display: grid; grid-template-columns: 250px 1fr; min-height: 100vh; background: var(--bg); }
+.adm .pad { padding: 40px; }
+.adm .side { position: sticky; top: 0; height: 100vh; padding: 24px 16px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--line); background: var(--bg-2); }
+.adm .logo { font-family: var(--display); font-weight: 400; font-size: 1.6rem; }
+.adm .side nav { display: grid; gap: 2px; margin-top: 10px; }
+.adm .side nav button { text-align: left; padding: 9px 12px; border-radius: 10px; border: 0; background: transparent; color: var(--muted); }
+.adm .side nav button:hover { background: var(--accent-soft); color: var(--text); }
+.adm .side nav button.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.adm .side-foot { margin-top: auto; display: grid; gap: 6px; font-size: 0.9rem; }
+.adm .side-foot a, .adm .side-foot button { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); text-align: left; }
+.adm .side-foot a:hover, .adm .side-foot button:hover { background: var(--accent-soft); color: var(--text); }
+.adm .main { padding: 32px clamp(20px, 4vw, 56px) 80px; max-width: 920px; width: 100%; }
+
+.adm .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; position: sticky; top: 0; z-index: 5; padding: 12px 0; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); }
+.adm .bar.tight { position: static; padding: 0; margin-bottom: 8px; background: none; backdrop-filter: none; }
+.adm .bar h2 { font-family: var(--display); font-weight: 400; font-size: 2rem; }
+.adm .bar-r { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.adm .abtn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-solid); font-size: 0.9rem; transition: border-color 0.2s, opacity 0.2s; }
+.adm .abtn:hover:not(:disabled) { border-color: var(--accent); }
+.adm .abtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.adm .abtn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.adm .abtn.danger { color: #dc2626; }
+.adm .abtn.on { background: var(--accent-soft); border-color: var(--accent); }
+.adm .ibtn { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-solid); }
+.adm .ibtn:hover { border-color: var(--accent); }
+.adm .ibtn.danger:hover { color: #dc2626; border-color: #dc2626; }
+
+.adm .form { display: grid; gap: 20px; }
+.adm .fld { display: grid; gap: 6px; }
+.adm .fld > label { font-weight: 600; font-size: 0.9rem; }
+.adm .fld > small { color: var(--muted); margin-top: -4px; }
+.adm .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.adm .inp { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-solid); color: var(--text); font: inherit; font-size: 0.95rem; }
+.adm .inp:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+.adm .inp.big { font-size: 1.3rem; font-weight: 600; }
+.adm .inp.md { font-family: var(--mono); font-size: 0.88rem; line-height: 1.6; resize: vertical; }
+.adm textarea.inp { resize: vertical; }
+.adm .switch { display: inline-flex; align-items: center; gap: 10px; font-weight: 400 !important; }
+.adm .switch input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+.adm .strings, .adm .list { display: grid; gap: 8px; }
+.adm .row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+.adm .row-btns { display: flex; gap: 4px; }
+.adm .item { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.adm .item > summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; font-weight: 500; list-style: none; }
+.adm .item > summary::-webkit-details-marker { display: none; }
+.adm .item > summary > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm .item[open] > summary { border-bottom: 1px solid var(--line); }
+.adm .item > .form { padding: 16px 14px 18px; }
+.adm .img-field { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
+.adm .img-field img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+.adm .img-field:not(:has(img)) { grid-template-columns: 1fr auto; }
+
+.adm .plist { display: grid; gap: 8px; }
+.adm .plist button { width: 100%; text-align: left; padding: 16px 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface-solid); display: grid; gap: 2px; transition: border-color 0.2s, transform 0.2s; }
+.adm .plist button:hover { border-color: var(--accent); transform: translateY(-2px); }
+.adm .plist span { color: var(--muted); font-size: 0.85rem; }
+.adm .preview { padding: 24px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-solid); min-height: 300px; }
+
+.adm .login { margin: 18vh auto 0; width: min(380px, 100% - 40px); padding: 32px; border-radius: 24px; border: 1px solid var(--line); background: var(--surface-solid); display: grid; gap: 14px; box-shadow: var(--shadow); grid-column: 1 / -1; }
+.adm .login h1 { font-family: var(--display); font-weight: 400; font-size: 2.2rem; }
+.adm .inp.code { text-align: center; font-family: var(--mono); font-size: 1.6rem; letter-spacing: 0.4em; }
+.adm .err { color: #dc2626; font-size: 0.9rem; }
+.adm:has(.login) { display: block; }
+
+.adm .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 12px 20px; border-radius: 12px; font-size: 0.92rem; box-shadow: var(--shadow); z-index: 300; max-width: calc(100% - 32px); }
+.adm .toast.ok { background: var(--ok); color: #fff; }
+.adm .toast.err { background: #dc2626; color: #fff; }
+
+@media (max-width: 820px) {
+  .adm { grid-template-columns: 1fr; }
+  .adm .side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; border-right: 0; border-bottom: 1px solid var(--line); }
+  .adm .side nav { display: flex; flex-wrap: wrap; margin: 0; }
+  .adm .side-foot { margin: 0 0 0 auto; display: flex; }
+  .adm .grid2 { grid-template-columns: 1fr; }
+}
+
+/* =====================================================================
+   CLEAN EDITOR — calmer than the public site: thin lines, soft corners,
+   no hard shadows, more air. (html prefix wins over the site's brutal layer.)
+   ===================================================================== */
+/* sidebar spans the whole page height; its content stays pinned while the page scrolls */
+html .adm { align-items: stretch; }
+html .adm .side { position: relative; top: auto; height: auto; align-self: stretch; padding: 0; box-shadow: none; border-right: 1px solid var(--line); background: var(--bg-2); }
+html .adm .side-inner { position: sticky; top: 0; display: flex; flex-direction: column; gap: 10px; min-height: 100vh; padding: 28px 18px; }
+html .adm .logo { font-size: 1.05rem; letter-spacing: 0; text-transform: none; font-weight: 700; }
+html .adm .side nav button { border-radius: 8px; font-weight: 500; font-size: 0.92rem; padding: 9px 12px; }
+html .adm .side nav button.on, html .adm .side nav button:hover { background: var(--accent-soft); color: var(--text); }
+html .adm .side nav button.on { font-weight: 700; box-shadow: inset 3px 0 0 var(--accent-text); }
+
+/* title bar: solid so scrolled content never shows through it */
+html .adm .bar { top: 0; margin: 0 0 28px; padding: 16px 0; background: var(--bg); border-bottom: 1px solid var(--line); backdrop-filter: none; z-index: 10; }
+html .adm .bar h2 { font-size: 1.5rem; text-transform: none; letter-spacing: -0.01em; font-weight: 700; }
+html .adm .bar.tight { padding: 0; border: 0; margin-bottom: 10px; }
+
+/* buttons and inputs */
+html .adm .abtn { border: 1px solid var(--line); border-radius: 8px; box-shadow: none; font-weight: 600; font-size: 0.88rem; padding: 8px 14px; background: transparent; }
+html .adm .abtn:hover:not(:disabled) { transform: none; box-shadow: none; border-color: var(--text); }
+html .adm .abtn.primary { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+html .adm .abtn.danger { color: #e5566a; }
+html .adm .ibtn { border: 1px solid var(--line); border-radius: 6px; width: 30px; height: 30px; background: transparent; }
+html .adm .inp { border: 1px solid var(--line); border-radius: 8px; background: transparent; padding: 11px 13px; }
+html .adm .inp:focus { outline: 2px solid var(--accent-text); outline-offset: 0; border-color: transparent; }
+html .adm .inp.big { font-size: 1.25rem; font-weight: 700; }
+
+/* forms: more breathing room, quieter labels */
+html .adm .form { gap: 28px; }
+html .adm .fld { gap: 8px; }
+html .adm .fld > label { font-size: 0.74rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+html .adm .fld > small { font-size: 0.82rem; margin-top: 0; }
+html .adm .strings, html .adm .list { gap: 10px; }
+html .adm .row { gap: 10px; }
+html .adm .row-btns { gap: 6px; }
+
+/* list items: plain rows instead of boxed cards */
+html .adm .item { border: 1px solid var(--line); border-radius: 10px; box-shadow: none; background: transparent; }
+html .adm .item > summary { padding: 14px 16px; font-weight: 600; font-size: 0.95rem; }
+html .adm .item[open] > summary { border-bottom: 1px solid var(--line); }
+html .adm .item > .form { padding: 22px 16px 24px; gap: 22px; }
+html .adm .plist button, html .adm .preview, html .adm .login { border: 1px solid var(--line); border-radius: 10px; box-shadow: none; }
+html .adm .plist button:hover { transform: none; box-shadow: none; border-color: var(--text); }
+html .adm .login { box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6); }
+html .adm .login h1 { text-transform: none; font-weight: 700; font-size: 1.6rem; }
+html .adm .img-field img { border: 1px solid var(--line); border-radius: 8px; }
+html .adm .toast { border: 0; border-radius: 10px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6); }
+html .adm .main { padding-top: 12px; }
