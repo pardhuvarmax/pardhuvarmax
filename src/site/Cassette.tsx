@@ -132,10 +132,13 @@ export default function Cassette() {
             }
           }}
         />
-        <div className="cs-now">
-          <span className="cs-kick">{playing ? 'Now playing' : 'Loaded'}</span>
-          <h3>{track?.title}</h3>
-          <p>{track?.artist || album.artist}</p>
+        <div className="cs-head">
+          {album.cover && <img className="cs-cover" src={safeHref(album.cover)} alt={`${album.title} cover`} />}
+          <div className="cs-now">
+            <span className="cs-kick">{playing ? 'Now playing' : 'Loaded'}</span>
+            <h3>{track?.title}</h3>
+            <p>{track?.artist || album.artist}</p>
+          </div>
         </div>
         <div className="cs-ctrl">
           <button className="cs-btn" onClick={() => step(-1)} disabled={t === 0} aria-label="Previous track"><SkipBack size={18} /></button>

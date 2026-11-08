@@ -39,3 +39,7 @@
 .site .cs-empty .cs-tape { width: min(300px, 100%); cursor: default; }
 .site .cs-empty p { margin: 0; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .site .cs-tape.spin .cs-reel { animation: none; } .site .cs-tape { transition: none; } }
+
+.site .cs-head { display: flex; align-items: center; gap: clamp(16px, 3vw, 28px); }
+.site .cs-cover { flex: none; width: clamp(96px, 20vw, 168px); aspect-ratio: 1; object-fit: cover; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--accent); }
+.site .cs-head .cs-now { min-width: 0; }
