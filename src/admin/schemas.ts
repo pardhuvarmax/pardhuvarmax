@@ -210,6 +210,7 @@ export const COLLECTIONS: Collection[] = [
     path: 'src/content/cassette.json',
     fields: [
       { key: 'intro', label: 'Intro line', type: 'textarea', help: 'Shown at the top of the Cassette page.' },
+      { key: 'favLabel', label: 'Favourite tag text', type: 'text', help: 'The tag shown in the player for songs marked as a favourite, e.g. "Peak favourite". Leave empty to show only the star in the track list.' },
       { key: 'disclaimer', label: 'Disclaimer (bottom of page)', type: 'textarea', help: 'Rights notice shown under the player. Leave empty to hide it.' },
       {
         key: 'albums',
@@ -230,7 +231,7 @@ export const COLLECTIONS: Collection[] = [
             fields: [
               { key: 'title', label: 'Track title', type: 'text' },
               { key: 'artist', label: 'Artist (if different)', type: 'text' },
-              { key: 'fav', label: 'Peak favourite', type: 'boolean', help: 'Adds a "Peak favourite" tag and a star in the track list.' },
+              { key: 'fav', label: 'Favourite', type: 'boolean', help: 'Adds the favourite tag (text set at the top of this section) and a star in the track list.' },
               { key: 'year', label: 'Year (optional)', type: 'text' },
               { key: 'note', label: 'Why I like it (optional)', type: 'textarea', help: 'Shown under the player controls while this song is selected.' },
               { key: 'cover', label: 'Song cover (optional)', type: 'image', help: 'Shown in the player while this song is selected.' },
