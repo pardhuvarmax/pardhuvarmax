@@ -5,6 +5,7 @@ import SiteLayout from "./site/SiteLayout.tsx";
 import Home from "./site/Home.tsx";
 import Blog from "./site/Blog.tsx";
 import Post from "./site/Post.tsx";
+import ProjectDetail from "./site/ProjectDetail.tsx";
 import { CassettePage, MePage, ProjectsPage, PublicationsPage, ResearchPage } from "./site/Pages.tsx";
 import { applyTheme, initialTheme } from "./site/useTheme.ts";
 import "./styles/index.css";
@@ -24,6 +25,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="research" element={<ResearchPage />} />
         <Route path="publications" element={<PublicationsPage />} />
         <Route path="projects" element={<ProjectsPage />} />
+        <Route path="projects/:slug" element={<ProjectDetail />} />
         <Route path="cassette" element={<CassettePage />} />
         <Route path="blog" element={<Blog />} />
         <Route path="blog/:slug" element={<Post />} />

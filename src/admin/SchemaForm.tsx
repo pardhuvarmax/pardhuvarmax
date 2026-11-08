@@ -98,7 +98,7 @@ function FieldInput({ f, value, onChange, onError, openLast }: { f: Field; value
   const [added, setAdded] = useState(-1); // index of an item just added with the + button, so it opens ready to fill in
   switch (f.type) {
     case 'textarea':
-      return <textarea className="inp" rows={3} value={value ?? ''} onChange={(e) => onChange(e.target.value)} />;
+      return <textarea className="inp" rows={f.rows ?? 3} value={value ?? ''} onChange={(e) => onChange(e.target.value)} />;
     case 'number':
       return (
         <div className="num-field">

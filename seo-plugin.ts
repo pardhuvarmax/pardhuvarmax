@@ -14,7 +14,7 @@ const abs = (u: string) => (/^https?:/i.test(u) ? u : SITE + (u.startsWith('/') 
 
 interface Page { url: string; title: string; description: string; image: string; type: 'website' | 'article'; date?: string }
 
-function collect(): { pages: Page[]; posts: (Page & { slug: string })[] } {
+function collect(): { pages: Page[]; posts: (Page & { slug: string })[]; projects: (Page & { slug: string })[] } {
   const site = read('src/content/site.json')
   const cassette = read('src/content/cassette.json')
   const name: string = site.name
@@ -41,6 +41,16 @@ function collect(): { pages: Page[]; posts: (Page & { slug: string })[] } {
           date: meta.date,
         }))
     : []
+  const slugify = (x: string) => x.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+  const projects: (Page & { slug: string })[] = (read('src/content/projects.json').items ?? []).map((p: { name: string; description: string; cover?: string; date?: string }) => ({
+    slug: slugify(p.name),
+    url: `/projects/${slugify(p.name)}`,
+    title: `${p.name} | ${name}`,
+    description: clip(p.description || `${p.name}, a project by ${name}.`),
+    image: p.cover || photo,
+    type: 'website' as const,
+    date: undefined,
+  }))
   const firstCover = cassette.albums?.[0]?.cover || cassette.albums?.[0]?.tracks?.[0]?.cover || photo
   const pages: Page[] = [
     { url: '/', title: `${name} | Researcher`, description: clip(`${site.role}. ${site.headline}`), image: photo, type: 'website' },
@@ -51,7 +61,7 @@ function collect(): { pages: Page[]; posts: (Page & { slug: string })[] } {
     { url: '/blog', title: `Writing | ${name}`, description: `Working notes and writing by ${name}.`, image: photo, type: 'website' },
     { url: '/cassette', title: `Cassette | ${name}`, description: clip(cassette.intro || `Music on repeat, ${name}.`), image: firstCover, type: 'website' },
   ]
-  return { pages, posts }
+  return { pages, posts, projects }
 }
 
 function head(p: Page, site: { name: string }): string {
@@ -94,11 +104,11 @@ export function seoPlugin(): Plugin {
       if (!fs.existsSync(indexPath)) return
       const base = fs.readFileSync(indexPath, 'utf8')
       const site = read('src/content/site.json')
-      const { pages, posts } = collect()
+      const { pages, posts, projects } = collect()
 
       // the main page gets the tags in place; every other page gets its own folder with an index.html
       fs.writeFileSync(indexPath, renderRoute(base, pages[0], site))
-      for (const p of [...pages.slice(1), ...posts]) {
+      for (const p of [...pages.slice(1), ...posts, ...projects]) {
         const dir = path.join(outDir, p.url)
         fs.mkdirSync(dir, { recursive: true })
         fs.writeFileSync(path.join(dir, 'index.html'), renderRoute(base, p, site))
@@ -108,6 +118,7 @@ export function seoPlugin(): Plugin {
       const urls = [
         ...pages.map((p) => ({ loc: SITE + (p.url === '/' ? '/' : p.url), lastmod: today })),
         ...posts.map((p) => ({ loc: SITE + p.url, lastmod: p.date || today })),
+        ...projects.map((p) => ({ loc: SITE + p.url, lastmod: today })),
       ]
       fs.writeFileSync(
         path.join(outDir, 'sitemap.xml'),

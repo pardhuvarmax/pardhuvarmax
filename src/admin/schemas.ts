@@ -9,6 +9,7 @@ export interface Field {
   fields?: Field[]; // for type "list": the fields of each item
   multiline?: boolean; // for type "strings": each entry is a textarea
   titleKey?: string; // for type "list": which item field names the row
+  rows?: number; // for type "textarea": visible rows (default 3)
   min?: number; // for type "number"
   max?: number;
   step?: number;
@@ -116,10 +117,28 @@ export const COLLECTIONS: Collection[] = [
         type: 'list',
         titleKey: 'name',
         fields: [
-          { key: 'name', label: 'Name', type: 'text' },
-          { key: 'description', label: 'Description', type: 'textarea' },
+          { key: 'name', label: 'Name', type: 'text', help: 'The page address comes from this, e.g. kernel-borderlands becomes /projects/kernel-borderlands.' },
+          { key: 'description', label: 'Short description', type: 'textarea', help: 'One or two sentences, shown on the cards and in link previews.' },
+          { key: 'status', label: 'Status tag', type: 'select', options: ['', 'Active', 'Research', 'Prototype', 'Archived'], help: 'Leave blank for no tag.' },
+          { key: 'featured', label: 'Featured', type: 'boolean', help: 'Featured projects come first, get a wider card, and are the ones shown on the home page.' },
+          { key: 'date', label: 'Date (YYYY-MM, optional)', type: 'text', help: 'Used for the Newest sort.' },
           { key: 'lang', label: 'Languages (2-4, comma separated)', type: 'text' },
-          { key: 'url', label: 'Repository URL', type: 'url' },
+          { key: 'url', label: 'Repository URL', type: 'url', help: 'GitHub links also pull in stars, languages and activity at build time.' },
+          { key: 'tags', label: 'Tags', type: 'strings', help: 'Used for filtering and for linking related projects and posts.' },
+          { key: 'cover', label: 'Cover image (optional)', type: 'image' },
+          { key: 'install', label: 'Quick start (optional)', type: 'textarea', rows: 4, help: 'Commands shown in a copyable box on the project page, one per line.' },
+          { key: 'body', label: 'Write-up (Markdown)', type: 'textarea', rows: 14, help: 'The long description on the project page: the problem, the approach, results. Headings, lists, links and code blocks work.' },
+          {
+            key: 'links',
+            label: 'Extra links',
+            type: 'list',
+            titleKey: 'label',
+            fields: [
+              { key: 'label', label: 'Label', type: 'text', help: 'e.g. Paper, Docs, Demo' },
+              { key: 'href', label: 'URL', type: 'url' },
+            ],
+          },
+          { key: 'relatedPosts', label: 'Related posts (slugs)', type: 'strings', help: 'The part of the address after /blog/, e.g. hello-world. Posts that mention the project by name are found automatically.' },
         ],
       },
     ],

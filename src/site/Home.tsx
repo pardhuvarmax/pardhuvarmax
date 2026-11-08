@@ -6,6 +6,8 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ArrowDown, ArrowRight, ArrowUpRight, FileText, Mail } from 'lucide-react';
 import { experience, formatDate, honors, news, posts, projects, publications, safeHref, site, skills } from '../lib/content';
 import { glow, Reveal, SectionHead } from './Reveal';
+import { ProjectCard } from './ProjectsView';
+import { allProjects, homeProjects, repoOf, useGithubStats } from '../lib/projects';
 import { SpiderSprite, type Frame } from './spiderman';
 
 const ext = (href: string) => /^https?:/i.test(href);
@@ -621,26 +623,25 @@ export function Experience() {
 }
 
 export function Projects() {
+  const stats = useGithubStats();
   return (
     <section id="projects" className="wrap sec">
       <SectionHead kicker="04 · Projects" title={<>Open-source <em>systems</em></>}>
         Research code and systems software, built in the open.
       </SectionHead>
       <div className="cards">
-        {projects.items.map((p, i) => (
-          <Reveal key={p.name} delay={(i % 3) * 0.06}>
-            <a className="card glow" href={safeHref(p.url)} target="_blank" rel="noopener noreferrer" onPointerMove={glow}>
-              <div className="card-top">
-                <span className="langs">{p.lang.split(',').slice(0, 4).map((l) => <i key={l}>{l.trim()}</i>)}</span>
-                <ArrowUpRight size={18} />
-              </div>
-              <h3>{p.name}</h3>
-              <p>{p.description}</p>
-            </a>
+        {homeProjects().map((p, i) => (
+          <Reveal key={p.slug} delay={(i % 3) * 0.06}>
+            <ProjectCard p={p} stats={stats[repoOf(p.url) ?? '']} />
           </Reveal>
         ))}
       </div>
-      <Reveal><a className="link-arrow more" href={site.links[0].href} target="_blank" rel="noopener noreferrer">All repositories on GitHub <ArrowUpRight size={15} /></a></Reveal>
+      <Reveal>
+        <div className="more-links">
+          <Link className="link-arrow more" to="/projects">All {allProjects.length} projects <ArrowRight size={15} /></Link>
+          <a className="link-arrow more" href={site.links[0].href} target="_blank" rel="noopener noreferrer">GitHub <ArrowUpRight size={15} /></a>
+        </div>
+      </Reveal>
     </section>
   );
 }

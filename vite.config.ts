@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { handleAdmin } from './api/admin.ts'
 import { seoPlugin } from './seo-plugin.ts'
+import { githubStatsPlugin } from './github-stats-plugin.ts'
 
 const securityHeaders = {
   'X-Content-Type-Options': 'nosniff',
@@ -69,6 +70,7 @@ export default defineConfig({
     tailwindcss(),
     adminDevApi(),
     seoPlugin(),
+    githubStatsPlugin(),
   ],
   resolve: {
     alias: {
