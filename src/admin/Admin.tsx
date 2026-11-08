@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ExternalLink, FilePlus2, ImagePlus, LogOut, Save, Trash2 } from 'lucide-react';
 import { api, ApiError, uploadImage } from './api';
+import { LoginScreen } from './LoginScreen';
 import { COLLECTIONS, type FileCollection } from './schemas';
 import { blankItem, ImageField, SchemaForm } from './SchemaForm';
 import { EMPTY_META, parsePost, slugify, stringifyPost, type PostMeta } from '../lib/frontmatter';
@@ -9,39 +10,7 @@ import '../styles/site.css';
 import '../styles/admin.css';
 
 export type Toast = { kind: 'ok' | 'err'; text: string } | null;
-type Status = { authed: boolean; local: boolean; configured: boolean };
-
-/* ---------- Login ---------- */
-export function Login({ configured, onDone }: { configured: boolean; onDone: () => void }) {
-  const [code, setCode] = useState('');
-  const [err, setErr] = useState('');
-  const [busy, setBusy] = useState(false);
-  return (
-    <form
-      className="login"
-      onSubmit={async (e) => {
-        e.preventDefault();
-        setBusy(true);
-        setErr('');
-        try {
-          await api('login', { body: { code } });
-          onDone();
-        } catch (ex) {
-          setErr((ex as Error).message);
-        } finally {
-          setBusy(false);
-        }
-      }}
-    >
-      <h1>Content admin</h1>
-      <p className="muted">Enter the 6-digit code from your authenticator app.</p>
-      {!configured && <p className="err">TOTP_SECRET is not configured on the server.</p>}
-      <input className="inp code" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} placeholder="000000" autoFocus />
-      {err && <p className="err">{err}</p>}
-      <button className="abtn primary" disabled={busy || code.length !== 6}>{busy ? 'Checking…' : 'Sign in'}</button>
-    </form>
-  );
-}
+type Status = { authed: boolean; local: boolean; configured: boolean; totp?: boolean; google?: string | null; github?: boolean; orcid?: boolean };
 
 /* ---------- File (JSON) editor ---------- */
 export function FileEditor({ col, notify, saveNote, addItem }: { col: FileCollection; notify: (t: Toast) => void; saveNote: string; addItem?: boolean }) {
@@ -279,7 +248,7 @@ export default function Admin() {
   }, [toast]);
 
   if (!status) return <div className="site adm"><p className="muted pad">Loading…</p></div>;
-  if (!status.authed) return <div className="site adm"><Login configured={status.configured} onDone={refresh} /></div>;
+  if (!status.authed) return <LoginScreen configured={status.configured} totp={status.totp} google={status.google} github={status.github} orcid={status.orcid} onDone={refresh} returnTo="/admin" />;
 
   const col = COLLECTIONS.find((c) => c.id === active)!;
   const saveNote = status.local ? 'Saved to disk. The site updates instantly in dev.' : 'Committed to GitHub. The site redeploys in about a minute.';

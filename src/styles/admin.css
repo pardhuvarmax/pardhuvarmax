@@ -125,3 +125,11 @@ html .adm .login h1 { text-transform: none; font-weight: 700; font-size: 1.6rem;
 html .adm .img-field img { border: 1px solid var(--line); border-radius: 8px; }
 html .adm .toast { border: 0; border-radius: 10px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6); }
 html .adm .main { padding-top: 12px; }
+
+.login-back { grid-column: 1 / -1; text-align: center; margin-top: 18px; font-size: 0.92rem; }
+.login-back a { color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--muted); }
+.login-back a:hover { color: var(--accent-text); border-color: var(--accent-text); }
+.adm:has(.login) .login { margin-top: 16vh; }
+/* sign-in page: push the card down with padding (a margin would spill outside the page and show the white body behind it) */
+html .adm:has(.login) { padding-top: 16vh; padding-bottom: 8vh; }
+html .adm:has(.login) .login { margin-top: 0; }

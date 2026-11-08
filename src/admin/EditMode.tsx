@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, ExternalLink, FilePlus2, FolderPlus, LogOut, Pencil, User, X } from 'lucide-react';
 import { api } from './api';
 import { COLLECTIONS, type FileCollection } from './schemas';
-import { FileEditor, Login, PostEditor, type Toast } from './Admin';
+import { FileEditor, PostEditor, type Toast } from './Admin';
 import '../styles/admin.css';
 import '../styles/editmode.css';
 
@@ -33,18 +33,20 @@ const MORE = ['posts', 'projects', 'publications', 'experience', 'honors', 'skil
  * On-site editing. Loaded only for the owner (a saved hint, or the dev server) or when "Admin" in the footer is clicked.
  * Signed out: shows the TOTP sign-in dialog. Signed in: a floating Edit button, a menu, and a slide-in editor panel.
  */
-export default function EditMode({ request }: { request: { n: number; kind: 'menu' | 'login' } }) {
+export default function EditMode({ request }: { request: number }) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [status, setStatus] = useState<Status | null>(null);
   const [menu, setMenu] = useState(false);
-  const [login, setLogin] = useState(false);
   const [action, setAction] = useState<(Action & { n: number }) | null>(null);
   const [toast, setToast] = useState<Toast>(null);
 
   const refresh = useCallback(
     () =>
       api<Status>('status')
-        .then((s) => {
+        .then((raw) => {
+          // an unexpected reply (no API, bad deploy) counts as signed out, so the sign-in dialog still works
+          const s: Status = raw && typeof raw.authed === 'boolean' ? raw : { authed: false, local: false, configured: false };
           setStatus(s);
           try {
             if (s.authed && !s.local) localStorage.setItem('cms', '1');
@@ -59,15 +61,13 @@ export default function EditMode({ request }: { request: { n: number; kind: 'men
   useEffect(() => { refresh(); }, [refresh]);
 
   // footer "Admin" link: sign in, or open the menu when already signed in
-  // requests from the small "e" button: one click toggles the menu when signed in; five clicks open sign-in
+  // each click on the small "e": toggle the menu when signed in, otherwise go to the sign-in page (e.g. the session expired)
   const handled = useRef(0);
   useEffect(() => {
-    if (!status || request.n <= handled.current) return;
-    handled.current = request.n;
-    if (request.kind === 'login') {
-      if (status.authed) setMenu(true);
-      else setLogin(true);
-    } else if (status.authed) setMenu((m) => !m);
+    if (!status || request <= handled.current) return;
+    handled.current = request;
+    if (status.authed) setMenu((m) => !m);
+    else navigate('/login', { state: { from: pathname } });
   }, [request, status]);
 
   // lets the "e" button look "on" while signed in
@@ -86,12 +86,11 @@ export default function EditMode({ request }: { request: { n: number; kind: 'men
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       if (action) setAction(null);
-      else if (login) setLogin(false);
       else setMenu(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [action, login]);
+  }, [action]);
 
   if (!status) return null;
   const saveNote = status.local ? 'Saved to disk. The site updates instantly in dev.' : 'Committed to GitHub. The live site updates in about a minute.';
@@ -102,16 +101,6 @@ export default function EditMode({ request }: { request: { n: number; kind: 'men
 
   return (
     <div className="em">
-      {/* sign-in dialog */}
-      {login && !status.authed && (
-        <div className="em-modal" role="dialog" aria-modal="true" aria-label="Sign in" onClick={() => setLogin(false)}>
-          <div className="adm em-login" onClick={(e) => e.stopPropagation()}>
-            <button className="em-x" aria-label="Close" onClick={() => setLogin(false)}><X size={18} /></button>
-            <Login configured={status.configured} onDone={() => { setLogin(false); refresh(); }} />
-          </div>
-        </div>
-      )}
-
       {/* floating edit button + menu */}
       {status.authed && menu && <div className="em-catch" onClick={() => setMenu(false)} />}
       {status.authed && (

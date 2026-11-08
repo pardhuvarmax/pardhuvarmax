@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/zenrage", "destination": "/zenrage.html" },
     { "source": "/zenrage", "destination": "/zenrage.html" },
+    { "source": "/auth/:provider/callback", "destination": "/api/admin?action=oauth-callback&provider=:provider" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

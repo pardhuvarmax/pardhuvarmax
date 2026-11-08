@@ -7,3 +7,8 @@ npm-debug.log*
 *.zip
 portfolio_design_extracted/
 *.bak
+
+# secrets: never commit real values (the .env.example template is fine)
+.env
+.env.local
+.env.*.local
