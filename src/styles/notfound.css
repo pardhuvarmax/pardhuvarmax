@@ -253,6 +253,15 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 .nfb .bsoff .bs-walkabout { animation: bsHunt 6.4s ease-in-out infinite; }
 .nfb .bsoff.on .bs-walkabout { animation: none; left: 150px; }
 .nfb .bsoff .bs-phone { position: absolute; left: 70px; top: -14px; width: 18px; height: 30px; border: 3px solid #f2f2f2; background: #000; }
+.nfb .bsoff.on .bs-phone { animation: bsPhoneBlink 0.9s steps(1, end) infinite; }
+@keyframes bsPhoneBlink {
+  0% { background: #e0242c; box-shadow: 0 0 10px 2px rgba(224, 36, 44, 0.6); }
+  20% { background: #2f5bff; box-shadow: 0 0 10px 2px rgba(47, 91, 255, 0.6); }
+  40% { background: #ffd23f; box-shadow: 0 0 10px 2px rgba(255, 210, 63, 0.6); }
+  60% { background: #22d3ee; box-shadow: 0 0 10px 2px rgba(34, 211, 238, 0.6); }
+  80% { background: #ff3fa4; box-shadow: 0 0 10px 2px rgba(255, 63, 164, 0.6); }
+}
+@media (prefers-reduced-motion: reduce) { .nfb .bsoff.on .bs-phone { animation: none; background: #2f5bff; } }
 .nfb .bsoff .bs-bars { position: absolute; left: -2px; top: -26px; display: flex; align-items: flex-end; gap: 2px; height: 16px; }
 .nfb .bsoff .bs-bars i { width: 4px; background: #f2f2f2; opacity: 0.2; }
 .nfb .bsoff .bs-bars i:nth-child(1) { height: 4px; animation: bsBar1 6.4s steps(1, end) infinite; } .nfb .bsoff .bs-bars i:nth-child(2) { height: 8px; animation: bsBar2 6.4s steps(1, end) infinite; }
