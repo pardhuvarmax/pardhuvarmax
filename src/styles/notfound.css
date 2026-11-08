@@ -1,9 +1,67 @@
-.site .nf { padding-top: clamp(104px, 14vw, 150px); }
-.site .nf h1 { margin: 10px 0 12px; font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1; letter-spacing: -0.03em; }
-.site .nf h1 em { color: var(--accent-text); }
-.site .rg { margin-top: 28px; max-width: 640px; }
-.site .rg-canvas { display: block; width: 100%; height: auto; aspect-ratio: 640 / 220; border: 3px solid var(--ink); background: var(--surface); box-shadow: 6px 6px 0 var(--accent); cursor: pointer; touch-action: manipulation; outline: none; }
-.site .rg-canvas:focus-visible { box-shadow: 6px 6px 0 var(--accent), 0 0 0 3px var(--ink); }
-.site .rg-help { margin: 12px 0 0; font-size: 0.8rem; color: var(--muted); }
-.site .nf-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-.site .nf-links kbd { margin-left: 8px; padding: 0 5px; border: 2px solid currentColor; font: 700 0.68rem/1.5 var(--mono, monospace); }
+/* 404: the site, broken. Black and white only; the only colour is Spider-Man (drawn by the game). */
+html.nf-lock { overflow: hidden; }
+html.nf-lock .progress { display: none; } /* the coloured scroll bar has no place on a broken page */
+.nfb { position: fixed; inset: 0; z-index: 110; overflow: hidden auto; background: #000; color: #f2f2f2; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+.nfb * { box-sizing: border-box; }
+
+/* the giant, bent number behind everything */
+.nfb-num { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; user-select: none; font-family: 'Archivo', 'Arial Black', system-ui, sans-serif; font-weight: 900; font-size: min(58vw, 78vh, 720px); line-height: 0.8; letter-spacing: -0.06em; color: rgba(255, 255, 255, 0.04); filter: url(#nfb-warp); animation: nfbJolt 7s steps(1, end) infinite; }
+.nfb-num::before, .nfb-num::after { content: attr(data-text); position: absolute; inset: 0; display: grid; place-items: center; }
+.nfb-num::before { color: rgba(255, 255, 255, 0.11); animation: nfbSliceA 3.6s steps(1, end) infinite; }
+.nfb-num::after { color: rgba(255, 255, 255, 0.08); animation: nfbSliceB 4.4s steps(1, end) infinite; }
+@keyframes nfbSliceA {
+  0%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+  8% { clip-path: inset(14% 0 66% 0); transform: translate(-22px, 0); }
+  16% { clip-path: inset(0 0 100% 0); }
+  42% { clip-path: inset(56% 0 24% 0); transform: translate(26px, 0); }
+  47% { clip-path: inset(0 0 100% 0); }
+  71% { clip-path: inset(33% 0 49% 0); transform: translate(-14px, 4px); }
+  76% { clip-path: inset(0 0 100% 0); }
+}
+@keyframes nfbSliceB {
+  0%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+  12% { clip-path: inset(70% 0 12% 0); transform: translate(30px, 0); }
+  19% { clip-path: inset(0 0 100% 0); }
+  55% { clip-path: inset(8% 0 78% 0); transform: translate(-28px, -3px); }
+  60% { clip-path: inset(0 0 100% 0); }
+  83% { clip-path: inset(44% 0 38% 0); transform: translate(18px, 0); }
+  88% { clip-path: inset(0 0 100% 0); }
+}
+@keyframes nfbJolt { 0%, 93%, 100% { transform: none; } 94% { transform: translate(6px, -4px) skewX(4deg); } 96% { transform: translate(-8px, 3px) skewX(-6deg); } 98% { transform: translate(3px, 0); } }
+
+/* static and scanlines over the top */
+.nfb-noise { position: fixed; inset: -20px; pointer-events: none; opacity: 0.16; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); animation: nfbNoise 0.6s steps(5) infinite; }
+@keyframes nfbNoise { 0% { transform: translate(0, 0); } 20% { transform: translate(-14px, 9px); } 40% { transform: translate(11px, -12px); } 60% { transform: translate(-8px, -6px); } 80% { transform: translate(13px, 7px); } 100% { transform: translate(0, 0); } }
+.nfb-scan { position: fixed; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 3px); }
+.nfb-scan::after { content: ''; position: absolute; left: 0; right: 0; height: 18vh; top: -20vh; background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.07), transparent); animation: nfbBand 5.5s linear infinite; }
+@keyframes nfbBand { to { transform: translateY(140vh); } }
+
+/* content */
+.nfb-in { position: relative; z-index: 2; width: min(720px, 100% - 2 * clamp(20px, 5vw, 48px)); margin: 0 auto; padding: clamp(96px, 16vh, 150px) 0 60px; }
+.nfb-line { margin: 0 0 14px; font-size: 0.78rem; letter-spacing: 0.08em; color: #9a9a9a; text-transform: uppercase; word-break: break-all; }
+.nfb-line b { color: #fff; font-weight: 700; }
+.nfb-blink { animation: nfbBlink 1.1s steps(2, end) infinite; }
+@keyframes nfbBlink { 50% { opacity: 0.2; } }
+.nfb-h { position: relative; margin: 0 0 14px; font-family: 'Archivo', 'Arial Black', system-ui, sans-serif; font-weight: 900; font-size: clamp(2.4rem, 8vw, 4.6rem); line-height: 0.95; letter-spacing: -0.035em; text-transform: uppercase; color: #fff; animation: nfbJitter 5s steps(1, end) infinite; }
+.nfb-h::before, .nfb-h::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; }
+.nfb-h::before { color: #cfcfcf; animation: nfbHA 2.9s steps(1, end) infinite; clip-path: inset(0 0 100% 0); }
+.nfb-h::after { color: #7d7d7d; animation: nfbHB 3.7s steps(1, end) infinite; clip-path: inset(0 0 100% 0); }
+@keyframes nfbHA { 0%, 100% { clip-path: inset(0 0 100% 0); } 10% { clip-path: inset(10% 0 55% 0); transform: translate(-6px, 0); } 16% { clip-path: inset(0 0 100% 0); } 58% { clip-path: inset(52% 0 12% 0); transform: translate(7px, 0); } 63% { clip-path: inset(0 0 100% 0); } }
+@keyframes nfbHB { 0%, 100% { clip-path: inset(0 0 100% 0); } 24% { clip-path: inset(60% 0 8% 0); transform: translate(8px, 1px); } 30% { clip-path: inset(0 0 100% 0); } 74% { clip-path: inset(20% 0 50% 0); transform: translate(-7px, 0); } 79% { clip-path: inset(0 0 100% 0); } }
+@keyframes nfbJitter { 0%, 90%, 100% { transform: none; } 91% { transform: translate(3px, 0) skewX(-3deg); } 93% { transform: translate(-4px, 1px); } 95% { transform: none; } }
+.nfb-copy { max-width: 56ch; margin: 0 0 6px; font-size: 0.92rem; line-height: 1.65; color: #bdbdbd; }
+
+/* the game, in greys */
+.nfb .rg { margin-top: 26px; max-width: 640px; }
+.nfb .rg-canvas { display: block; width: 100%; height: auto; aspect-ratio: 640 / 220; border: 2px solid #f2f2f2; background: rgba(0, 0, 0, 0.55); box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.18); cursor: pointer; touch-action: manipulation; outline: none; }
+.nfb .rg-canvas:focus-visible { box-shadow: 0 0 0 3px #fff; }
+.nfb .rg-help { margin: 12px 0 0; font-size: 0.76rem; color: #8a8a8a; }
+.nfb-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.nfb-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border: 2px solid #f2f2f2; background: transparent; color: #f2f2f2; font: 700 0.8rem/1 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+.nfb-btn:hover, .nfb-btn:focus-visible { background: #f2f2f2; color: #000; outline: none; }
+.nfb-btn kbd { margin-left: 6px; padding: 0 5px; border: 1px solid currentColor; font: 700 0.66rem/1.6 inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nfb-num, .nfb-num::before, .nfb-num::after, .nfb-noise, .nfb-scan::after, .nfb-h, .nfb-h::before, .nfb-h::after, .nfb-blink { animation: none; }
+  .nfb-num::before, .nfb-num::after, .nfb-h::before, .nfb-h::after { display: none; }
+}

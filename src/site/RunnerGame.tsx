@@ -19,7 +19,7 @@ const readBest = () => {
   try { return Number(localStorage.getItem('rungame:best')) || 0; } catch { return 0; }
 };
 
-export default function RunnerGame() {
+export default function RunnerGame({ mono = false }: { mono?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const [best, setBest] = useState(readBest);
   const [mode, setMode] = useState<Mode>('idle');
@@ -38,9 +38,9 @@ export default function RunnerGame() {
 
     const cs = getComputedStyle(canvas);
     const col = (v: string, d: string) => cs.getPropertyValue(v).trim() || d;
-    let ink = col('--text', '#eee');
-    let accent = col('--accent', '#3b8bff');
-    let muted = col('--muted', '#999');
+    let ink = mono ? '#f2f2f2' : col('--text', '#eee');
+    let accent = mono ? '#ffffff' : col('--accent', '#3b8bff');
+    let muted = mono ? '#8a8a8a' : col('--muted', '#999');
 
     let y = 0; // height above the ground
     let vy = 0;
@@ -137,7 +137,7 @@ export default function RunnerGame() {
       }
 
       // draw
-      ink = col('--text', ink); accent = col('--accent', accent); muted = col('--muted', muted);
+      if (!mono) { ink = col('--text', ink); accent = col('--accent', accent); muted = col('--muted', muted); }
       ctx.clearRect(0, 0, W, H);
       ctx.fillStyle = muted;
       for (const s of stars) {
@@ -171,7 +171,7 @@ export default function RunnerGame() {
       window.removeEventListener('keydown', onKey);
       canvas.removeEventListener('pointerdown', onPointer);
     };
-  }, []);
+  }, [mono]);
 
   return (
     <div className="rg">
