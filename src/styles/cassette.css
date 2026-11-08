@@ -69,7 +69,7 @@
 /* Spider-Man sits on top of the player, sideways, legs swinging; his headset wire plugs into the playing tape */
 .site .cs-rig { position: relative; }
 .site .cs-rig .cs-stage { position: relative; margin-top: 118px; }
-.site .cs-spidey { position: absolute; z-index: 4; left: clamp(20px, 6vw, 72px); top: -81px; width: 112px; height: 112px; pointer-events: none; }
+.site .cs-spidey { position: absolute; z-index: 4; left: -54px; top: -81px; width: 112px; height: 112px; pointer-events: none; }
 .site .cs-spidey.on .spider-sprite { animation: csBob 0.6s steps(2, end) infinite; }
 @keyframes csBob { 50% { transform: translateY(-2px); } }
 .site .cs-note { position: absolute; top: 4px; left: 70px; font-style: normal; font-size: 18px; font-weight: 900; color: var(--accent-text); opacity: 0; animation: csNote 1.8s ease-out infinite; }
@@ -87,3 +87,4 @@
 @keyframes csLed { 50% { opacity: 0.25; } }
 @media (max-width: 900px) { .site .cs-rig .cs-stage { margin-top: 118px; } }
 @media (prefers-reduced-motion: reduce) { .site .cs-spidey.on .spider-sprite, .site .cs-note, .site .cs-wire.on .w-flow, .site .cs-wire.on .w-led { animation: none; } .site .cs-note { display: none; } }
+@media (max-width: 700px) { .site .cs-spidey { left: -4px; } }
