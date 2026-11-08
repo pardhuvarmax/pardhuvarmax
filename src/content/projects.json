@@ -15,16 +15,20 @@
         "multi-agent",
         "security"
       ],
-      "body": "## What it is\n\nKernel Borderlands (KB) is a runtime defense framework that watches a Linux system from inside the kernel. It detects, classifies and contains anomalous process behaviour at **Ring 0**.\n\nInstead of leaning only on signatures or fixed rules, KB observes kernel telemetry through **eBPF instrumentation**, builds behavioural context from it, and coordinates a multi-agent defense architecture that can respond to what it sees while the system runs.\n\nIt brings together kernel observability, behavioural analytics, agent orchestration, reinforcement learning and systems programming in one platform. It is built for research and experimentation into host defense.\n\n## How it is put together\n\n- **Kernel layer** (C, eBPF with CO-RE and libbpf): instrumentation and telemetry collection.\n- **Control plane** (Go): the `kbd` daemon that coordinates events and manages the system.\n- **Autonomous Agent Defense Swarm** (Python): behavioural reasoning and multi-agent reinforcement learning.\n- **Operator tools:** a React and TypeScript dashboard, a Rust terminal interface, and a Model Context Protocol server so AI agents can use it as a tool.\n- **Script checker** (Rust): analysis and safety verification of scripts.\n\nIt targets Linux 5.8 and later. The wiki covers installation, requirements, the architecture, the kernel hook points and telemetry pipeline, and the technical whitepaper.",
-      "install": "# set up the environment from the wiki first, then:\ncd kb-control-plane && go run cmd/kbd/main.go\ncd kb-aads && python main.py\ncd kb-op/kb-dashboard && npm run dev",
+      "body": "## What it is\n\nKernel Borderlands (KB) is a runtime defense framework that watches a Linux system from inside the kernel. It detects, classifies and contains anomalous process behaviour at **Ring 0**.\n\nInstead of leaning only on signatures or fixed rules, KB observes kernel telemetry through **eBPF instrumentation**, builds behavioural context from it, and uses that to decide how to respond while the system is running. It is built for research and experimentation into host defense.\n\n## How it is put together\n\n- **Sensors** (C, eBPF with CO-RE and libbpf) observe the kernel and collect telemetry.\n- **Control plane** (Go): the `kbd` daemon scores what the sensors report and enforces the response.\n- **Operator tools:** the `kbctl` command line, a web dashboard and an SSH console.\n- **Containment is deliberate.** Isolate is reversible, namespace-level containment. Kill is separate, needs a two-click confirmation, and only goes ahead after `kbd` has passed its own safety checks and the sensor has confirmed it applied the containment. PID 1, kernel threads, protected executables and registered workloads are never killed.\n- **Research components** sit alongside: a Python agent swarm for behavioural reasoning and multi-agent reinforcement learning, and a Rust script checker. Both are installed but kept off by default for now.\n\n## Installing it\n\nVersion 1.0.0 is the first release, packaged for Ubuntu 24.04 and Debian (`.deb`) and for Arch (`.pkg.tar.zst`), with checksums to verify the download and a field manual for each distribution covering installation, operation and the command reference. Nothing starts at install time: run `sudo kbctl up`, then `kbctl dashboard open`.\n\nIt needs a Linux kernel with BTF, `bpf` enabled in the LSM list (the docs explain how), systemd and openssh. The `docs/` folder in the repository covers the architecture, hook points and development setup.",
+      "install": "# Ubuntu 24.04 / Debian\nsudo apt install ./kernel-borderlands_1.0.0_amd64.deb\n\n# Arch\nsudo pacman -U kernel-borderlands-1.0.0-1-x86_64.pkg.tar.zst\n\n# nothing starts on install\nsudo kbctl up\nkbctl dashboard open",
       "links": [
         {
           "label": "Project site",
           "href": "https://pardhuvarmax.github.io/kernel-borderlands/"
         },
         {
-          "label": "Wiki",
-          "href": "https://github.com/pardhuvarmax/kernel-borderlands/wiki"
+          "label": "Latest release",
+          "href": "https://github.com/pardhuvarmax/kernel-borderlands/releases/latest"
+        },
+        {
+          "label": "Docs",
+          "href": "https://github.com/pardhuvarmax/kernel-borderlands/tree/main/docs"
         }
       ],
       "relatedPosts": [],
