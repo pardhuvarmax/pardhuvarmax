@@ -39,7 +39,8 @@ createRoot(document.getElementById("root")!).render(
       </Route>
       <Route path="/admin" element={<Suspense fallback={null}><Admin /></Suspense>} />
       <Route path="/login" element={<Suspense fallback={null}><LoginPage /></Suspense>} />
-      {import.meta.env.DEV && <Route path="/__broken/:kind" element={<DevBroken />} />}
+      <Route path="/__broken" element={<DevBroken />} />
+      <Route path="/__broken/:kind" element={<DevBroken />} />
     </Routes>
   </BrowserRouter>
   </ErrorBoundary>

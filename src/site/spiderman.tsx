@@ -4,7 +4,7 @@ const SM_W = 25;
 const SM_H = 27;
 const SM_CELL = 4;
 
-type Pose = 'hang' | 'stand' | 'run' | 'sit';
+type Pose = 'hang' | 'stand' | 'run' | 'sit' | 'point';
 
 function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: number; c: string }[] {
   const cells = new Map<string, string>();
@@ -33,7 +33,7 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   } else if (pose === 'sit') {
     line(10, 19, 8, 22, 'B'); line(8, 22, 10, 24, 'B');
     line(14, 19, 16, 22, 'B'); line(16, 22, 14, 24, 'B');
-  } else if (pose === 'stand') {
+  } else if (pose === 'stand' || pose === 'point') {
     line(10, 19, 9, 25, 'B');
     line(14, 19, 15, 25, 'B');
   } else {
@@ -52,6 +52,9 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   if (pose === 'hang') {
     line(8, 12, 6, 8, 'R'); line(6, 8, 6, 2, 'R'); // raised to the web
     line(16, 12, 19, 13, 'R'); line(19, 13, 19, 15, 'R');
+  } else if (pose === 'point') {
+    line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
+    line(16, 12, 20, 11, 'R'); line(20, 11, 22, 11, 'R'); put(24, 11, 'R'); put(24, 12, 'R'); // arm out, one finger pointing
   } else if (pose === 'stand' || pose === 'sit') {
     line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
     line(16, 12, 18, 16, 'R'); line(18, 16, 18, 19, 'R');
@@ -75,7 +78,7 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   });
 }
 
-export type Frame = 'hang' | 'look-left' | 'look-right' | 'alert' | 'runA' | 'runB' | 'sit' | 'sit-left' | 'sit-right' | 'sit-sense';
+export type Frame = 'hang' | 'look-left' | 'look-right' | 'alert' | 'runA' | 'runB' | 'sit' | 'sit-left' | 'sit-right' | 'sit-sense' | 'point' | 'point-left';
 const SM_FRAMES: Record<Frame, { x: number; y: number; c: string }[]> = (() => {
   const mirror = (cs: { x: number; y: number; c: string }[]) => cs.map((p) => ({ ...p, x: 24 - p.x }));
   const run = buildSpiderMan('run');
@@ -90,6 +93,8 @@ const SM_FRAMES: Record<Frame, { x: number; y: number; c: string }[]> = (() => {
     'sit-left': buildSpiderMan('sit', -1),
     'sit-right': buildSpiderMan('sit', 1),
     'sit-sense': buildSpiderMan('sit', 0, true), // spider-sense tingling
+    point: buildSpiderMan('point', 1),
+    'point-left': mirror(buildSpiderMan('point', 1)),
   };
 })();
 const SM_FILL: Record<string, string> = { R: '#c4161c', B: '#1d3fa0', K: '#08080a', W: '#ffffff', S: '#f2f2ee', Y: '#ffd23f' };
