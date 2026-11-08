@@ -223,16 +223,19 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 
 /* 401: Spider-Man the cop, two patrol cars flashing behind him */
 .nfb .bs401 .bs-guard { left: 150px; animation: bsBreath 2.2s steps(1, end) infinite; }
-.nfb .bs401 .bs-car { position: absolute; top: 146px; width: 80px; height: 36px; opacity: 0.8; }
-.nfb .bs401 .bs-car.l { left: 84px; } .nfb .bs401 .bs-car.r { left: 276px; transform: scaleX(-1); }
-.nfb .bs401 .bs-car svg { display: block; }
-.nfb .bs401 .lb { position: absolute; top: -6px; width: 10px; height: 6px; animation: bsLight 0.7s steps(1, end) infinite; }
-.nfb .bs401 .lb.red { left: 28px; background: #e0242c; box-shadow: 0 0 16px 6px rgba(224, 36, 44, 0.65); }
-.nfb .bs401 .lb.blue { left: 40px; background: #2f5bff; box-shadow: 0 0 16px 6px rgba(47, 91, 255, 0.65); animation-name: bsLightB; }
+.nfb .bs401 .bs-car { position: absolute; top: 96px; width: 180px; height: 120px; }
+.nfb .bs401 .bs-car.r { left: 232px; } .nfb .bs401 .bs-car.l { left: 28px; transform: scaleX(-1); }
+.nfb .bs401 .bs-car svg { position: relative; display: block; }
+.nfb .bs401 .bs-car .lb { position: absolute; top: 5px; width: 35px; height: 10px; animation: bsLight 0.7s steps(1, end) infinite; }
+.nfb .bs401 .bs-car .lb.red { left: 60px; background: #e0242c; box-shadow: 0 0 10px 3px rgba(224, 36, 44, 0.9); }
+.nfb .bs401 .bs-car .lb.blue { left: 100px; background: #2f5bff; box-shadow: 0 0 10px 3px rgba(47, 91, 255, 0.9); animation-name: bsLightB; }
+.nfb .bs401 .bs-bloom { position: absolute; left: -40px; top: -60px; width: 260px; height: 210px; border-radius: 50%; pointer-events: none; mix-blend-mode: screen; opacity: 0; animation: bsLight 0.7s steps(1, end) infinite; }
+.nfb .bs401 .bs-bloom.red { background: radial-gradient(closest-side, rgba(224, 36, 44, 0.42), transparent); }
+.nfb .bs401 .bs-bloom.blue { background: radial-gradient(closest-side, rgba(47, 91, 255, 0.42), transparent); animation-name: bsLightB; }
 .nfb .bs401 .bs-cop-say { left: 120px; top: 6px; font-size: 1.15rem; max-width: none; padding: 10px 16px; opacity: 0; transform-origin: 40px 100%; animation: bsCopSay 6s infinite; }
 @keyframes bsBreath { 0% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-@keyframes bsLight { 0% { opacity: 1; } 50% { opacity: 0.1; } }
-@keyframes bsLightB { 0% { opacity: 0.1; } 50% { opacity: 1; } }
+@keyframes bsLight { 0% { opacity: 1; } 50% { opacity: 0.08; } }
+@keyframes bsLightB { 0% { opacity: 0.08; } 50% { opacity: 1; } }
 @keyframes bsCopSay { 0%, 25% { opacity: 0; transform: scale(0.5); } 28% { opacity: 1; transform: scale(1.1); } 31%, 72% { opacity: 1; transform: scale(1); } 78%, 100% { opacity: 0; transform: scale(0.95); } }
 
 /* 429: hamster wheel (speed is driven from the component) */

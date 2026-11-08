@@ -123,19 +123,44 @@ export function Scene403() {
 }
 
 /* ---------- 401: Spider-Man the cop, scanning the crowd outside two parked patrol cars, then asking who you are ---------- */
+const CARPAL = { W: '#d8d8d8', G: '#6a6a6a', D: '#1c1f24', K: '#0c0c0c', S: '#9c9c9c', H: '#ffffff' };
 const GLASSES = ['KKKKKKK', 'K..K..K', 'K..K..K', 'KKKKKKK'];
 const CAP = ['.DDDDDDD.', 'DDDDWDDDD', 'KKKKKKKKK'];
-const CAR = [
-  '.......WWWWWW.......', '......WKKKKKKW......', '.....WKKKKWKKKKW....', '..WWWWWWWWWWWWWWWW..',
-  '.WGGGGGGGGGGGGGGGGW.', '.WGGGWWWWWWGGGGGGGGW.', '.WWWWWWWWWWWWWWWWWW.', '..KKK..........KKK..', '..KWK..........KWK..',
-];
 const S401: [Frame, number][] = [
   ['cross-left', 0], ['cross', 0.08], ['cross-right', 0.16], ['cross', 0.22],
   ['point', 0.26], ['alert', 0.52], ['point', 0.56], ['cross', 0.76], ['cross-left', 0.86],
 ];
+const CAR = [
+  '....................................',
+  '............DDDDDDDDDDDDDDD.........',
+  '............DDDDDDDDDDDDDDDWW.......',
+  '..........WWWWWWWWWWWWWWWWWWWW......',
+  '.........WWWWWWWWWWWWWWWWWWWWWW.....',
+  '.....DDDDDDDDDDDDKDDDDDDDDDDDDD.....',
+  '....DDDSSSDDDDDDDKDDDDDDDDDDDDDD....',
+  '....DDSSSDDDDDDDDKDSSSSDDGDDDDDD....',
+  '....DSSSDDDDDDDDDKDSSSDDDGDDDDDD....',
+  '...DDDDDDDDDDDDDDKDSSDDDDGDDDDDDD...',
+  '..WWWWWWWWWWWWWWWKDDDDDDWGWWWWWWW...',
+  '..WWWWWWWWWWWWWWWWWWWWWWWGWWWWWWW...',
+  '..WWWWWWWWWWWWWWWWWWSSWWWGWWWSSWWW..',
+  '..WWWWWWWWWWWWWWWWWWWWWWWGWWWWWWWW..',
+  '..HHHHKKKKKKKHHHHWWWWWWWWGWWWWWWWW..',
+  '..HHHHGDGDGDGHHHHWWWWWWWWGWWWWWWWWWW',
+  '..HHHHGDGDGDGHHHHKKKKKKKKGKWKWKKKKK.',
+  '..KKKKGDGDGDGKKKKKKKKKKKKKKWWKKKKKK.',
+  '..KKKKGDGDGDGKKKKKKKKKKKKKKKKKKSSKK.',
+  '..SSSSSWWWWWSSSSSKKSSKK......KKSSKK.',
+  '..SSSSSWWWWWSSSSSKKSSKK......KKKKKK.',
+  '..DDDDDDDDDDDDDDDKKKKKK.......KKKK..',
+  '..................KKKK..............',
+  '....................................',
+];
+/** A parked patrol car at a three-quarter angle: front bumper and headlights towards you, one flank receding. The light bar is a separate layer so it can blink. */
 const Patrol = ({ side, delay }: { side: 'l' | 'r'; delay: number }) => (
   <div className={`bs-car ${side}`}>
-    <PixelArt rows={CAR} palette={GREY} cell={4} />
+    <i className="bs-bloom red" style={{ animationDelay: `${delay}s` }} /><i className="bs-bloom blue" style={{ animationDelay: `${delay}s` }} />
+    <PixelArt rows={CAR} palette={CARPAL} cell={5} />
     <i className="lb red" style={{ animationDelay: `${delay}s` }} /><i className="lb blue" style={{ animationDelay: `${delay}s` }} />
   </div>
 );
