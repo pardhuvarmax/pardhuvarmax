@@ -66,3 +66,5 @@
 .lg-provider:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--accent); color: var(--text); }
 /* keep room above the card for Spider-Man even when the card is taller than the window */
 .site.lg { padding-top: 120px; padding-bottom: 40px; }
+.lg-brand span { overflow: hidden; padding: 0; }
+.lg-brand span img { display: block; width: 100%; height: 100%; object-fit: cover; }
