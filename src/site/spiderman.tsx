@@ -4,8 +4,8 @@ const SM_W = 25;
 const SM_H = 27;
 const SM_CELL = 4;
 
-type Pose = 'hang' | 'stand' | 'run' | 'sit' | 'point' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold';
-const STANDING: Pose[] = ['stand', 'point', 'reach', 'shrug', 'throwA', 'throwB', 'shout', 'hold'];
+type Pose = 'hang' | 'stand' | 'run' | 'sit' | 'point' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold' | 'clutch';
+const STANDING: Pose[] = ['stand', 'point', 'reach', 'shrug', 'throwA', 'throwB', 'shout', 'hold', 'clutch'];
 
 function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: number; c: string }[] {
   const cells = new Map<string, string>();
@@ -80,6 +80,9 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   } else if (pose === 'shout') {
     line(8, 12, 8, 9, 'R'); line(8, 9, 9, 9, 'R');
     line(16, 12, 16, 9, 'R'); line(16, 9, 15, 9, 'R'); // hands cupped round the mouth
+  } else if (pose === 'clutch') {
+    line(8, 12, 5, 9, 'R'); line(5, 9, 8, 6, 'R');
+    line(16, 12, 19, 9, 'R'); line(19, 9, 16, 6, 'R'); // both hands clamped on his head
   } else if (pose === 'hold') {
     line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
     line(16, 12, 19, 8, 'R'); line(19, 8, 19, 4, 'R'); // holding a board up
@@ -106,7 +109,7 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   });
 }
 
-export type Frame = 'hang' | 'look-left' | 'look-right' | 'alert' | 'runA' | 'runB' | 'sit' | 'sit-left' | 'sit-right' | 'sit-sense' | 'point' | 'point-left' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold-left' | 'hold' | 'hold-right';
+export type Frame = 'hang' | 'look-left' | 'look-right' | 'alert' | 'runA' | 'runB' | 'sit' | 'sit-left' | 'sit-right' | 'sit-sense' | 'point' | 'point-left' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold-left' | 'hold' | 'hold-right' | 'clutch';
 const SM_FRAMES: Record<Frame, { x: number; y: number; c: string }[]> = (() => {
   const mirror = (cs: { x: number; y: number; c: string }[]) => cs.map((p) => ({ ...p, x: 24 - p.x }));
   const run = buildSpiderMan('run');
@@ -131,6 +134,7 @@ const SM_FRAMES: Record<Frame, { x: number; y: number; c: string }[]> = (() => {
     shout: buildSpiderMan('shout', 1),
     'hold-left': buildSpiderMan('hold', -1),
     hold: buildSpiderMan('hold', 0),
+    clutch: buildSpiderMan('clutch', 0),
     'hold-right': buildSpiderMan('hold', 1),
     'point-left': mirror(buildSpiderMan('point', 1)),
   };

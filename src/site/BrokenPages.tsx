@@ -131,7 +131,7 @@ export function MaintenancePage({ text }: { text?: string }) {
       seed={19}
       title="Back soon"
       line={<>ERROR <b>503</b> · <span className="nfb-blink">down for maintenance</span></>}
-      copy={text || 'The site is closed for a little maintenance. Spider-Man is on a lunch break and will be back soon.'}
+      copy={text || 'The site is getting a little maintenance. Spider-Man is taking a short nap meanwhile, and both will be back soon.'}
       scene={<Scene503 />}
       actions={<button className="nfb-btn nfb-primary" onClick={() => window.location.reload()}><RotateCcw size={16} /> Check again</button>}
     />

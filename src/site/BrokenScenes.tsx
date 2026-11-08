@@ -17,11 +17,29 @@ export function Bubble({ children, style, className = '' }: { children: ReactNod
 }
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/** Speech bubbles that take turns on a loop: [text, start, end] as fractions of `ms`. */
+function Say({ lines, ms, style }: { lines: [string, number, number][]; ms: number; style?: CSSProperties }) {
+  const refs = useRef<(HTMLDivElement | null)[]>([]);
+  useEffect(() => {
+    if (reduced()) return;
+    const anims = lines.map(([, start, end], i) => refs.current[i]?.animate(
+      [{ offset: 0, opacity: 0 }, { offset: Math.max(0, start - 0.0004), opacity: 0 }, { offset: start, opacity: 1 }, { offset: end - 0.0004, opacity: 1 }, { offset: end, opacity: 0 }, { offset: 1, opacity: 0 }],
+      { duration: ms, iterations: Infinity },
+    ));
+    return () => anims.forEach((a) => a?.cancel());
+  }, [ms]); // eslint-disable-line react-hooks/exhaustive-deps
+  return (
+    <>
+      {lines.map(([t], i) => <div key={i} className="bs-bubble" ref={(el) => { refs.current[i] = el; }} style={{ ...style, opacity: i === 0 ? 1 : 0 }}>{t}</div>)}
+    </>
+  );
+}
+
 const GREY = { W: '#f2f2f2', G: '#9a9a9a', D: '#3a3a3a', K: '#000000', Y: '#ffffff', C: '#cfcfcf', P: '#7a7a7a' };
 
 /** Plays a sequence of Spider-Man poses on a loop: [pose, start] pairs, `start` being a fraction of `ms`. Each pose is held until the next starts,
  *  so his arms and legs actually move (no rotating pixel art). Runs on the Web Animations API, so it stays in step with the CSS timelines. */
-function Seq({ steps, ms }: { steps: [Frame, number][]; ms: number }) {
+function Seq({ steps, ms }: { steps: [Frame, number, string?][]; ms: number }) {
   const refs = useRef<(HTMLDivElement | null)[]>([]);
   useEffect(() => {
     if (reduced()) return;
@@ -38,8 +56,8 @@ function Seq({ steps, ms }: { steps: [Frame, number][]; ms: number }) {
   }, [ms]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
-      {steps.map(([f], i) => (
-        <div key={i} className="bs-fl" ref={(el) => { refs.current[i] = el; }} style={{ opacity: i === 0 ? 1 : 0 }}>
+      {steps.map(([f, , cls], i) => (
+        <div key={i} className={`bs-fl ${cls ?? ''}`} ref={(el) => { refs.current[i] = el; }} style={{ opacity: i === 0 ? 1 : 0 }}>
           <SpiderSprite frame={f} />
         </div>
       ))}
@@ -205,26 +223,40 @@ export function Scene429({ progress, done }: { progress: number; done: boolean }
   );
 }
 
-/* ---------- offline: he walks about holding his phone up, hunting for a signal ---------- */
+/* ---------- offline: the tower is broken. He tries for a bar three times, smashes his phone, then panics ---------- */
 const TOWER = ['....WW....', '....WW....', '...W..W...', '...WWWW...', '...W..W...', '..W.WW.W..', '..WWWWWW..', '..W.WW.W..', '.W..WW..W.', '.WWWWWWWW.', '.W..WW..W.', 'WWWWWWWWWW'];
-const HUNT = ['One bar. Please.', 'Come on...', 'Nope.'];
-const SOFF: [Frame, number][] = [['hold-right', 0], ['hold', 0.46], ['hold-left', 0.6]];
-const Bars = ({ lit }: { lit?: boolean }) => (
-  <div className={`bs-bars ${lit ? 'lit' : ''}`}><i /><i /><i /><i /></div>
-);
+const TOWER_BROKEN = ['..........', '..........', '..........', '..........', '..........', '..........', '..W.WW....', '..WWWWWW..', '..W.WW.W..', '.W..WW..W.', '.WWWWWWWW.', 'WWWWWWWWWW'];
+const TOWER_TOP = ['.WW.....', '..WW.WW.', '..WWWWW.', '.W..W..W'];
+const SOFF: [Frame, number, string?][] = [
+  ['look-right', 0], ['hold-right', 0.05], ['look-right', 0.15], ['hold', 0.19], ['look-left', 0.3], ['hold-right', 0.33],
+  ['brace', 0.44], ['throwA', 0.48], ['throwB', 0.54], ['look-right', 0.58], ['clutch', 0.64, 'bs-jit'], ['alert', 0.92],
+];
+const TRIES: [string, number, number][] = [
+  ['One bar. Please.', 0.05, 0.19], ['Come on...', 0.19, 0.33], ['JUST ONE BAR!!', 0.33, 0.47], ['AAARGH!', 0.47, 0.58], ['...', 0.58, 0.64], ['I BROKE IT!!', 0.64, 0.92],
+];
 export function SceneOffline({ online = false }: { online?: boolean }) {
-  const [i, setI] = useState(0);
   return (
     <div className={`bs bsoff ${online ? 'on' : ''}`} aria-hidden="true">
-      <Bubble className={online ? 'say-once' : 'say'} style={{ left: 6, top: 2 }}>
-        <span onAnimationIteration={online ? undefined : () => setI((v) => (v + 1) % HUNT.length)}>{online ? 'Got signal!' : HUNT[i]}</span>
-      </Bubble>
-      <PixelArt className="bs-tower" rows={TOWER} palette={GREY} cell={4} />
-      <i className="bs-sig s1" /><i className="bs-sig s2" /><i className="bs-sig s3" />
-      <div className="bs-sp bs-walkabout">
-        {online ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="hold" /></div> : <Seq steps={SOFF} ms={6400} />}
-        <div className="bs-phone"><Bars lit={online} /></div>
+      {online ? <Bubble className="say-once" style={{ left: 6, top: 2 }}>Got signal!</Bubble> : <Say lines={TRIES} ms={9000} style={{ left: 6, top: 2 }} />}
+      {online ? (
+        <>
+          <PixelArt className="bs-tower" rows={TOWER} palette={GREY} cell={4} />
+          <i className="bs-sig s1" /><i className="bs-sig s2" /><i className="bs-sig s3" />
+        </>
+      ) : (
+        <>
+          <PixelArt className="bs-tower" rows={TOWER_BROKEN} palette={GREY} cell={4} />
+          <PixelArt className="bs-tower-top" rows={TOWER_TOP} palette={GREY} cell={4} />
+          <i className="bs-zap a" /><i className="bs-zap b" />
+        </>
+      )}
+      <div className="bs-sp">
+        {online ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="hold" /></div> : <Seq steps={SOFF} ms={9000} />}
       </div>
+      <div className={`bs-phone ${online ? 'lit' : ''}`}>
+        <div className={`bs-bars ${online ? 'lit' : ''}`}><i /><i /><i /><i /></div>
+      </div>
+      {!online && <div className="bs-wreck"><i /><i /><i /><i /></div>}
     </div>
   );
 }
