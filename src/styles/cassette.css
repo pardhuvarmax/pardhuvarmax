@@ -43,3 +43,5 @@
 .site .cs-head { display: flex; align-items: center; gap: clamp(16px, 3vw, 28px); }
 .site .cs-cover { flex: none; width: clamp(96px, 20vw, 168px); aspect-ratio: 1; object-fit: cover; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--accent); }
 .site .cs-head .cs-now { min-width: 0; }
+
+.site .cs-disclaimer { max-width: 760px; margin: clamp(26px, 4vw, 40px) 0 0; padding-left: 14px; border-left: 3px solid var(--accent); color: var(--muted); font-size: 0.82rem; line-height: 1.6; }

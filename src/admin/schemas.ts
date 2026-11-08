@@ -207,6 +207,7 @@ export const COLLECTIONS: Collection[] = [
     path: 'src/content/cassette.json',
     fields: [
       { key: 'intro', label: 'Intro line', type: 'textarea', help: 'Shown at the top of the Cassette page.' },
+      { key: 'disclaimer', label: 'Disclaimer (bottom of page)', type: 'textarea', help: 'Rights notice shown under the player. Leave empty to hide it.' },
       {
         key: 'albums',
         label: 'Albums (tapes)',

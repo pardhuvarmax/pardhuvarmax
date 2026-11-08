@@ -6,8 +6,12 @@
       "artist": "Chase Atlantic",
       "cover": "/uploads/friends-cover.jpg",
       "tracks": [
-        { "title": "Friends (Intro loop)", "src": "/uploads/chase-atlantic-friends.mp3" }
+        {
+          "title": "Friends (Intro loop)",
+          "src": "/uploads/chase-atlantic-friends.mp3"
+        }
       ]
     }
-  ]
+  ],
+  "disclaimer": "Disclaimer: all music, artwork and related rights belong to their respective artists, labels and owners. Tracks are shared here only for personal listening and appreciation, with no commercial intent. If you are a rights holder and want something removed, email me and it will come down."
 }

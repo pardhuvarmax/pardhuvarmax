@@ -17,6 +17,7 @@ function Reels() {
 }
 
 export default function Cassette() {
+  const disclaimer = cassette.disclaimer ? <p className="cs-disclaimer">{cassette.disclaimer}</p> : null;
   const albums = cassette.albums.filter((a) => a.tracks?.some((t) => t.src));
   const audio = useRef<HTMLAudioElement>(null);
   const wantPlay = useRef(false);
@@ -49,6 +50,7 @@ export default function Cassette() {
           <span className="cs-tape" aria-hidden="true"><span className="cs-label"><b>Side A</b></span><Reels /></span>
           <p>Nothing on the shelf yet. New tapes soon.</p>
         </div>
+        {disclaimer}
       </section>
     );
   }
@@ -171,6 +173,7 @@ export default function Cassette() {
           ))}
         </ol>
       </div>
+      {disclaimer}
     </section>
   );
 }

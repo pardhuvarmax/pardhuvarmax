@@ -13,7 +13,7 @@ export { site, publications, projects, experience, honors, skills, news };
 
 export interface CassetteTrack { title: string; artist?: string; src: string }
 export interface CassetteAlbum { title: string; artist: string; year?: string; cover?: string; note?: string; tracks: CassetteTrack[] }
-export const cassette = cassetteData as { intro: string; albums: CassetteAlbum[] };
+export const cassette = cassetteData as { intro: string; disclaimer?: string; albums: CassetteAlbum[] };
 
 export interface Post extends PostMeta {
   slug: string;
