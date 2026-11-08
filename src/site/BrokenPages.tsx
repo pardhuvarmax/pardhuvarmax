@@ -18,7 +18,7 @@ export function CrashPage({ error }: { error?: Error | null }) {
       title={stale ? 'New version out' : 'Something broke'}
       line={<>ERROR <b>500</b> · <span className="nfb-blink">{stale ? 'page files changed' : 'the page crashed'}</span></>}
       copy={stale ? 'The site was updated while this tab was open, so some of its files are gone. Reload to get the new version.' : 'Something went wrong while drawing this page. It is not you, and Spider-Man is on it. Reloading usually helps.'}
-      scene={<Scene500 />}
+      scene={<Scene500 stale={stale} />}
       actions={
         <>
           <button className="nfb-btn nfb-primary" onClick={() => window.location.reload()}><RotateCcw size={16} /> Reload</button>

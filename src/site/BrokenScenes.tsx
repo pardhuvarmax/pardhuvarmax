@@ -50,12 +50,17 @@ function Seq({ steps, ms }: { steps: [Frame, number][]; ms: number }) {
 
 /* ---------- 500: percussive maintenance. He hits the monitor with a wrench until it behaves ---------- */
 const S500: [Frame, number][] = [['look-right', 0], ['throwA', 0.08], ['throwB', 0.17], ['look-right', 0.23], ['throwA', 0.33], ['throwB', 0.42], ['look-right', 0.48], ['throwA', 0.58], ['throwB', 0.67], ['shrug', 0.74], ['alert', 0.88]];
-export function Scene500() {
+export function Scene500({ stale = false }: { stale?: boolean }) {
   return (
     <div className="bs bs500" aria-hidden="true">
-      <Bubble style={{ left: 6, top: 2 }}>Hold on. I know a trick.</Bubble>
+      <Bubble style={{ left: 6, top: 2 }}>{stale ? 'New build landed. Let me poke it.' : 'Hold on. I know a trick.'}</Bubble>
       <div className="bs-mon">
-        <div className="bs-mon-in"><span>500</span></div>
+        <div className="bs-mon-in">
+          <span>500</span>
+          <div className="bs-site">
+            <b /><u /><u /><u /><s /><s /><s />
+          </div>
+        </div>
       </div>
       <div className="bs-mon-neck" /><div className="bs-mon-foot" />
       <i className="bs-smoke a" /><i className="bs-smoke b" /><i className="bs-smoke c" />

@@ -32,15 +32,19 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 @keyframes nfbJolt { 0%, 93%, 100% { transform: none; } 94% { transform: translate(6px, -4px) skewX(4deg); } 96% { transform: translate(-8px, 3px) skewX(-6deg); } 98% { transform: translate(3px, 0); } }
 
 /* static and scanlines over the top */
-.nfb-glow { position: fixed; inset: 0; pointer-events: none; mix-blend-mode: screen; animation: nfbGlowIn 3.2s ease-out both; background:
-  radial-gradient(60vmax 45vmax at 14% 18%, rgba(196, 22, 28, 0.2), transparent 70%),
-  radial-gradient(60vmax 45vmax at 88% 82%, rgba(29, 63, 160, 0.26), transparent 70%),
-  radial-gradient(40vmax 30vmax at 72% 14%, rgba(255, 210, 63, 0.09), transparent 70%); }
-.nfb-glow::after { content: ''; position: absolute; inset: 0; animation: nfbGlowDrift 14s ease-in-out infinite alternate; background:
-  radial-gradient(40vmax 30vmax at 30% 80%, rgba(196, 22, 28, 0.1), transparent 70%),
-  radial-gradient(40vmax 30vmax at 70% 30%, rgba(29, 63, 160, 0.12), transparent 70%); }
+.nfb-glow { position: fixed; inset: 0; pointer-events: none; mix-blend-mode: screen; animation: nfbGlowIn 3s ease-out both; }
+.nfb-glow i { position: absolute; opacity: 0; animation: nfbLine 3s steps(1, end) infinite; }
 @keyframes nfbGlowIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes nfbGlowDrift { from { transform: translate(-3%, 2%); } to { transform: translate(3%, -2%); } }
+@keyframes nfbLine {
+  0%, 6% { opacity: 0; transform: translateX(0); }
+  7% { opacity: var(--pk); transform: translateX(var(--dx)); }
+  10% { opacity: calc(var(--pk) * 0.4); transform: translateX(calc(var(--dx) * -0.6)); }
+  13% { opacity: 0; }
+  58% { opacity: 0; transform: translateX(0); }
+  59% { opacity: calc(var(--pk) * 0.8); transform: translateX(calc(var(--dx) * 0.5)); }
+  61% { opacity: var(--pk); transform: translateX(calc(var(--dx) * -1)); }
+  64%, 100% { opacity: 0; }
+}
 .nfb-noise { position: fixed; inset: -20px; pointer-events: none; opacity: 0.16; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); animation: nfbNoise 0.6s steps(5) infinite; }
 @keyframes nfbNoise { 0% { transform: translate(0, 0); } 20% { transform: translate(-14px, 9px); } 40% { transform: translate(11px, -12px); } 60% { transform: translate(-8px, -6px); } 80% { transform: translate(13px, 7px); } 100% { transform: translate(0, 0); } }
 .nfb-scan { position: fixed; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 3px); }
@@ -73,7 +77,7 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 .nfb-btn kbd { margin-left: 6px; padding: 0 5px; border: 1px solid currentColor; font: 700 0.66rem/1.6 inherit; }
 
 @media (prefers-reduced-motion: reduce) {
-  .nfb-num, .nfb-s::before, .nfb-s::after, .nfb-noise, .nfb-glow, .nfb-glow::after, .nfb-scan::after, .nfb-h, .nfb-h::before, .nfb-h::after, .nfb-blink { animation: none; }
+  .nfb-num, .nfb-s::before, .nfb-s::after, .nfb-noise, .nfb-glow i, .nfb-scan::after, .nfb-h, .nfb-h::before, .nfb-h::after, .nfb-blink { animation: none; }
   .nfb-s::before, .nfb-s::after, .nfb-h::before, .nfb-h::after { display: none; }
 }
 
@@ -149,6 +153,20 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
   67.5% { transform: translate(-6px, 2px) scaleX(1.2); color: #000; } 69% { transform: none; color: #f2f2f2; } 100% { transform: none; color: #f2f2f2; }
 }
 @keyframes bsSmoke { 0%, 70% { opacity: 0; transform: none; } 72% { opacity: 0.85; } 96%, 100% { opacity: 0; transform: translate(6px, -36px) scale(2); } }
+
+/* the monitor flickers between the real site and the error */
+.nfb .bs500 .bs-site { position: absolute; inset: 0; background: #0a0a0a; opacity: 0; animation: bsSiteFlick 8s infinite; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 9px 7px 7px 7px 1fr 1fr; gap: 4px; padding: 6px; align-content: start; }
+.nfb .bs500 .bs-site b { grid-column: 1 / 3; background: #f2f2f2; height: 5px; width: 62%; }
+.nfb .bs500 .bs-site u { grid-column: 1 / 3; background: #888; height: 4px; text-decoration: none; }
+.nfb .bs500 .bs-site u:nth-of-type(1) { width: 90%; } .nfb .bs500 .bs-site u:nth-of-type(2) { width: 72%; } .nfb .bs500 .bs-site u:nth-of-type(3) { width: 80%; }
+.nfb .bs500 .bs-site s { background: #3a3a3a; border: 1px solid #f2f2f2; text-decoration: none; min-height: 14px; }
+@keyframes bsSiteFlick {
+  0%, 2.5% { opacity: 0; }
+  3% { opacity: 1; } 4% { opacity: 0; } 5% { opacity: 1; transform: translateX(3px); } 6.5%, 15% { opacity: 0; transform: none; }
+  17.5% { opacity: 1; transform: translateX(-4px); } 18.5% { opacity: 0; } 19.5% { opacity: 1; transform: none; } 20.5% { opacity: 0; } 22% { opacity: 1; transform: translateX(5px); } 23.5%, 40% { opacity: 0; transform: none; }
+  42.5% { opacity: 1; transform: translateX(4px); } 43.5% { opacity: 0; } 44.5% { opacity: 1; transform: none; } 46% { opacity: 0; } 47% { opacity: 1; transform: translateX(-5px); } 48.5%, 62% { opacity: 0; transform: none; }
+  64% { opacity: 1; } 65% { opacity: 0; } 66% { opacity: 1; } 67.5% { opacity: 0; } 68.5% { opacity: 1; transform: translateX(3px); } 70% { opacity: 0; transform: none; } 71% { opacity: 1; } 73% { opacity: 0; } 74%, 91% { opacity: 1; transform: none; } 92% { opacity: 0; } 93% { opacity: 1; } 94.5%, 100% { opacity: 0; }
+}
 
 /* 403: strands shoot out, the sign drops and bounces, he hops over, taps it, hops back */
 .nfb .bs403 { cursor: pointer; }

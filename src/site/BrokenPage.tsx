@@ -4,6 +4,28 @@ import '../styles/notfound.css';
 
 /** The shared "broken site" screen: black and white, a huge warped code stretched across the page, glitching text, and a scene
  *  with Spider-Man (the only colour). Rendered on <body> so nothing in the layout can sit on top of it. */
+
+const GLITCH = ['#e0242c', '#2f5bff', '#ffd23f', '#22d3ee', '#ff3fa4'];
+/** Faint coloured streaks that flicker and jump sideways, like a signal coming back. Deterministic per page so it does not reshuffle on re-render. */
+function GlitchLines({ seed }: { seed: number }) {
+  let r = seed * 9301 + 49297;
+  const rnd = () => ((r = (r * 9301 + 49297) % 233280) / 233280);
+  const lines = Array.from({ length: 26 }, (_, i) => {
+    const thick = rnd() < 0.22;
+    return {
+      top: rnd() * 100, left: rnd() * 70, width: 14 + rnd() * 48, height: thick ? 6 + rnd() * 10 : 1 + Math.floor(rnd() * 3),
+      color: GLITCH[i % GLITCH.length], dx: (rnd() < 0.5 ? -1 : 1) * (14 + rnd() * 60), dur: 2.2 + rnd() * 3.6, delay: rnd() * 4, peak: thick ? 0.12 : 0.34,
+    };
+  });
+  return (
+    <div className="nfb-glow" aria-hidden="true">
+      {lines.map((l, i) => (
+        <i key={i} style={{ top: `${l.top}%`, left: `${l.left}%`, width: `${l.width}%`, height: l.height, background: l.color, '--dx': `${l.dx}px`, '--pk': l.peak, animationDuration: `${l.dur}s`, animationDelay: `${l.delay}s` } as React.CSSProperties} />
+      ))}
+    </div>
+  );
+}
+
 export default function BrokenPage({
   code,
   title,
@@ -92,7 +114,7 @@ export default function BrokenPage({
       <div className="nfb-num" ref={num} aria-hidden="true" style={{ filter: `url(#${filter})` }}>
         <div className="nfb-s" data-text={code}><span className="nfb-t">{code}</span></div>
       </div>
-      {tint && <div className="nfb-glow" aria-hidden="true" />}
+      {tint && <GlitchLines seed={seed} />}
       <div className="nfb-noise" aria-hidden="true" />
       <div className="nfb-scan" aria-hidden="true" />
 
