@@ -114,6 +114,7 @@ export default function Cassette() {
         ))}
       </div>
 
+      <div className="cs-stage">
       <div className="cs-deck">
         <audio
           ref={audio}
@@ -174,6 +175,7 @@ export default function Cassette() {
         </ol>
       </div>
       {disclaimer}
+      </div>
     </section>
   );
 }
