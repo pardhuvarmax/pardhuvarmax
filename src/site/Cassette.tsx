@@ -186,6 +186,7 @@ export default function Cassette() {
           {(track?.cover || album.cover) && <img className="cs-cover" src={safeHref((track?.cover || album.cover)!)} alt={`${track?.title ?? album.title} cover`} />}
           <div className="cs-now">
             <span className="cs-kick">{playing ? 'Now playing' : 'Loaded'}</span>
+            {track?.fav && <span className="cs-fav">★ Peak favourite</span>}
             <h3>{track?.title}</h3>
             <p>{track?.artist || album.artist}{track?.year ? ` · ${track.year}` : ''}</p>
           </div>
@@ -223,7 +224,7 @@ export default function Cassette() {
             <li key={x.src + i}>
               <button className={i === t ? 'on' : ''} onClick={() => play(a, i)}>
                 <span className="cs-n">{i === t && playing ? '▶' : String(i + 1).padStart(2, '0')}</span>
-                <span className="cs-t">{x.title}</span>
+                <span className="cs-t">{x.title}{x.fav && <span className="cs-star" aria-label="Peak favourite"> ★</span>}</span>
                 {x.artist && <span className="cs-a">{x.artist}</span>}
               </button>
             </li>

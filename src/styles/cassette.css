@@ -102,3 +102,7 @@
 .site .cs-glow.live { animation: csGlow 1s ease-in-out infinite; }
 @keyframes csGlow { 50% { opacity: 1; transform: scale(1.45); } }
 @media (prefers-reduced-motion: reduce) { .site .cs-link.live, .site .cs-glow.live { animation: none; } }
+
+/* peak-favourite tag in the player, star in the track list */
+.site .cs-fav { display: inline-block; margin-left: 10px; padding: 2px 8px; border: 2px solid var(--accent); color: var(--accent-text); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; vertical-align: 1px; }
+.site .cs-star { color: var(--accent-text); }

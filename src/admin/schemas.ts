@@ -227,6 +227,7 @@ export const COLLECTIONS: Collection[] = [
             fields: [
               { key: 'title', label: 'Track title', type: 'text' },
               { key: 'artist', label: 'Artist (if different)', type: 'text' },
+              { key: 'fav', label: 'Peak favourite', type: 'boolean', help: 'Adds a "Peak favourite" tag and a star in the track list.' },
               { key: 'year', label: 'Year (optional)', type: 'text' },
               { key: 'note', label: 'Why I like it (optional)', type: 'textarea', help: 'Shown under the player controls while this song is selected.' },
               { key: 'cover', label: 'Song cover (optional)', type: 'image', help: 'Shown in the player while this song is selected.' },
