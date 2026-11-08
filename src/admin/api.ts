@@ -20,6 +20,7 @@ export async function api<T = any>(action: string, opts: { query?: Record<string
     /* non-JSON */
   }
   if (!res.ok) throw new ApiError(res.status, data?.error ?? `Request failed (${res.status})`);
+  if (data === null) throw new ApiError(res.status, 'The admin service did not answer. Check that the API is deployed.');
   return data as T;
 }
 

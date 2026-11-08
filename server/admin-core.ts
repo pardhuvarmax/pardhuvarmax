@@ -13,7 +13,7 @@ export interface AdminRequest {
 export interface AdminResult {
   status: number;
   json: unknown;
-  headers?: Record<string, string>;
+  headers?: Record<string, string | string[]>;
 }
 export interface AdminOptions {
   /** Dev server: write to local disk and skip login. */
@@ -80,12 +80,89 @@ function verifyTotp(code: string): boolean {
   });
 }
 
+/* ---------------- Google sign-in ---------------- */
+/** Accounts allowed to sign in with Google (comma separated in ADMIN_EMAILS). */
+function allowedEmails(): string[] {
+  return (process.env.ADMIN_EMAILS || 'pardhuvarma.cs@gmail.com').split(',').map((e) => e.trim().toLowerCase()).filter(Boolean);
+}
+/** Verifies a Google ID token (from Google Identity Services) with Google, and checks audience, issuer, expiry and the allow-list. */
+async function verifyGoogle(credential: unknown): Promise<string> {
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  if (!clientId) throw new HttpError(500, 'Google sign-in is not configured.');
+  if (typeof credential !== 'string' || credential.length < 20 || credential.length > 8192) throw new HttpError(400, 'Missing Google credential.');
+  const r = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(credential));
+  if (!r.ok) throw new HttpError(401, 'Google did not accept that sign-in.');
+  const t = (await r.json()) as { aud?: string; iss?: string; email?: string; email_verified?: string | boolean; exp?: string | number };
+  const issuerOk = t.iss === 'accounts.google.com' || t.iss === 'https://accounts.google.com';
+  const email = String(t.email ?? '').toLowerCase();
+  if (t.aud !== clientId || !issuerOk || String(t.email_verified) !== 'true' || Number(t.exp) * 1000 < Date.now() || !allowedEmails().includes(email)) {
+    throw new HttpError(401, 'This Google account is not allowed to sign in.');
+  }
+  return email;
+}
+
+/* ---------------- GitHub / ORCID sign-in (OAuth authorization-code flow) ---------------- */
+const OAUTH = {
+  github: { authorize: 'https://github.com/login/oauth/authorize', idEnv: 'GITHUB_CLIENT_ID', secretEnv: 'GITHUB_CLIENT_SECRET' },
+  orcid: { authorize: 'https://orcid.org/oauth/authorize', idEnv: 'ORCID_CLIENT_ID', secretEnv: 'ORCID_CLIENT_SECRET' },
+} as const;
+type Provider = keyof typeof OAUTH;
+const providerOf = (p: unknown): Provider => {
+  if (p === 'github' || p === 'orcid') return p;
+  throw new HttpError(400, 'Unknown sign-in provider.');
+};
+const oauthConfigured = (p: Provider) => !!process.env[OAUTH[p].idEnv] && !!process.env[OAUTH[p].secretEnv];
+const csvEnv = (name: string, fallback: string) => (process.env[name] || fallback).split(',').map((v) => v.trim().toLowerCase()).filter(Boolean);
+
+function siteOrigin(req: AdminRequest): string {
+  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, '');
+  const host = req.headers['x-forwarded-host'] ?? req.headers.host;
+  const proto = (req.headers['x-forwarded-proto'] ?? 'https').split(',')[0];
+  return `${proto}://${host}`;
+}
+const callbackUrl = (req: AdminRequest, p: Provider) => `${siteOrigin(req)}/auth/${p}/callback`;
+/** Where to send the person afterwards: only same-site paths. */
+const safeFrom = (v: unknown): string => (typeof v === 'string' && v.startsWith('/') && !v.startsWith('//') && v.length < 200 && !/[\r\n\\]/.test(v) ? v : '/');
+const signState = (nonce: string) => crypto.createHmac('sha256', sessionSecret() + '|oauth').update(nonce).digest('hex');
+// SameSite=Lax (not Strict): the provider sends the browser back to us from another site.
+const stateCookie = (value: string, maxAge: number, secure: boolean) => `oauth_state=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${secure ? '; Secure' : ''}`;
+
+/** Trades the one-time code for the person's identity. Returns the lowercase GitHub login / the ORCID iD. */
+async function oauthIdentity(p: Provider, code: string, redirectUri: string): Promise<string> {
+  const client_id = process.env[OAUTH[p].idEnv]!;
+  const client_secret = process.env[OAUTH[p].secretEnv]!;
+  if (p === 'github') {
+    const t = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client_id, client_secret, code, redirect_uri: redirectUri }),
+    });
+    const token = ((await t.json()) as { access_token?: string }).access_token;
+    if (!token) throw new HttpError(401, 'GitHub did not accept that sign-in.');
+    const u = await fetch('https://api.github.com/user', { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'User-Agent': 'portfolio-cms' } });
+    return String(((await u.json()) as { login?: string }).login ?? '').toLowerCase();
+  }
+  const t = await fetch('https://orcid.org/oauth/token', {
+    method: 'POST',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ client_id, client_secret, grant_type: 'authorization_code', code, redirect_uri: redirectUri }),
+  });
+  const body = (await t.json()) as { orcid?: string };
+  if (!body.orcid) throw new HttpError(401, 'ORCID did not accept that sign-in.');
+  return body.orcid.toLowerCase();
+}
+const oauthAllowed = (p: Provider, who: string) => (p === 'github' ? csvEnv('ADMIN_GITHUB_USERS', 'pardhuvarmax') : csvEnv('ADMIN_ORCIDS', '0009-0005-3251-9944')).includes(who);
+
 /* ---------------- Session ---------------- */
+/** Key that signs the session cookie. Never derived from anything public (e.g. the Google client id). */
 function sessionSecret(): string {
-  return process.env.ADMIN_SESSION_SECRET || crypto.createHash('sha256').update('admin:' + (process.env.TOTP_SECRET ?? '')).digest('hex');
+  if (process.env.ADMIN_SESSION_SECRET) return process.env.ADMIN_SESSION_SECRET;
+  return process.env.TOTP_SECRET ? crypto.createHash('sha256').update('admin:' + process.env.TOTP_SECRET).digest('hex') : '';
 }
 function signSession(exp: number): string {
-  const sig = crypto.createHmac('sha256', sessionSecret()).update(String(exp)).digest('hex');
+  const secret = sessionSecret();
+  if (!secret) throw new HttpError(500, 'Set ADMIN_SESSION_SECRET (or TOTP_SECRET) on the server to enable sign-in.');
+  const sig = crypto.createHmac('sha256', secret).update(String(exp)).digest('hex');
   return `${exp}.${sig}`;
 }
 function readCookie(header: string | undefined, name: string): string {
@@ -96,7 +173,7 @@ function readCookie(header: string | undefined, name: string): string {
   return '';
 }
 function isAuthed(req: AdminRequest): boolean {
-  if (!process.env.TOTP_SECRET) return false;
+  if (!sessionSecret()) return false;
   const [expStr, sig] = readCookie(req.headers.cookie, SESSION_COOKIE).split('.');
   const exp = Number(expStr);
   if (!exp || !sig || exp < Date.now() / 1000) return false;
@@ -227,7 +304,7 @@ function githubStorage(): Storage {
 /* ---------------- Handler ---------------- */
 export async function handleAdmin(req: AdminRequest, opts: AdminOptions = {}): Promise<AdminResult> {
   const noStore = { 'Cache-Control': 'no-store' };
-  const ok = (json: unknown, headers: Record<string, string> = {}): AdminResult => ({ status: 200, json, headers: { ...noStore, ...headers } });
+  const ok = (json: unknown, headers: Record<string, string | string[]> = {}): AdminResult => ({ status: 200, json, headers: { ...noStore, ...headers } });
   try {
     const action = req.query.action ?? '';
     const local = !!opts.local;
@@ -235,16 +312,18 @@ export async function handleAdmin(req: AdminRequest, opts: AdminOptions = {}): P
     const ip = (req.headers['x-forwarded-for'] ?? 'local').split(',')[0].trim();
 
     if (action === 'status') {
-      return ok({ authed: local || isAuthed(req), local, configured: local || !!process.env.TOTP_SECRET });
+      const totp = !!process.env.TOTP_SECRET;
+      const google = process.env.GOOGLE_CLIENT_ID || null; // a client id is public by design
+      return ok({ authed: local || isAuthed(req), local, configured: local || totp || !!google || oauthConfigured('github') || oauthConfigured('orcid'), totp: local || totp, google, github: oauthConfigured('github'), orcid: oauthConfigured('orcid') });
     }
 
-    if (req.method !== 'POST' && ['login', 'logout', 'write', 'delete', 'upload'].includes(action)) {
+    if (req.method !== 'POST' && ['login', 'google', 'logout', 'write', 'delete', 'upload'].includes(action)) {
       throw new HttpError(405, 'Method Not Allowed');
     }
 
     if (action === 'login') {
       if (local) return ok({ authed: true, local });
-      if (!process.env.TOTP_SECRET) throw new HttpError(500, 'TOTP_SECRET is not configured.');
+      if (!process.env.TOTP_SECRET) throw new HttpError(500, 'Authenticator sign-in is not configured.');
       throttle(ip);
       const code = typeof req.body?.code === 'string' ? req.body.code.trim() : '';
       if (!verifyTotp(code)) {
@@ -253,6 +332,67 @@ export async function handleAdmin(req: AdminRequest, opts: AdminOptions = {}): P
       }
       attempts.delete(ip);
       return ok({ authed: true }, { 'Set-Cookie': cookieHeader(signSession(Math.floor(Date.now() / 1000) + SESSION_TTL), SESSION_TTL, secure) });
+    }
+    if (action === 'google') {
+      if (local) return ok({ authed: true, local });
+      throttle(ip);
+      try {
+        await verifyGoogle(req.body?.credential);
+      } catch (e) {
+        if (e instanceof HttpError && e.status === 401) recordFailure(ip);
+        throw e;
+      }
+      attempts.delete(ip);
+      return ok({ authed: true }, { 'Set-Cookie': cookieHeader(signSession(Math.floor(Date.now() / 1000) + SESSION_TTL), SESSION_TTL, secure) });
+    }
+    if (action === 'oauth-start') {
+      const p = providerOf(req.query.provider);
+      const from = safeFrom(req.query.from);
+      if (local) return { status: 302, json: {}, headers: { Location: from, 'Cache-Control': 'no-store' } };
+      if (!oauthConfigured(p)) throw new HttpError(500, `${p} sign-in is not configured.`);
+      if (!sessionSecret()) throw new HttpError(500, 'Set ADMIN_SESSION_SECRET (or TOTP_SECRET) on the server to enable sign-in.');
+      const nonce = crypto.randomBytes(16).toString('hex');
+      const url = new URL(OAUTH[p].authorize);
+      url.searchParams.set('client_id', process.env[OAUTH[p].idEnv]!);
+      url.searchParams.set('redirect_uri', callbackUrl(req, p));
+      url.searchParams.set('state', `${nonce}.${Buffer.from(from).toString('base64url')}`);
+      if (p === 'github') {
+        url.searchParams.set('scope', 'read:user');
+        url.searchParams.set('allow_signup', 'false');
+      } else {
+        url.searchParams.set('response_type', 'code');
+        url.searchParams.set('scope', '/authenticate');
+      }
+      return { status: 302, json: {}, headers: { Location: url.toString(), 'Set-Cookie': stateCookie(`${nonce}.${signState(nonce)}`, 600, secure), 'Cache-Control': 'no-store' } };
+    }
+    if (action === 'oauth-callback') {
+      const p = providerOf(req.query.provider);
+      const back = (location: string, cookies: string[]): AdminResult => ({ status: 302, json: {}, headers: { Location: location, 'Set-Cookie': cookies, 'Cache-Control': 'no-store' } });
+      const fail = (message: string) => back('/login?error=' + encodeURIComponent(message), [stateCookie('', 0, secure)]);
+      try {
+        if (!oauthConfigured(p) || !sessionSecret()) throw new HttpError(500, 'Sign-in is not configured.');
+        throttle(ip);
+        if (req.query.error) return fail('Sign-in was cancelled.');
+        const [nonce, fromB64] = String(req.query.state ?? '').split('.');
+        const [cookieNonce, cookieSig] = readCookie(req.headers.cookie, 'oauth_state').split('.');
+        const sigOk = !!nonce && nonce === cookieNonce && !!cookieSig && cookieSig.length === signState(nonce).length && crypto.timingSafeEqual(Buffer.from(cookieSig), Buffer.from(signState(nonce)));
+        if (!sigOk) {
+          recordFailure(ip);
+          throw new HttpError(401, 'The sign-in session expired. Please try again.');
+        }
+        const code = String(req.query.code ?? '');
+        if (!code || code.length > 512) throw new HttpError(400, 'Missing sign-in code.');
+        const who = await oauthIdentity(p, code, callbackUrl(req, p));
+        if (!who || !oauthAllowed(p, who)) {
+          recordFailure(ip);
+          throw new HttpError(401, 'This account is not allowed to sign in.');
+        }
+        attempts.delete(ip);
+        const from = safeFrom(fromB64 ? Buffer.from(fromB64, 'base64url').toString() : '/');
+        return back(from, [stateCookie('', 0, secure), cookieHeader(signSession(Math.floor(Date.now() / 1000) + SESSION_TTL), SESSION_TTL, secure)]);
+      } catch (e) {
+        return fail(e instanceof HttpError ? e.message : 'Sign-in failed.');
+      }
     }
     if (action === 'logout') return ok({ authed: false }, { 'Set-Cookie': cookieHeader('', 0, secure) });
 

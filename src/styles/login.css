@@ -1,0 +1,68 @@
+/* Sign-in page: same language as the site (outlined card, hard shadow, dotted background, drifting accent). */
+.lg { align-items: center; justify-content: center; padding: 32px 20px; }
+.lg-card { position: relative; z-index: 2; width: min(440px, 100%); padding: 34px 32px 26px; background: var(--bg); border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--accent); }
+.lg-brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.lg-brand span { display: grid; place-items: center; width: 28px; height: 28px; background: var(--accent); color: var(--on-accent); border: 2px solid var(--ink); font-family: 'Archivo', system-ui, sans-serif; font-weight: 900; font-size: 16px; letter-spacing: 0; }
+.lg-kicker { display: inline-flex; align-items: center; gap: 6px; margin: 26px 0 0; padding: 3px 10px; background: var(--ink); color: var(--bg); font-family: var(--mono, 'JetBrains Mono', monospace); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.lg-card h1 { margin: 12px 0 0; font-family: 'Archivo', system-ui, sans-serif; font-weight: 900; font-size: clamp(2.2rem, 7vw, 3rem); line-height: 1; letter-spacing: -0.03em; text-transform: uppercase; }
+.lg-lede { margin: 12px 0 26px; color: var(--muted); font-size: 0.98rem; }
+
+.lg-otp { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.lg-otp input { width: 100%; min-width: 0; height: 62px; padding: 0; border: 2px solid var(--ink); background: var(--surface); color: var(--text); font-family: var(--mono, 'JetBrains Mono', monospace); font-size: 1.7rem; text-align: center; caret-color: var(--accent-text); border-radius: 0; transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s; }
+.lg-otp input:focus { outline: none; transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--accent); }
+.lg-otp input:disabled { opacity: 0.5; }
+.lg-otp.bad input { border-color: #e5566a; animation: lgShake 0.4s; }
+@keyframes lgShake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+
+.lg-err { margin: 14px 0 0; padding: 8px 12px; border: 2px solid #e5566a; color: #e5566a; font-size: 0.9rem; font-weight: 600; }
+.lg-note { margin: 14px 0 0; padding: 10px 12px; border: 2px dashed var(--ink); color: var(--muted); font-size: 0.9rem; }
+.lg-note span { display: block; margin-top: 4px; font-size: 0.82rem; }
+.lg-note code { font-family: var(--mono, 'JetBrains Mono', monospace); color: var(--text); }
+
+.lg-btn { width: 100%; margin-top: 20px; padding: 14px; border: 3px solid var(--ink); background: var(--accent); color: var(--on-accent); font: inherit; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); transition: transform 0.12s, box-shadow 0.12s; }
+.lg-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.lg-btn:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+.lg-btn:disabled { background: transparent; color: var(--muted); box-shadow: none; cursor: not-allowed; border-color: var(--line); }
+
+.lg-back { display: inline-flex; align-items: center; gap: 6px; margin-top: 22px; color: var(--muted); font-size: 0.9rem; text-decoration: none; }
+.lg-back:hover { color: var(--accent-text); }
+
+@media (max-width: 420px) { .lg-card { padding: 26px 20px 22px; } .lg-otp { gap: 6px; } .lg-otp input { height: 54px; font-size: 1.4rem; } }
+@media (prefers-reduced-motion: reduce) { .lg-otp.bad input { animation: none; } }
+/* brand line and label stack instead of sitting side by side */
+.lg-brand { display: flex; }
+.lg-kicker { display: flex; width: fit-content; }
+/* the site's global `p, h1 { margin: 0 }` would otherwise win */
+.site.lg .lg-kicker { margin: 26px 0 0; }
+.site.lg .lg-card h1 { margin: 12px 0 0; }
+.site.lg .lg-lede { margin: 12px 0 26px; }
+.site.lg .lg-err { margin: 14px 0 0; }
+.site.lg .lg-note { margin: 14px 0 0; }
+.site.lg .lg-back { margin-top: 22px; }
+
+/* "CONTENT ADMIN": plain text, no filled box, with a brief soft glitch every few seconds */
+.site.lg .lg-kicker { position: relative; display: block; width: fit-content; margin: 26px 0 0; padding: 0; background: none; color: var(--accent-text); font-size: 0.78rem; letter-spacing: 0.2em; animation: lgJitter 5s infinite; }
+.lg-kicker::before, .lg-kicker::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; opacity: 0; pointer-events: none; }
+.lg-kicker::before { color: var(--accent-2); clip-path: inset(0 0 55% 0); animation: lgSplitA 5s infinite; }
+.lg-kicker::after { color: var(--accent-3); clip-path: inset(50% 0 0 0); animation: lgSplitB 5s infinite; }
+@keyframes lgJitter { 0%, 90%, 100% { transform: none; } 92% { transform: translateX(1px) skewX(-6deg); } 95% { transform: translateX(-1px); } 97% { transform: none; } }
+@keyframes lgSplitA { 0%, 90%, 100% { opacity: 0; transform: none; } 91% { opacity: 0.85; transform: translateX(-3px); } 94% { opacity: 0.6; transform: translateX(2px); } 96% { opacity: 0; } }
+@keyframes lgSplitB { 0%, 90%, 100% { opacity: 0; transform: none; } 92% { opacity: 0.85; transform: translateX(3px); } 95% { opacity: 0.55; transform: translateX(-2px); } 97% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .site.lg .lg-kicker, .lg-kicker::before, .lg-kicker::after { animation: none; } }
+
+/* Spider-Man sits on the top edge of the card (his hips are at row 19 of 27, so 80px up puts the ledge under him) */
+.lg-spidey { position: absolute; z-index: 3; right: 34px; top: -80px; width: 100px; height: 108px; pointer-events: none; }
+@media (max-width: 420px) { .lg-spidey { right: 18px; } }
+
+/* Google button and the "or" divider */
+.site.lg .lg-or { display: flex; align-items: center; gap: 12px; margin: 22px 0 16px; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.lg-or::before, .lg-or::after { content: ''; flex: 1; height: 2px; background: var(--line); }
+.lg-google { display: flex; justify-content: center; min-height: 44px; }
+
+/* GitHub / ORCID buttons, same width as the Google button */
+.lg-oauth { display: grid; gap: 10px; width: min(320px, 100%); margin: 12px auto 0; }
+.lg-google + .lg-oauth { margin-top: 10px; }
+.lg-provider { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 11px 12px; border: 2px solid var(--ink); background: transparent; color: var(--text); font-weight: 700; font-size: 0.9rem; text-decoration: none; transition: transform 0.12s, box-shadow 0.12s; }
+.lg-provider:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--accent); color: var(--text); }
+/* keep room above the card for Spider-Man even when the card is taller than the window */
+.site.lg { padding-top: 120px; padding-bottom: 40px; }

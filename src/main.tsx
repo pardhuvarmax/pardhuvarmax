@@ -11,6 +11,7 @@ import "./styles/index.css";
 
 // The CMS is only loaded when /admin is visited.
 const Admin = lazy(() => import("./admin/Admin.tsx"));
+const LoginPage = lazy(() => import("./admin/LoginPage.tsx"));
 
 applyTheme(initialTheme());
 
@@ -27,6 +28,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="blog/:slug" element={<Post />} />
       </Route>
       <Route path="/admin" element={<Suspense fallback={null}><Admin /></Suspense>} />
+      <Route path="/login" element={<Suspense fallback={null}><LoginPage /></Suspense>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </BrowserRouter>

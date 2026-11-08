@@ -61,7 +61,7 @@
 @keyframes drift1 { to { transform: translate(14vw, 12vh) scale(1.15); } }
 @keyframes drift2 { to { transform: translate(-16vw, 10vh) scale(0.9); } }
 @keyframes drift3 { to { transform: translate(-12vw, -14vh) scale(1.2); } }
-.site > *:not(.site-bg):not(.progress):not(.nav):not(.skip):not(.dotgrid):not(.cam):not(.web):not(.polaroid):not(.em) { position: relative; z-index: 1; }
+.site > *:not(.site-bg):not(.progress):not(.nav):not(.skip):not(.dotgrid):not(.cam):not(.web):not(.polaroid):not(.em):not(.edit-dot) { position: relative; z-index: 1; }
 
 .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 120; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform-origin: 0 50%; }
 
@@ -668,3 +668,9 @@
 .site .edit-dot { position: fixed; z-index: 240; left: 10px; bottom: 8px; display: grid; place-items: center; width: 20px; height: 20px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: transparent; color: var(--muted); font-family: var(--mono); font-size: 11px; line-height: 1; opacity: 0.35; cursor: pointer; transition: opacity 0.2s, color 0.2s, border-color 0.2s; }
 .site .edit-dot:hover, .site .edit-dot:focus-visible { opacity: 1; }
 html[data-cms='on'] .site .edit-dot { opacity: 0.9; color: var(--accent-text); border-color: var(--accent-text); }
+/* the "e" is invisible until you hover (or keyboard-focus) it; a slightly larger invisible hit area makes it easy to find */
+.site .edit-dot { opacity: 0; }
+.site .edit-dot::after { content: ''; position: absolute; inset: -10px; }
+.site .edit-dot:hover, .site .edit-dot:focus-visible { opacity: 0.85; color: var(--text); border-color: var(--muted); }
+html[data-cms='on'] .site .edit-dot { opacity: 0; }
+html[data-cms='on'] .site .edit-dot:hover, html[data-cms='on'] .site .edit-dot:focus-visible { opacity: 1; color: var(--accent-text); border-color: var(--accent-text); }
