@@ -56,17 +56,17 @@ function FooterSpidey() {
   return <div className="footer-spidey" aria-hidden="true"><SpiderSprite frame={LOOKS[i]} /></div>;
 }
 
-/** "It is 02:41 in Hyderabad. After midnight, probably still awake." Uses the time zone set under Special. */
+/** "It is 2:41 AM in Hyderabad. After midnight. Probably still awake." Uses the time zone set under Special. */
 function LocalTime() {
   const cfg = special as Record<string, unknown>;
   const zone = typeof cfg.timeZone === 'string' && cfg.timeZone ? cfg.timeZone : 'Asia/Kolkata';
   const city = String(site.location || '').split(',')[0].trim() || 'home';
   const read = () => {
     try {
-      const parts = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: zone }).formatToParts(new Date());
-      const h = Number(parts.find((p) => p.type === 'hour')?.value) % 24;
-      const m = parts.find((p) => p.type === 'minute')?.value ?? '00';
-      return { h, text: `${String(h).padStart(2, '0')}:${m}` };
+      const d = new Date();
+      const h = Number(new Intl.DateTimeFormat('en-GB', { hour: '2-digit', hour12: false, timeZone: zone }).format(d)) % 24;
+      const text = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: zone }).format(d).replace(/\u202f/g, ' ');
+      return { h, text };
     } catch {
       return null;
     }
@@ -77,7 +77,8 @@ function LocalTime() {
     return () => clearInterval(id);
   }, [zone]);
   if (cfg.showLocalTime === false || !now) return null;
-  const mood = now.h >= 5 && now.h < 12 ? 'Morning. Coffee first.' : now.h < 17 ? 'Afternoon. Probably reading papers.' : now.h < 22 ? 'Evening. Probably tinkering with Arch.' : 'After midnight. Probably still awake.';
+  const h = now.h;
+  const mood = h < 5 ? 'After midnight. Probably still awake.' : h < 12 ? 'Morning. Coffee first.' : h < 17 ? 'Afternoon. Probably reading papers.' : h < 22 ? 'Evening. Probably tinkering with Arch.' : 'Late night. Probably still awake.';
   return <span className="footer-time">It is {now.text} in {city}. {mood}</span>;
 }
 
