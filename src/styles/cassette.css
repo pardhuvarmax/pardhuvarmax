@@ -1,0 +1,41 @@
+/* Cassette page: tapes on a shelf, deck underneath. */
+.site .cs-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 26px; margin-top: 8px; }
+.site .cs-tape { position: relative; display: grid; grid-template-rows: auto auto; gap: 14px; padding: 14px; border: 3px solid var(--ink); background: var(--surface-solid); color: var(--text); font: inherit; text-align: left; cursor: pointer; box-shadow: 6px 6px 0 var(--tc, var(--accent)); transition: transform 0.15s, box-shadow 0.15s; }
+.site .cs-tape::before, .site .cs-tape::after { content: ''; position: absolute; bottom: 7px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--ink); background: var(--bg); }
+.site .cs-tape::before { left: 8px; }
+.site .cs-tape::after { right: 8px; }
+.site .cs-tape:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--tc, var(--accent)); }
+.site .cs-tape.on { background: var(--tc, var(--accent)); color: #fff; }
+.site .cs-label { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 2px solid var(--ink); background: var(--bg); color: var(--text); min-height: 64px; }
+.site .cs-label img { width: 44px; height: 44px; object-fit: cover; border: 2px solid var(--ink); flex: none; }
+.site .cs-label b { display: block; font-family: var(--display); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1.1; }
+.site .cs-label i { display: block; margin-top: 4px; font-style: normal; font-size: 0.8rem; color: var(--muted); }
+.site .cs-window { display: flex; justify-content: space-around; align-items: center; padding: 8px 0 12px; margin: 0 14px; border: 2px solid var(--ink); border-radius: 40px; background: var(--bg); }
+.site .cs-reel { position: relative; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--ink); background: repeating-conic-gradient(var(--ink) 0 12deg, transparent 12deg 60deg); }
+.site .cs-reel::after { content: ''; position: absolute; inset: 9px; border-radius: 50%; background: var(--bg); border: 2px solid var(--ink); }
+.site .cs-tape.spin .cs-reel { animation: csSpin 1.6s linear infinite; }
+@keyframes csSpin { to { transform: rotate(360deg); } }
+
+.site .cs-deck { margin-top: clamp(34px, 5vw, 56px); padding: clamp(18px, 3vw, 30px); border: 3px solid var(--ink); background: var(--surface-solid); box-shadow: 8px 8px 0 var(--ink); max-width: 760px; }
+.site .cs-kick { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-text); }
+.site .cs-now h3 { margin: 6px 0 0; font-family: var(--display); font-weight: 900; font-size: clamp(1.4rem, 3.4vw, 2rem); text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.05; }
+.site .cs-now p { margin: 6px 0 0; color: var(--muted); }
+.site .cs-ctrl { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+.site .cs-btn { display: grid; place-items: center; width: 42px; height: 42px; border: 2px solid var(--ink); background: var(--bg); color: var(--text); cursor: pointer; }
+.site .cs-btn.big { width: 54px; height: 54px; background: var(--accent); color: var(--on-accent, #fff); box-shadow: 4px 4px 0 var(--ink); }
+.site .cs-btn:hover:not(:disabled) { background: var(--accent); color: var(--on-accent, #fff); }
+.site .cs-btn:disabled { opacity: 0.35; cursor: default; }
+.site .cs-seek { display: flex; align-items: center; gap: 12px; margin-top: 18px; font-variant-numeric: tabular-nums; font-size: 0.82rem; color: var(--muted); }
+.site .cs-seek input { flex: 1; accent-color: var(--accent); }
+.site .cs-note { margin: 18px 0 0; color: var(--muted); max-width: 60ch; }
+.site .cs-tracks { list-style: none; margin: 22px 0 0; padding: 0; border-top: 2px solid var(--line); }
+.site .cs-tracks button { display: flex; align-items: baseline; gap: 14px; width: 100%; padding: 11px 6px; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.site .cs-tracks button:hover, .site .cs-tracks button.on { background: var(--accent-soft); }
+.site .cs-tracks button.on .cs-t { font-weight: 800; }
+.site .cs-n { width: 2ch; font-variant-numeric: tabular-nums; color: var(--accent-text); font-size: 0.82rem; }
+.site .cs-a { margin-left: auto; color: var(--muted); font-size: 0.82rem; }
+
+.site .cs-empty { display: grid; justify-items: start; gap: 18px; }
+.site .cs-empty .cs-tape { width: min(300px, 100%); cursor: default; }
+.site .cs-empty p { margin: 0; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .site .cs-tape.spin .cs-reel { animation: none; } .site .cs-tape { transition: none; } }

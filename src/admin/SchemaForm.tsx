@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
-import { ArrowDown, ArrowUp, ImagePlus, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, ImagePlus, Music, Plus, Trash2 } from 'lucide-react';
 import type { Field } from './schemas';
-import { uploadImage } from './api';
+import { uploadFile, uploadImage } from './api';
 
 type Obj = Record<string, any>;
 
@@ -52,6 +52,42 @@ export function ImageField({ value, onChange, onError }: { value: string; onChan
   );
 }
 
+const MAX_AUDIO = 3_200_000;
+
+export function AudioField({ value, onChange, onError }: { value: string; onChange: (v: string) => void; onError?: (m: string) => void }) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  return (
+    <div className="img-field audio-field">
+      {value && <audio controls preload="none" src={value} />}
+      <input className="inp" value={value} onChange={(e) => onChange(e.target.value)} placeholder="/uploads/… .mp3" />
+      <button type="button" className="abtn" disabled={busy} onClick={() => ref.current?.click()}>
+        <Music size={15} /> {busy ? 'Uploading…' : 'Upload audio'}
+      </button>
+      <input
+        ref={ref}
+        type="file"
+        accept=".mp3,.m4a,.aac,.ogg,.wav,audio/*"
+        hidden
+        onChange={async (e) => {
+          const f = e.target.files?.[0];
+          e.target.value = '';
+          if (!f) return;
+          if (f.size > MAX_AUDIO) return onError?.('That file is over 3.2 MB. Export it at a lower bitrate (128 kbps MP3 is about 1 MB per minute).');
+          setBusy(true);
+          try {
+            onChange(await uploadFile(f));
+          } catch (err) {
+            onError?.((err as Error).message);
+          } finally {
+            setBusy(false);
+          }
+        }}
+      />
+    </div>
+  );
+}
+
 function FieldInput({ f, value, onChange, onError, openLast }: { f: Field; value: any; onChange: (v: any) => void; onError?: (m: string) => void; openLast?: boolean }) {
   const [added, setAdded] = useState(-1); // index of an item just added with the + button, so it opens ready to fill in
   switch (f.type) {
@@ -74,6 +110,8 @@ function FieldInput({ f, value, onChange, onError, openLast }: { f: Field; value
       return <input className="inp" type="date" value={value ?? ''} onChange={(e) => onChange(e.target.value)} />;
     case 'image':
       return <ImageField value={value ?? ''} onChange={onChange} onError={onError} />;
+    case 'audio':
+      return <AudioField value={value ?? ''} onChange={onChange} onError={onError} />;
     case 'strings': {
       const list: string[] = Array.isArray(value) ? value : [];
       return (

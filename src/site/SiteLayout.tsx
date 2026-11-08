@@ -26,6 +26,7 @@ const NAV = [
   { to: '/publications', label: 'Publications' },
   { to: '/projects', label: 'Projects' },
   { to: '/blog', label: 'Writing' },
+  { to: '/cassette', label: 'Cassette' },
   { to: '/#contact', label: 'Contact' },
 ];
 

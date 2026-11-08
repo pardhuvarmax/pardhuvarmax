@@ -5,10 +5,15 @@ import experience from '../content/experience.json';
 import honors from '../content/honors.json';
 import skills from '../content/skills.json';
 import news from '../content/news.json';
+import cassetteData from '../content/cassette.json';
 import { parsePost, type PostMeta } from './frontmatter';
 import { readingTime } from './markdown';
 
 export { site, publications, projects, experience, honors, skills, news };
+
+export interface CassetteTrack { title: string; artist?: string; src: string }
+export interface CassetteAlbum { title: string; artist: string; year?: string; cover?: string; note?: string; tracks: CassetteTrack[] }
+export const cassette = cassetteData as { intro: string; albums: CassetteAlbum[] };
 
 export interface Post extends PostMeta {
   slug: string;

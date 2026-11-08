@@ -28,9 +28,12 @@ const SESSION_COOKIE = 'admin_session';
 const SESSION_TTL = 8 * 60 * 60; // seconds
 const TEXT_EXTS = ['.md', '.json'];
 const IMAGE_EXTS = ['.png', '.jpg', '.jpeg', '.webp', '.gif'];
+const AUDIO_EXTS = ['.mp3', '.m4a', '.aac', '.ogg', '.wav'];
+const MAX_IMAGE_BYTES = 3_500_000;
+const MAX_AUDIO_BYTES = 3_200_000; // Vercel rejects request bodies over 4.5 MB, and base64 adds a third
 const ALLOWED = [
   { prefix: 'src/content/', exts: TEXT_EXTS },
-  { prefix: 'public/uploads/', exts: IMAGE_EXTS },
+  { prefix: 'public/uploads/', exts: [...IMAGE_EXTS, ...AUDIO_EXTS] },
 ];
 
 class HttpError extends Error {
@@ -438,7 +441,9 @@ export async function handleAdmin(req: AdminRequest, opts: AdminOptions = {}): P
       const name = String(req.body?.name ?? '').toLowerCase().replace(/[^a-z0-9._-]/g, '-').replace(/-+/g, '-');
       const file = safePath(`public/uploads/${Date.now()}-${name}`);
       const data = Buffer.from(String(req.body?.data ?? ''), 'base64');
-      if (!data.length || data.length > 3_500_000) throw new HttpError(400, 'Image missing or larger than 3.5 MB.');
+      const isAudio = AUDIO_EXTS.includes(path.posix.extname(file));
+      if (!data.length) throw new HttpError(400, 'File is empty.');
+      if (data.length > (isAudio ? MAX_AUDIO_BYTES : MAX_IMAGE_BYTES)) throw new HttpError(400, isAudio ? 'Audio is larger than 3.2 MB. Export it at a lower bitrate (128 kbps MP3 is about 1 MB per minute).' : 'Image is larger than 3.5 MB.');
       await store.write(file, data, `cms: upload ${file}`);
       return ok({ url: '/' + file.replace(/^public\//, '') });
     }

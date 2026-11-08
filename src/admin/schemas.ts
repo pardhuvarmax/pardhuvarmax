@@ -1,4 +1,4 @@
-export type FieldType = 'text' | 'textarea' | 'url' | 'date' | 'select' | 'boolean' | 'strings' | 'list' | 'image';
+export type FieldType = 'text' | 'textarea' | 'url' | 'date' | 'select' | 'boolean' | 'strings' | 'list' | 'image' | 'audio';
 
 export interface Field {
   key: string;
@@ -196,6 +196,39 @@ export const COLLECTIONS: Collection[] = [
         fields: [
           { key: 'label', label: 'Group', type: 'text' },
           { key: 'items', label: 'Items (comma separated)', type: 'textarea' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'cassette',
+    label: 'Cassette (music)',
+    kind: 'file',
+    path: 'src/content/cassette.json',
+    fields: [
+      { key: 'intro', label: 'Intro line', type: 'textarea', help: 'Shown at the top of the Cassette page.' },
+      {
+        key: 'albums',
+        label: 'Albums (tapes)',
+        type: 'list',
+        titleKey: 'title',
+        fields: [
+          { key: 'title', label: 'Album title', type: 'text' },
+          { key: 'artist', label: 'Artist', type: 'text' },
+          { key: 'year', label: 'Year (optional)', type: 'text' },
+          { key: 'cover', label: 'Cover image (optional)', type: 'image' },
+          { key: 'note', label: 'Why I like it (optional)', type: 'textarea' },
+          {
+            key: 'tracks',
+            label: 'Tracks',
+            type: 'list',
+            titleKey: 'title',
+            fields: [
+              { key: 'title', label: 'Track title', type: 'text' },
+              { key: 'artist', label: 'Artist (if different)', type: 'text' },
+              { key: 'src', label: 'Audio file', type: 'audio', help: 'MP3, M4A, AAC, OGG or WAV, up to 3.2 MB each (a 128 kbps MP3 is about 1 MB per minute).' },
+            ],
+          },
         ],
       },
     ],
