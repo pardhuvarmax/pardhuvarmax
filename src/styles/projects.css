@@ -13,7 +13,7 @@
 .site .pj-status.s-prototype { background: var(--accent-3); }
 .site .pj-status.s-archived { background: transparent; color: var(--muted); }
 .site .pj-star { color: var(--accent-text); border-color: var(--accent); }
-.site .pj-cover { display: block; width: calc(100% + 48px); margin: -24px -24px 18px; aspect-ratio: 16 / 7; object-fit: cover; border-bottom: 2px solid var(--ink); }
+.site .pj-cover { display: block; width: calc(100% + 48px); margin: -24px -24px 18px; aspect-ratio: 16 / 7; max-height: 260px; object-fit: cover; object-position: left center; border-bottom: 2px solid var(--ink); }
 .site .pj-foot { display: grid; gap: 10px; margin-top: auto; padding-top: 18px; }
 .site .pj-langbar { display: flex; height: 6px; border: 1px solid var(--ink); overflow: hidden; }
 .site .pj-langbar i { display: block; height: 100%; }

@@ -6,13 +6,29 @@
       "lang": "C, Go, Python, Rust",
       "url": "https://github.com/pardhuvarmax/kernel-borderlands",
       "featured": true,
-      "status": "",
-      "date": "",
-      "tags": [],
-      "body": "",
-      "install": "",
-      "links": [],
-      "relatedPosts": []
+      "status": "Active",
+      "date": "2026-05",
+      "tags": [
+        "ebpf",
+        "linux-kernel",
+        "runtime-defense",
+        "multi-agent",
+        "security"
+      ],
+      "body": "## What it is\n\nKernel Borderlands (KB) is a runtime defense framework that watches a Linux system from inside the kernel. It detects, classifies and contains anomalous process behaviour at **Ring 0**.\n\nInstead of leaning only on signatures or fixed rules, KB observes kernel telemetry through **eBPF instrumentation**, builds behavioural context from it, and coordinates a multi-agent defense architecture that can respond to what it sees while the system runs.\n\nIt brings together kernel observability, behavioural analytics, agent orchestration, reinforcement learning and systems programming in one platform. It is built for research and experimentation into host defense.\n\n## How it is put together\n\n- **Kernel layer** (C, eBPF with CO-RE and libbpf): instrumentation and telemetry collection.\n- **Control plane** (Go): the `kbd` daemon that coordinates events and manages the system.\n- **Autonomous Agent Defense Swarm** (Python): behavioural reasoning and multi-agent reinforcement learning.\n- **Operator tools:** a React and TypeScript dashboard, a Rust terminal interface, and a Model Context Protocol server so AI agents can use it as a tool.\n- **Script checker** (Rust): analysis and safety verification of scripts.\n\nIt targets Linux 5.8 and later. The wiki covers installation, requirements, the architecture, the kernel hook points and telemetry pipeline, and the technical whitepaper.",
+      "install": "# set up the environment from the wiki first, then:\ncd kb-control-plane && go run cmd/kbd/main.go\ncd kb-aads && python main.py\ncd kb-op/kb-dashboard && npm run dev",
+      "links": [
+        {
+          "label": "Project site",
+          "href": "https://pardhuvarmax.github.io/kernel-borderlands/"
+        },
+        {
+          "label": "Wiki",
+          "href": "https://github.com/pardhuvarmax/kernel-borderlands/wiki"
+        }
+      ],
+      "relatedPosts": [],
+      "cover": "/uploads/1794140092939-kernel-borderlands.webp"
     },
     {
       "name": "kblinuxv-archives",
@@ -20,12 +36,23 @@
       "lang": "C, Go, Python, Shell",
       "url": "https://github.com/pardhuvarmax/kblinuxv-archives",
       "featured": true,
-      "status": "",
-      "date": "",
-      "tags": [],
-      "body": "",
-      "install": "",
-      "links": [],
+      "status": "Research",
+      "date": "2026-11",
+      "tags": [
+        "dataset",
+        "cve",
+        "linux-kernel",
+        "reproducibility",
+        "security-research"
+      ],
+      "body": "## What it is\n\nKB-LVA is the Kernel Borderlands Linux Vulnerability Archive: an independent research dataset of Linux vulnerability proof-of-concepts and reproduction artifacts, kept with enough provenance and verification evidence for other researchers to study and reproduce them.\n\nFinding a CVE does not mean finding a usable reproduction artifact. KB-LVA records where each artifact came from, what it is, whether it matches the CVE, whether it is still available, and whether anyone has reproduced it. The main deliverable is a machine-readable dataset: PoC source files where redistribution is permitted, plus vulnerability records, provenance, compatibility, integrity hashes, license status and verification evidence.\n\n## How it works\n\nEach artifact moves through discovery, classification, deduplication, a human decision to acquire, retrieval from the original repository at an immutable commit, integrity and provenance checks, source review, validation in an isolated lab, and finally a versioned release. Its state is one of `DISCOVERED`, `RETRIEVED`, `SOURCE_REVIEWED`, `LAB_VALIDATED` or `REJECTED`. Acquiring something is not validating it.\n\nThe pipeline is a single Go command-line tool, `kblva`. Automation prepares changes on separate branches and opens pull requests, but a person decides, and automation never runs a PoC.\n\n## Limits and safety\n\nKB-LVA is not a scanner, an exploit framework or a place to run proof-of-concepts. Collected artifacts keep their original licenses and attribution. Where a license is unknown or restrictive, only metadata and a source reference are kept. Nothing from the archive should be run outside an isolated lab.",
+      "install": "make build\nbin/kblva doctor\nbin/kblva run",
+      "links": [
+        {
+          "label": "Documentation",
+          "href": "https://github.com/pardhuvarmax/kblinuxv-archives/tree/main/documentation"
+        }
+      ],
       "relatedPosts": []
     },
     {
@@ -34,12 +61,26 @@
       "lang": "Rust, Shell, HTML",
       "url": "https://github.com/pardhuvarmax/emrac",
       "featured": true,
-      "status": "",
-      "date": "",
-      "tags": [],
-      "body": "",
-      "install": "",
-      "links": [],
+      "status": "Active",
+      "date": "2026-07",
+      "tags": [
+        "archlinux",
+        "package-management",
+        "aur",
+        "pacman"
+      ],
+      "body": "## What it is\n\nEmrac is a hybrid package manager for Arch Linux. It is an orchestration and interface layer over `pacman`, `makepkg`, `libalpm`, PKGBUILD and the AUR, and it puts the official repositories, the AUR and local repositories behind one command line.\n\nIt builds from a PKGBUILD when that is worthwhile, installs a binary when it is not, and tells you why. Every change shows a plan first, and `--dry-run` works on all of them.\n\n## What it adds\n\n- **Plans that match pacman.** Upgrade previews are built from repositories synced just now, including what conflicts and replacements will remove, so what you confirm is what happens.\n- **AUR builds you can trust a little more.** Packages are reviewed, audited for risky code, built in a bubblewrap sandbox, and inspected again before they are installed.\n- **A history you can check.** Each record is linked to the one before by SHA-256, and a second copy is kept in a root-owned ledger, so edits and deletions show up.\n- **Undo.** Transactions can be rolled back or redone, and the installed set can be saved and restored.\n- **Everyday tools:** health checks, `.pacnew` handling, cache management, pins, and Arch news that can stop an upgrade.\n\nThe current release is slice r3 (version 0.3.0, 2026-10-15). The core loop works, and a terminal interface and build profiles are still to come.",
+      "install": "emrac search ripgrep      # official repos and the AUR\nemrac install ripgrep     # preview, confirm, install\nemrac snapshot            # save the installed set as a restore point\nemrac upgrade             # full upgrade\nemrac undo                # reverse the last transaction",
+      "links": [
+        {
+          "label": "Project site",
+          "href": "https://pardhuvarmax.github.io/emrac/"
+        },
+        {
+          "label": "Release notes",
+          "href": "https://github.com/pardhuvarmax/emrac/blob/main/docs/releases/r3.md"
+        }
+      ],
       "relatedPosts": []
     },
     {
@@ -48,12 +89,31 @@
       "lang": "Python, Jupyter, LaTeX",
       "url": "https://github.com/pardhuvarmax/rlae-research",
       "featured": false,
-      "status": "",
-      "date": "",
-      "tags": [],
-      "body": "",
-      "install": "",
-      "links": [],
+      "status": "Research",
+      "date": "2025-12",
+      "tags": [
+        "low-rank-adaptation",
+        "reversible-learning",
+        "robust-ml",
+        "research-paper",
+        "ai-safety"
+      ],
+      "body": "## What it is\n\nThis is the code and experiment framework behind the paper *On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning*. It is a lightweight runtime environment for dynamic adapter routing and modular parameter isolation, and it is shared strictly so the results can be reproduced.\n\nThe idea in one line: learning that cannot be undone is not intelligence, it is a surrender to emergence.\n\n## What it implements\n\n- **Runtime Low-Rank Adaptive Environments (RLAE).** The base model stays permanently frozen, and all adaptive behaviour lives in LoRA modules, so nothing in the base weights is ever changed.\n- **Structural Variance Analysis for Robustness (SVAR).** A diagnostic evaluation only: it measures how the system behaves under perturbation and changes nothing.\n\nThe experiments use Qwen2.5-3B-Instruct as the base model, with quantized execution supported. One experiment trains and then verifies that a reset restores the original behaviour, and another runs the structural robustness diagnostics.\n\n## Cite and reuse\n\nThe paper is on arXiv and the archived version is on Zenodo, both linked above. The repository is a research artifact, so external contributions are not accepted.",
+      "install": "pip install -r experiments/requirements.txt\npython src/exp1_reset/1_baseline.py\npython src/exp1_reset/2_train_sft.py\npython src/exp1_reset/3_train_rl.py\npython src/exp1_reset/4_verify_reset.py     # check the reset really restores the model",
+      "links": [
+        {
+          "label": "Project site",
+          "href": "https://pardhuvarmax.github.io/rlae-research/"
+        },
+        {
+          "label": "Paper (arXiv)",
+          "href": "https://arxiv.org/abs/2603.02934"
+        },
+        {
+          "label": "Zenodo",
+          "href": "https://doi.org/10.5281/zenodo.18761938"
+        }
+      ],
       "relatedPosts": []
     },
     {
@@ -62,12 +122,27 @@
       "lang": "Python, Jupyter, LaTeX",
       "url": "https://github.com/pardhuvarmax/lbsm-research",
       "featured": false,
-      "status": "",
-      "date": "",
-      "tags": [],
-      "body": "",
+      "status": "Research",
+      "date": "2026-05",
+      "tags": [
+        "machine-learning",
+        "statistical-learning",
+        "manifolds",
+        "telemetry",
+        "adaptive-agents"
+      ],
+      "body": "## What it is\n\nLBSM, Latent Behavioral Structure in Low-Dimensional Statistical Manifolds, is an experimental statistical machine learning project. It asks whether adaptive, autonomous, sequential systems show structured, low-dimensional organisation in their behaviour even though what we can observe of them is high-dimensional.\n\nThe working hypothesis is that the telemetry such systems produce sits on structured low-dimensional manifolds rather than anywhere in the full space.\n\n## What it studies\n\n- whether behavioural regimes cluster naturally in a latent space;\n- whether adaptation, such as reinforcement-guided learning, shapes that geometry;\n- whether behavioural drift shows up as the manifold moving;\n- whether behaviour over time has a compact statistical description;\n- whether any of this carries over from the synthetic setup to real adaptive systems.\n\nPhase 1 uses reinforcement-guided synthetic agents because their regimes are known by construction. They are the first controlled test of the idea, not the limit of its scope.\n\n## The work so far\n\nSeven notebooks cover telemetry generation, manifold learning, HMM inference, online anomaly detection, reinforcement-learning behavioural evolution, manifold visualisation, and a robustness analysis over a 160-configuration grid. The exported datasets and a PDF report for each notebook are in the repository.",
       "install": "",
-      "links": [],
+      "links": [
+        {
+          "label": "Notebooks",
+          "href": "https://github.com/pardhuvarmax/lbsm-research/tree/main/notebooks"
+        },
+        {
+          "label": "Reports",
+          "href": "https://github.com/pardhuvarmax/lbsm-research/tree/main/outputs/reports"
+        }
+      ],
       "relatedPosts": []
     },
     {
@@ -76,10 +151,15 @@
       "lang": "Python, HTML, Shell",
       "url": "https://github.com/pardhuvarmax/lease-manager-bpctf2",
       "featured": false,
-      "status": "",
-      "date": "",
-      "tags": [],
-      "body": "",
+      "status": "Archived",
+      "date": "2026-10",
+      "tags": [
+        "ctf",
+        "infrastructure",
+        "provisioning",
+        "gcp"
+      ],
+      "body": "## What it was\n\nLease Manager was a self-service cloud provisioning and lease system built for BPCTF2, a live capture-the-flag event. Instead of organisers handing out infrastructure by hand, players asked for a challenge instance through a web page. The service handled the request, called the infrastructure control tool, and returned the endpoint it had allocated.\n\nIt was designed for a live event, where requests arrive at the same time and abuse prevention matters.\n\n## How it worked\n\n- **A small Python service** using only the standard library handled the lease API, with Nginx in front for TLS and reverse proxying. It ran as a systemd service that restarted itself.\n- **Two control tools** managed the underlying challenge infrastructure, running on Docker and Docker Compose.\n- **Idempotent leases.** Asking again for a team that already had a lease returned the existing one. That also stopped duplicates when a slow cold start, about 10 to 25 seconds, outlasted the client's timeout.\n- **Rate limits** in the application: at most 5 distinct team names per address per hour and 12 requests per minute.\n\n## A deliberate trade-off\n\nThe deployment did not verify identity at the lease endpoint, because the event was already running and a usable self-service path mattered more. The cost was that someone could, in principle, request a lease under another team's name. It was covered by the rate limits, the existing-lease check, monitoring, and the ability for organisers to quarantine an abused slot.\n\nIt ran on Google Cloud Compute Engine, with SSH through Identity-Aware Proxy and Let's Encrypt certificates. The event is over, so the repository is archived.",
       "install": "",
       "links": [],
       "relatedPosts": []
