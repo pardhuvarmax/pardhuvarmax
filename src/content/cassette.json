@@ -12,7 +12,7 @@
           "artist": "Chase Atlantic",
           "cover": "/uploads/friends-cover.jpg",
           "year": "2015",
-          "note": "Some things don't need explaining.",
+          "note": "Everything's a blur except this.",
           "fav": true
         },
         {
@@ -21,7 +21,7 @@
           "artist": "Chase Atlantic",
           "cover": "/uploads/drugs-and-money-cover.jpg",
           "year": "2017",
-          "note": "Ask me later."
+          "note": "Don't remember how I got here. Don't care."
         },
         {
           "title": "Slow Down (Instrumental)",
@@ -29,7 +29,7 @@
           "artist": "Chase Atlantic",
           "cover": "/uploads/slow-down-cover.jpg",
           "year": "2016",
-          "note": "Only at certain hours."
+          "note": "Room's spinning. Perfect."
         }
       ]
     },
@@ -44,7 +44,7 @@
           "artist": "The Weeknd",
           "cover": "/uploads/blinding-lights-cover.jpg",
           "year": "2019",
-          "note": "You either know, or you don't.",
+          "note": "Eyes closed, still too bright.",
           "fav": true
         },
         {
@@ -53,7 +53,7 @@
           "artist": "The Weeknd",
           "cover": "/uploads/high-for-this-cover.jpg",
           "year": "2011",
-          "note": "Don't ask."
+          "note": "The floor feels different tonight."
         }
       ]
     }
