@@ -56,7 +56,7 @@ function FooterSpidey() {
   return <div className="footer-spidey" aria-hidden="true"><SpiderSprite frame={LOOKS[i]} /></div>;
 }
 
-/** "It is 2:41 AM in Hyderabad. After midnight. Probably still awake." Uses the time zone set under Special. */
+/** "It is 2:41 AM in Hyderabad. After midnight. Probably sleeping, maybe awake." Uses the time zone set under Special. */
 function LocalTime() {
   const cfg = special as Record<string, unknown>;
   const zone = typeof cfg.timeZone === 'string' && cfg.timeZone ? cfg.timeZone : 'Asia/Kolkata';
@@ -78,7 +78,7 @@ function LocalTime() {
   }, [zone]);
   if (cfg.showLocalTime === false || !now) return null;
   const h = now.h;
-  const mood = h < 5 ? 'After midnight. Probably still awake.' : h < 12 ? 'Morning. Coffee first.' : h < 17 ? 'Afternoon. Probably reading papers.' : h < 22 ? 'Evening. Probably tinkering with Arch.' : 'Late night. Probably still awake.';
+  const mood = h < 5 ? 'After midnight. Probably sleeping, maybe awake.' : h < 12 ? 'Morning. Coffee first.' : h < 17 ? 'Afternoon. Probably reading papers.' : h < 22 ? 'Evening. Probably tinkering with Arch.' : 'Late night. Probably sleeping, maybe awake.';
   return <span className="footer-time">It is {now.text} in {city}. {mood}</span>;
 }
 
