@@ -44,4 +44,10 @@
 .site .cs-cover { flex: none; width: clamp(96px, 20vw, 168px); aspect-ratio: 1; object-fit: cover; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--accent); }
 .site .cs-head .cs-now { min-width: 0; }
 
-.site .cs-disclaimer { max-width: 760px; margin: clamp(26px, 4vw, 40px) 0 0; padding-left: 14px; border-left: 3px solid var(--accent); color: var(--muted); font-size: 0.82rem; line-height: 1.6; }
+/* sticky-paper notice: fixed paper colours so it reads the same in dark and light themes */
+.site .cs-sticky { position: relative; width: min(340px, 100%); margin: clamp(34px, 5vw, 52px) 0 0 clamp(0px, 3vw, 28px); padding: 26px 20px 20px; background: #f3df72; color: #2a2208; border: 2px solid #1a1505; box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.55); transform: rotate(-1.6deg); font-size: 0.86rem; line-height: 1.55; }
+.site .cs-sticky::before { content: ''; position: absolute; top: -13px; left: 50%; width: 92px; height: 26px; transform: translateX(-50%) rotate(2deg); background: rgba(255, 255, 255, 0.55); border: 1px solid rgba(0, 0, 0, 0.18); }
+.site .cs-sticky::after { content: ''; position: absolute; right: 0; bottom: 0; width: 22px; height: 22px; background: linear-gradient(135deg, rgba(0, 0, 0, 0.16) 50%, transparent 50%); }
+.site .cs-sticky b { display: block; margin-bottom: 8px; font-family: var(--display); font-weight: 900; font-size: 0.95rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.site .cs-sticky p { margin: 0; color: inherit; }
+@media (prefers-reduced-motion: no-preference) { .site .cs-sticky { transition: transform 0.2s; } .site .cs-sticky:hover { transform: rotate(0deg); } }
