@@ -9,6 +9,36 @@
         {
           "title": "Friends (Intro loop)",
           "src": "/uploads/chase-atlantic-friends.mp3"
+        },
+        {
+          "title": "Drugs & Money (Instrumental)",
+          "src": "/uploads/chase-atlantic-drugs-and-money-instrumental.mp3"
+        },
+        {
+          "title": "Slow Down (Instrumental)",
+          "src": "/uploads/chase-atlantic-slow-down-instrumental.mp3"
+        }
+      ]
+    },
+    {
+      "title": "After Hours",
+      "artist": "The Weeknd",
+      "cover": "/uploads/after-hours-cover.jpg",
+      "tracks": [
+        {
+          "title": "Blinding Lights (Instrumental)",
+          "src": "/uploads/the-weeknd-blinding-lights-instrumental.mp3"
+        }
+      ]
+    },
+    {
+      "title": "Trilogy",
+      "artist": "The Weeknd",
+      "cover": "/uploads/trilogy-cover.jpg",
+      "tracks": [
+        {
+          "title": "High For This (Instrumental)",
+          "src": "/uploads/the-weeknd-high-for-this-instrumental.mp3"
         }
       ]
     }
