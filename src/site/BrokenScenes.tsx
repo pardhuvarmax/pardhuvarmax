@@ -125,16 +125,20 @@ export function Scene403() {
 /* ---------- 401: disguised, inspecting you with a magnifying glass ---------- */
 const GLASSES = ['KKKKKKK', 'K..K..K', 'K..K..K', 'KKKKKKK'];
 const MOUSTACHE = ['KKKKK', 'K...K'];
-const S401: [Frame, number][] = [['reach', 0], ['alert', 0.52], ['reach', 0.64]];
+const Card = <div className="bs-card"><i /><b /><b /></div>;
+const S401: [Frame, number, string?, ReactNode?][] = [
+  ['cross-left', 0], ['cross', 0.08], ['cross-right', 0.16], ['cross', 0.24],
+  ['hold-right', 0.3, undefined, Card], ['hold', 0.4, undefined, Card], ['hold-right', 0.5, undefined, Card],
+  ['shrug', 0.58], ['cross-left', 0.7], ['cross-right', 0.78], ['cross', 0.86],
+];
 export function Scene401() {
   return (
     <div className="bs bs401" aria-hidden="true">
       <div className="bs-sp bs-guard">
-        <Seq steps={S401} ms={4400} />
+        <Seq steps={S401} ms={6000} />
         <PixelArt className="bs-over" style={{ left: 40, top: 20 }} rows={GLASSES} palette={GREY} cell={4} />
         <PixelArt className="bs-over" style={{ left: 44, top: 36 }} rows={MOUSTACHE} palette={GREY} cell={4} />
       </div>
-      <div className="bs-mag"><b /><i /></div>
       <div className="bs-board">
         <div className="bs-board-b">WHO ARE<br />UH??</div>
         <div className="bs-stick" />
