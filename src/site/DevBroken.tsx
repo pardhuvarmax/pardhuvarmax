@@ -39,11 +39,16 @@ export default function DevBroken() {
   if (!kind) {
     return (
       <main className="bi">
-        <h1>Error pages</h1>
-        <p>Every error screen on its own page. Open one, or use the strip at the top to hop between them.</p>
+        <div className="bi-head">
+          <div className="bi-who" aria-hidden="true">
+            <span className="bi-q">?</span>
+            <SpiderSprite frame="alert" />
+          </div>
+          <h1>Looking for error codes?</h1>
+        </div>
         <ul>
           {PAGES.map((p) => (
-            <li key={p.kind}><Link to={`/__broken/${p.kind}`}><b>{p.code}</b><span>{p.label}</span><code>/__broken/{p.kind}</code></Link></li>
+            <li key={p.kind}><Link to={`/__broken/${p.kind}`}><b>{p.code}</b> {p.label}</Link></li>
           ))}
         </ul>
         <p><Link to="/">Back to the site</Link></p>
