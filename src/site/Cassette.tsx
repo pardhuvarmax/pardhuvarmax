@@ -35,9 +35,9 @@ export default function Cassette() {
   const firstRun = useRef(true);
 
   const album = albums[a];
-  const link: 'bluetooth' | 'wifi' = album?.link === 'wifi' ? 'wifi' : 'bluetooth';
   const tracks = album?.tracks.filter((x) => x.src) ?? [];
   const track = tracks[t];
+  const link: 'bluetooth' | 'wifi' = t % 2 === 0 ? 'bluetooth' : 'wifi'; // consecutive songs alternate connections
 
   useEffect(() => {
     const el = audio.current;
@@ -143,8 +143,12 @@ export default function Cassette() {
               </span>
             </span>
             <Reels />
-            <span className={`cs-link ${al.link === 'wifi' ? 'wifi' : 'bluetooth'} ${i === a ? 'on' : ''} ${i === a && playing ? 'live' : ''}`} aria-label={al.link === 'wifi' ? 'Wi-Fi' : 'Bluetooth'}>
-              {al.link === 'wifi' ? <Wifi size={14} /> : <Bluetooth size={14} />}
+            <span className="cs-links" aria-hidden="true">
+              {(['bluetooth', 'wifi'] as const).map((k) => (
+                <span key={k} className={`cs-link ${k} ${i === a && link === k ? 'on' : ''} ${i === a && link === k && playing ? 'live' : ''}`}>
+                  {k === 'wifi' ? <Wifi size={14} /> : <Bluetooth size={14} />}
+                </span>
+              ))}
             </span>
           </button>
         ))}

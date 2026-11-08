@@ -2,7 +2,6 @@
   "intro": "Tapes I keep on repeat while I code, read papers and break things. Press a tape, hit play.",
   "albums": [
     {
-      "link": "bluetooth",
       "title": "Chase Atlantic",
       "artist": "Favourites",
       "cover": "/uploads/friends-cover.jpg",
@@ -28,7 +27,6 @@
       ]
     },
     {
-      "link": "wifi",
       "title": "The Weeknd",
       "artist": "Favourites",
       "cover": "/uploads/blinding-lights-cover.jpg",

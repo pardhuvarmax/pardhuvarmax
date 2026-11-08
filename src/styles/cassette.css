@@ -90,14 +90,15 @@
 @media (prefers-reduced-motion: reduce) { .site .cs-ico[data-pop], .site .cs-ripple { animation: none; } .site .cs-ripple { display: none; } .site .cs-btn:active:not(:disabled) { transform: none; } }
 
 /* wireless link: a chip on each tape (bright on the connected one) and a matching glow on his headset */
-.site .cs-link { position: absolute; top: -13px; right: 14px; display: grid; place-items: center; width: 26px; height: 26px; border: 2px solid var(--ink); background: var(--bg); color: var(--muted); transition: background-color 0.2s, color 0.2s, box-shadow 0.2s; }
+.site .cs-links { position: absolute; top: -13px; right: 14px; display: flex; gap: 6px; }
+.site .cs-link { display: grid; place-items: center; width: 26px; height: 26px; border: 2px solid var(--ink); background: var(--bg); color: var(--muted); transition: background-color 0.2s, color 0.2s, box-shadow 0.2s; }
 .site .cs-link.bluetooth.on { background: #3b8bff; color: #fff; box-shadow: 0 0 12px 2px rgba(59, 139, 255, 0.75); }
-.site .cs-link.wifi.on { background: #35e07a; color: #06220f; box-shadow: 0 0 12px 2px rgba(53, 224, 122, 0.75); }
+.site .cs-link.wifi.on { background: #1f8f4e; color: #e8fff0; box-shadow: 0 0 12px 2px rgba(22, 128, 60, 0.8); }
 .site .cs-link.live { animation: csLink 1.2s ease-in-out infinite; }
 @keyframes csLink { 50% { transform: scale(1.12); } }
 .site .cs-glow { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; pointer-events: none; opacity: 0.8; }
 .site .cs-glow.bluetooth { background: radial-gradient(circle, rgba(59, 139, 255, 0.95) 0%, rgba(59, 139, 255, 0) 70%); }
-.site .cs-glow.wifi { background: radial-gradient(circle, rgba(53, 224, 122, 0.95) 0%, rgba(53, 224, 122, 0) 70%); }
+.site .cs-glow.wifi { background: radial-gradient(circle, rgba(31, 157, 87, 0.95) 0%, rgba(31, 157, 87, 0) 70%); }
 .site .cs-glow.live { animation: csGlow 1s ease-in-out infinite; }
 @keyframes csGlow { 50% { opacity: 1; transform: scale(1.45); } }
 @media (prefers-reduced-motion: reduce) { .site .cs-link.live, .site .cs-glow.live { animation: none; } }

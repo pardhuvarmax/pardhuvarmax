@@ -171,7 +171,7 @@ const coderFrame = (leg: number, typing: number, gaze: number) => {
 
 /** gaze: 0 = on the laptop, 1 = looking at the viewer, 2 = blinking at the viewer. */
 export function CoderSprite({ leg, typing, gaze = 0, link = 'bluetooth' }: { leg: number; typing: number; gaze?: number; link?: 'bluetooth' | 'wifi' }) {
-  const earLight = link === 'wifi' ? '#35e07a' : '#3b8bff'; // the headset's connected light
+  const earLight = link === 'wifi' ? '#1f9d57' : '#3b8bff'; // the headset's connected light
   return (
     <svg className="spider-sprite" width={CP_W * SM_CELL} height={CP_H * SM_CELL} viewBox={`0 0 ${CP_W * SM_CELL} ${CP_H * SM_CELL}`} shapeRendering="crispEdges" aria-hidden="true">
       {coderFrame(leg % 4, typing ? 1 : 0, gaze).map((p) => (
