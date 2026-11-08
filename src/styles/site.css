@@ -680,4 +680,4 @@ html[data-cms='on'] .site .edit-dot:hover, html[data-cms='on'] .site .edit-dot:f
 .brand-mark img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 /* Cassette page: huge faint clock behind the dot grid (it comes before the canvas, so the dots draw over it) */
-.bgtime { position: fixed; right: -5vw; bottom: -9vw; z-index: 0; pointer-events: none; user-select: none; font-family: var(--display); font-weight: 900; font-size: clamp(16rem, 62vw, 66rem); line-height: 0.85; letter-spacing: -0.05em; white-space: nowrap; color: var(--text); opacity: 0.028; }
+.bgtime { position: fixed; right: -5vw; bottom: -9vw; z-index: 0; pointer-events: none; user-select: none; font-family: var(--display); font-weight: 900; font-size: clamp(16rem, calc(310vw / var(--bt-len, 5)), 66rem); line-height: 0.85; letter-spacing: -0.05em; white-space: nowrap; color: var(--text); opacity: 0.028; }

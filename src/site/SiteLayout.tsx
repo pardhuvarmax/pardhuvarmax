@@ -1,9 +1,9 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, type CSSProperties } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'motion/react';
 import { ArrowUp, Menu, Moon, Sun, X } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
-import { site } from '../lib/content';
+import { site, special } from '../lib/content';
 import { useTheme } from './useTheme';
 import DotGrid from './DotGrid';
 import { useDynamicColors } from './useDynamicColors';
@@ -97,7 +97,9 @@ export default function SiteLayout() {
 
   return (
     <div className="site">
-      {pathname === '/cassette' && <div className="bgtime" aria-hidden="true">11:19</div>}
+      {special.bgText && pathname !== '/' && (
+        <div className="bgtime" aria-hidden="true" style={{ '--bt-len': Math.max(special.bgText.length, 3) } as CSSProperties}>{special.bgText}</div>
+      )}
       <DotGrid />
       <div className="site-bg" aria-hidden="true">
         <i className="blob b1" />

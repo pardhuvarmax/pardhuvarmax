@@ -239,6 +239,15 @@ export const COLLECTIONS: Collection[] = [
     ],
   },
   {
+    id: 'special',
+    label: 'Special',
+    kind: 'file',
+    path: 'src/content/special.json',
+    fields: [
+      { key: 'bgText', label: 'Background text', type: 'text', help: 'Huge, faint text behind the dot grid on every page except the main page. Leave empty to hide it.' },
+    ],
+  },
+  {
     id: 'news',
     label: 'Latest news',
     kind: 'file',

@@ -6,10 +6,11 @@ import honors from '../content/honors.json';
 import skills from '../content/skills.json';
 import news from '../content/news.json';
 import cassetteData from '../content/cassette.json';
+import special from '../content/special.json';
 import { parsePost, type PostMeta } from './frontmatter';
 import { readingTime } from './markdown';
 
-export { site, publications, projects, experience, honors, skills, news };
+export { site, publications, projects, experience, honors, skills, news, special };
 
 export interface CassetteTrack { title: string; artist?: string; year?: string; note?: string; fav?: boolean; cover?: string; src: string }
 export interface CassetteAlbum { title: string; artist: string; year?: string; cover?: string; note?: string; tracks: CassetteTrack[] }
