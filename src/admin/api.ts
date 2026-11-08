@@ -33,7 +33,9 @@ export function fileToBase64(file: File): Promise<string> {
   });
 }
 
-export async function uploadImage(file: File): Promise<string> {
+export async function uploadFile(file: File): Promise<string> {
   const { url } = await api<{ url: string }>('upload', { body: { name: file.name, data: await fileToBase64(file) } });
   return url;
 }
+
+export const uploadImage = uploadFile;

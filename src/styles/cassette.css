@@ -1,0 +1,108 @@
+/* Cassette page: tapes on a shelf, deck underneath. */
+.site .cs-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 26px; margin-top: 8px; }
+.site .cs-tape { position: relative; display: grid; grid-template-rows: auto auto; gap: 14px; padding: 14px; border: 3px solid var(--ink); background: var(--surface-solid); color: var(--text); font: inherit; text-align: left; cursor: pointer; box-shadow: 6px 6px 0 var(--tc, var(--accent)); transition: transform 0.15s, box-shadow 0.15s; }
+.site .cs-tape::before, .site .cs-tape::after { content: ''; position: absolute; bottom: 7px; width: 9px; height: 9px; border-radius: 50%; border: 2px solid var(--ink); background: var(--bg); }
+.site .cs-tape::before { left: 8px; }
+.site .cs-tape::after { right: 8px; }
+.site .cs-tape:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--tc, var(--accent)); }
+.site .cs-tape.on { background: var(--tc, var(--accent)); color: #fff; }
+.site .cs-label { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 2px solid var(--ink); background: var(--bg); color: var(--text); min-height: 64px; }
+.site .cs-label img { width: 44px; height: 44px; object-fit: cover; border: 2px solid var(--ink); flex: none; }
+.site .cs-label b { display: block; font-family: var(--display); font-weight: 900; font-size: 1rem; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1.1; }
+.site .cs-label i { display: block; margin-top: 4px; font-style: normal; font-size: 0.8rem; color: var(--muted); }
+.site .cs-window { display: flex; justify-content: space-around; align-items: center; padding: 8px 0 12px; margin: 0 14px; border: 2px solid var(--ink); border-radius: 40px; background: var(--bg); }
+.site .cs-reel { position: relative; width: 34px; height: 34px; border-radius: 50%; border: 3px solid var(--ink); background: repeating-conic-gradient(var(--ink) 0 12deg, transparent 12deg 60deg); }
+.site .cs-reel::after { content: ''; position: absolute; inset: 9px; border-radius: 50%; background: var(--bg); border: 2px solid var(--ink); }
+.site .cs-tape.spin .cs-reel { animation: csSpin 1.6s linear infinite; }
+@keyframes csSpin { to { transform: rotate(360deg); } }
+
+.site .cs-deck { margin-top: clamp(34px, 5vw, 56px); padding: clamp(18px, 3vw, 30px); border: 3px solid var(--ink); background: var(--surface-solid); box-shadow: 8px 8px 0 var(--ink); max-width: 760px; }
+.site .cs-kick { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent-text); }
+.site .cs-now h3 { margin: 6px 0 0; font-family: var(--display); font-weight: 900; font-size: clamp(1.4rem, 3.4vw, 2rem); text-transform: uppercase; letter-spacing: -0.02em; line-height: 1.05; }
+.site .cs-now p { margin: 6px 0 0; color: var(--muted); }
+.site .cs-ctrl { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+.site .cs-btn { display: grid; place-items: center; width: 42px; height: 42px; border: 2px solid var(--ink); background: var(--bg); color: var(--text); cursor: pointer; }
+.site .cs-btn.big { width: 54px; height: 54px; background: var(--accent); color: var(--on-accent, #fff); box-shadow: 4px 4px 0 var(--ink); }
+.site .cs-btn:hover:not(:disabled) { background: var(--accent); color: var(--on-accent, #fff); }
+.site .cs-btn:disabled { opacity: 0.35; cursor: default; }
+.site .cs-seek { display: flex; align-items: center; gap: 12px; margin-top: 18px; font-variant-numeric: tabular-nums; font-size: 0.82rem; color: var(--muted); }
+.site .cs-seek input { flex: 1; accent-color: var(--accent); }
+.site .cs-note { margin: 18px 0 0; color: var(--muted); max-width: 60ch; }
+.site .cs-tracks { list-style: none; margin: 22px 0 0; padding: 0; border-top: 2px solid var(--line); }
+.site .cs-tracks button { display: flex; align-items: baseline; gap: 14px; width: 100%; padding: 11px 6px; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.site .cs-tracks button:hover, .site .cs-tracks button.on { background: var(--accent-soft); }
+.site .cs-tracks button.on .cs-t { font-weight: 800; }
+.site .cs-n { width: 2ch; font-variant-numeric: tabular-nums; color: var(--accent-text); font-size: 0.82rem; }
+.site .cs-a { margin-left: auto; color: var(--muted); font-size: 0.82rem; }
+
+.site .cs-empty { display: grid; justify-items: start; gap: 18px; }
+.site .cs-empty .cs-tape { width: min(300px, 100%); cursor: default; }
+.site .cs-empty p { margin: 0; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .site .cs-tape.spin .cs-reel { animation: none; } .site .cs-tape { transition: none; } }
+
+.site .cs-head { display: flex; align-items: center; gap: clamp(16px, 3vw, 28px); }
+.site .cs-cover { flex: none; width: clamp(96px, 20vw, 168px); aspect-ratio: 1; object-fit: cover; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--accent); }
+.site .cs-head .cs-now { min-width: 0; }
+
+/* outlined notice: "!" icon + bold text, no fill; hard shadow for depth, hazard stripe and pulsing "!" for effect */
+.site .cs-notice { position: relative; display: flex; gap: 14px; align-items: flex-start; padding: 26px 16px 16px; border: 3px solid var(--ink); background: transparent; color: var(--text); box-shadow: 7px 7px 0 var(--accent), 7px 7px 0 3px var(--ink); transition: transform 0.18s, box-shadow 0.18s; }
+.site .cs-notice::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 10px; border-bottom: 3px solid var(--ink); background: repeating-linear-gradient(-45deg, var(--accent) 0 8px, transparent 8px 16px); background-size: 22.63px 100%; }
+.site .cs-notice:hover { transform: translate(-3px, -3px); box-shadow: 10px 10px 0 var(--accent), 10px 10px 0 3px var(--ink); }
+.site .cs-bang { position: relative; flex: none; display: grid; place-items: center; width: 34px; height: 34px; border: 3px solid var(--ink); background: var(--accent); color: var(--on-accent, #fff); font-family: var(--display); font-weight: 900; font-size: 1.3rem; line-height: 1; box-shadow: 3px 3px 0 var(--ink); }
+.site .cs-bang::after { content: ''; position: absolute; inset: -3px; border: 2px solid var(--accent); pointer-events: none; opacity: 0; }
+.site .cs-notice p { margin: 0; font-weight: 800; font-size: 0.84rem; line-height: 1.5; letter-spacing: 0.01em; color: inherit; }
+@media (prefers-reduced-motion: no-preference) {
+  .site .cs-notice::before { animation: csStripe 1.4s linear infinite; }
+  .site .cs-bang::after { animation: csPing 2.2s ease-out infinite; }
+  .site .cs-bang { animation: csBang 2.2s ease-in-out infinite; }
+}
+@keyframes csStripe { to { background-position: 22.63px 0; } }
+@keyframes csPing { 0% { opacity: 0.9; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.7); } }
+@keyframes csBang { 0%, 86%, 100% { transform: none; } 90% { transform: translateX(-2px) rotate(-6deg); } 94% { transform: translateX(2px) rotate(6deg); } }
+
+/* player on the left, notice on its right side (stacks on narrow screens) */
+.site .cs-stage { display: flex; align-items: flex-start; gap: clamp(24px, 4vw, 56px); margin-top: clamp(34px, 5vw, 56px); }
+.site .cs-stage .cs-deck { flex: 1 1 0; min-width: 0; margin-top: 0; }
+.site .cs-stage .cs-notice { flex: none; width: 290px; }
+@media (max-width: 900px) { .site .cs-stage { flex-direction: column; } .site .cs-stage .cs-notice { width: 100%; } }
+
+/* Spider-Man sits on top of the player, sideways, legs swinging */
+.site .cs-rig { position: relative; }
+.site .cs-rig .cs-stage { position: relative; margin-top: 118px; }
+.site .cs-spidey { position: absolute; z-index: 4; left: 6px; top: -81px; width: 112px; height: 112px; pointer-events: none; }
+.site .cs-spidey.on .spider-sprite { animation: csBob 0.6s steps(2, end) infinite; }
+@keyframes csBob { 50% { transform: translateY(-2px); } }
+.site .cs-tune { position: absolute; top: 4px; left: 70px; font-style: normal; font-size: 18px; font-weight: 900; color: var(--accent-text); opacity: 0; animation: csTune 1.8s ease-out infinite; }
+.site .cs-tune.n2 { left: 84px; animation-delay: 0.9s; }
+@keyframes csTune { 0% { opacity: 0; transform: translate(0, 10px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(14px, -34px); } }
+@media (max-width: 900px) { .site .cs-rig .cs-stage { margin-top: 118px; } }
+@media (prefers-reduced-motion: reduce) { .site .cs-spidey.on .spider-sprite, .site .cs-tune { animation: none; } .site .cs-tune { display: none; } }
+
+/* click feedback on the transport buttons: press in, ring burst, icon pop */
+.site .cs-btn { position: relative; transition: transform 0.08s, box-shadow 0.08s, background-color 0.15s; }
+.site .cs-btn:active:not(:disabled) { transform: translate(2px, 2px) scale(0.94); }
+.site .cs-btn.big:active:not(:disabled) { transform: translate(4px, 4px) scale(0.96); box-shadow: 0 0 0 var(--ink); }
+.site .cs-ico { display: grid; place-items: center; }
+.site .cs-ico[data-pop] { animation: csPop 0.32s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes csPop { from { transform: scale(0.3) rotate(-120deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.site .cs-ripple { position: absolute; inset: -3px; border: 3px solid var(--accent); pointer-events: none; animation: csRipple 0.55s ease-out forwards; }
+@keyframes csRipple { from { opacity: 0.95; transform: scale(1); } to { opacity: 0; transform: scale(1.9); } }
+@media (prefers-reduced-motion: reduce) { .site .cs-ico[data-pop], .site .cs-ripple { animation: none; } .site .cs-ripple { display: none; } .site .cs-btn:active:not(:disabled) { transform: none; } }
+
+/* wireless link: a chip on each tape (bright on the connected one) and a matching glow on his headset */
+.site .cs-links { position: absolute; top: -13px; right: 14px; display: flex; gap: 6px; }
+.site .cs-link { display: grid; place-items: center; width: 26px; height: 26px; border: 2px solid var(--ink); background: var(--bg); color: var(--muted); transition: background-color 0.2s, color 0.2s, box-shadow 0.2s; }
+.site .cs-link.bluetooth.on { background: #3b8bff; color: #fff; box-shadow: 0 0 12px 2px rgba(59, 139, 255, 0.75); }
+.site .cs-link.wifi.on { background: #1f8f4e; color: #e8fff0; box-shadow: 0 0 12px 2px rgba(22, 128, 60, 0.8); }
+.site .cs-link.live { animation: csLink 1.2s ease-in-out infinite; }
+@keyframes csLink { 50% { transform: scale(1.12); } }
+.site .cs-glow { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; pointer-events: none; opacity: 0.8; }
+.site .cs-glow.bluetooth { background: radial-gradient(circle, rgba(59, 139, 255, 0.95) 0%, rgba(59, 139, 255, 0) 70%); }
+.site .cs-glow.wifi { background: radial-gradient(circle, rgba(31, 157, 87, 0.95) 0%, rgba(31, 157, 87, 0) 70%); }
+.site .cs-glow.live { animation: csGlow 1s ease-in-out infinite; }
+@keyframes csGlow { 50% { opacity: 1; transform: scale(1.45); } }
+@media (prefers-reduced-motion: reduce) { .site .cs-link.live, .site .cs-glow.live { animation: none; } }
+
+/* peak-favourite tag in the player, star in the track list */
+.site .cs-fav { display: inline-block; margin-left: 10px; padding: 2px 8px; border: 2px solid var(--accent); color: var(--accent-text); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; vertical-align: 1px; }
+.site .cs-star { color: var(--accent-text); }

@@ -1,9 +1,9 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, type CSSProperties } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'motion/react';
 import { ArrowUp, Menu, Moon, Sun, X } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
-import { site } from '../lib/content';
+import { site, special } from '../lib/content';
 import { useTheme } from './useTheme';
 import DotGrid from './DotGrid';
 import { useDynamicColors } from './useDynamicColors';
@@ -20,12 +20,16 @@ const isOwnerHint = () => {
   return ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
 };
 
+const BG_POSITIONS = ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'center'];
+const bgPos = BG_POSITIONS.includes(String((special as Record<string, unknown>).bgTextPosition)) ? String((special as Record<string, unknown>).bgTextPosition) : 'bottom-right';
+
 const NAV = [
   { to: '/me', label: 'Me' },
   { to: '/research', label: 'Research' },
   { to: '/publications', label: 'Publications' },
   { to: '/projects', label: 'Projects' },
   { to: '/blog', label: 'Writing' },
+  { to: '/cassette', label: 'Cassette' },
   { to: '/#contact', label: 'Contact' },
 ];
 
@@ -96,6 +100,9 @@ export default function SiteLayout() {
 
   return (
     <div className="site">
+      {special.bgText && pathname !== '/' && (
+        <div className="bgtime" data-pos={bgPos} aria-hidden="true" style={{ '--bt-len': Math.max(special.bgText.length, 3) } as CSSProperties}>{special.bgText}</div>
+      )}
       <DotGrid />
       <div className="site-bg" aria-hidden="true">
         <i className="blob b1" />

@@ -1,4 +1,4 @@
-export type FieldType = 'text' | 'textarea' | 'url' | 'date' | 'select' | 'boolean' | 'strings' | 'list' | 'image';
+export type FieldType = 'text' | 'textarea' | 'url' | 'date' | 'select' | 'boolean' | 'strings' | 'list' | 'image' | 'audio' | 'number';
 
 export interface Field {
   key: string;
@@ -9,6 +9,9 @@ export interface Field {
   fields?: Field[]; // for type "list": the fields of each item
   multiline?: boolean; // for type "strings": each entry is a textarea
   titleKey?: string; // for type "list": which item field names the row
+  min?: number; // for type "number"
+  max?: number;
+  step?: number;
 }
 
 export interface FileCollection {
@@ -198,6 +201,63 @@ export const COLLECTIONS: Collection[] = [
           { key: 'items', label: 'Items (comma separated)', type: 'textarea' },
         ],
       },
+    ],
+  },
+  {
+    id: 'cassette',
+    label: 'Cassette (music)',
+    kind: 'file',
+    path: 'src/content/cassette.json',
+    fields: [
+      { key: 'intro', label: 'Intro line', type: 'textarea', help: 'Shown at the top of the Cassette page.' },
+      { key: 'disclaimer', label: 'Disclaimer (bottom of page)', type: 'textarea', help: 'Rights notice shown under the player. Leave empty to hide it.' },
+      {
+        key: 'albums',
+        label: 'Albums (tapes)',
+        type: 'list',
+        titleKey: 'title',
+        fields: [
+          { key: 'title', label: 'Album title', type: 'text' },
+          { key: 'artist', label: 'Artist', type: 'text' },
+          { key: 'year', label: 'Year (optional)', type: 'text' },
+          { key: 'cover', label: 'Tape cover (optional)', type: 'image', help: 'Shown on the cassette. Leave empty to use the first song\'s cover.' },
+          { key: 'note', label: 'Why I like it (optional)', type: 'textarea' },
+          {
+            key: 'tracks',
+            label: 'Tracks',
+            type: 'list',
+            titleKey: 'title',
+            fields: [
+              { key: 'title', label: 'Track title', type: 'text' },
+              { key: 'artist', label: 'Artist (if different)', type: 'text' },
+              { key: 'fav', label: 'Peak favourite', type: 'boolean', help: 'Adds a "Peak favourite" tag and a star in the track list.' },
+              { key: 'year', label: 'Year (optional)', type: 'text' },
+              { key: 'note', label: 'Why I like it (optional)', type: 'textarea', help: 'Shown under the player controls while this song is selected.' },
+              { key: 'cover', label: 'Song cover (optional)', type: 'image', help: 'Shown in the player while this song is selected.' },
+              { key: 'src', label: 'Audio file', type: 'audio', help: 'MP3, M4A, AAC, OGG or WAV, up to 3.2 MB each (a 128 kbps MP3 is about 1 MB per minute).' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'special',
+    label: 'Special',
+    kind: 'file',
+    path: 'src/content/special.json',
+    fields: [
+      { key: 'bgText', label: 'Background text', type: 'text', help: 'Huge, faint text behind the dot grid on every page except the main page. Leave empty to hide it.' },
+      { key: 'bgTextPosition', label: 'Background text position', type: 'select', options: ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'center'] },
+      { key: 'dotShape', label: 'Dots: shape', type: 'select', options: ['circle', 'square', 'diamond'] },
+      { key: 'dotSize', label: 'Dots: size', type: 'number', min: 0.5, max: 5, step: 0.1, help: 'Resting dot width in px. Default 1.5.' },
+      { key: 'dotSpacing', label: 'Dots: spacing', type: 'number', min: 12, max: 60, step: 1, help: 'Gap between dots in px. Default 26.' },
+      { key: 'dotOpacity', label: 'Dots: resting opacity (%)', type: 'number', min: 2, max: 60, step: 1, help: 'How visible the dots are when the cursor is away. Default 16.' },
+      { key: 'cursorEnabled', label: 'Cursor effect on', type: 'boolean', help: 'Turn the cursor depth effect off to keep a plain dot grid.' },
+      { key: 'cursorRadius', label: 'Cursor: reach', type: 'number', min: 60, max: 400, step: 5, help: 'Radius of the lens around the cursor in px. Default 190.' },
+      { key: 'cursorDepth', label: 'Cursor: depth strength', type: 'number', min: 0, max: 50, step: 1, help: 'How far dots are pushed outward at the cursor, in px. Default 15.' },
+      { key: 'cursorGrow', label: 'Cursor: dot growth', type: 'number', min: 0, max: 8, step: 0.1, help: 'How much dots swell at the cursor, in px. Default 2.6.' },
+      { key: 'cursorGlow', label: 'Cursor: glow (%)', type: 'number', min: 0, max: 40, step: 1, help: 'Strength of the soft coloured pit under the cursor. Default 10.' },
     ],
   },
   {

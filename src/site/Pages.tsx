@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { site } from '../lib/content';
 import { About, Experience, Projects, Publications, Research } from './Home';
 import { SectionHead } from './Reveal';
+import Cassette from './Cassette';
 
 // Dedicated views for the nav buttons. They reuse the same sections as the home page.
 function Page({ title, children }: { title: string; children: ReactNode }) {
@@ -25,6 +26,7 @@ function Page({ title, children }: { title: string; children: ReactNode }) {
 export const ResearchPage = () => <Page title="Research"><Research /></Page>;
 export const PublicationsPage = () => <Page title="Publications"><Publications /></Page>;
 export const ProjectsPage = () => <Page title="Projects"><Projects /></Page>;
+export const CassettePage = () => <Page title="Cassette"><Cassette /></Page>;
 export const MePage = () => (
   <Page title="Me">
     <section className="wrap sec">

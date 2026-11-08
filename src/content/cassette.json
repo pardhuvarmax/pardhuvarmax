@@ -1,0 +1,62 @@
+{
+  "intro": "Tapes I keep on repeat while I code, read papers and break things. Press a tape, hit play.",
+  "albums": [
+    {
+      "title": "Chase Atlantic",
+      "artist": "Favourites",
+      "cover": "/uploads/friends-cover.jpg",
+      "tracks": [
+        {
+          "title": "Friends (Intro loop)",
+          "src": "/uploads/chase-atlantic-friends.mp3",
+          "artist": "Chase Atlantic",
+          "cover": "/uploads/friends-cover.jpg",
+          "year": "2015",
+          "note": "Same place, every time.",
+          "fav": true
+        },
+        {
+          "title": "Drugs & Money (Instrumental)",
+          "src": "/uploads/chase-atlantic-drugs-and-money-instrumental.mp3",
+          "artist": "Chase Atlantic",
+          "cover": "/uploads/drugs-and-money-cover.jpg",
+          "year": "2017",
+          "note": "Not for everyone."
+        },
+        {
+          "title": "Slow Down (Instrumental)",
+          "src": "/uploads/chase-atlantic-slow-down-instrumental.mp3",
+          "artist": "Chase Atlantic",
+          "cover": "/uploads/slow-down-cover.jpg",
+          "year": "2016",
+          "note": "After midnight."
+        }
+      ]
+    },
+    {
+      "title": "The Weeknd",
+      "artist": "Favourites",
+      "cover": "/uploads/blinding-lights-cover.jpg",
+      "tracks": [
+        {
+          "title": "Blinding Lights (Instrumental)",
+          "src": "/uploads/the-weeknd-blinding-lights-instrumental.mp3",
+          "artist": "The Weeknd",
+          "cover": "/uploads/blinding-lights-cover.jpg",
+          "year": "2019",
+          "note": "Never told anyone why.",
+          "fav": true
+        },
+        {
+          "title": "High For This (Instrumental)",
+          "src": "/uploads/the-weeknd-high-for-this-instrumental.mp3",
+          "artist": "The Weeknd",
+          "cover": "/uploads/high-for-this-cover.jpg",
+          "year": "2011",
+          "note": "Left the lights off."
+        }
+      ]
+    }
+  ],
+  "disclaimer": "All music, artwork and related rights belong to their respective artists, labels and owners. Tracks are shared here only for personal listening and appreciation, with no commercial intent. If you are a rights holder and want something removed, email me and it will come down."
+}
