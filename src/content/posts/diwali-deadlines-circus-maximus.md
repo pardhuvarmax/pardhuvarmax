@@ -2,7 +2,7 @@
 title: "diwali, deadlines & circus maximus? "
 date: 2026-11-08
 summary: "A little break from portfolio work and Kernel Borderlands to enjoy some Diwali fireworks. Back to circus tomorrow. :)"
-tags: []
+tags: [diwali-&-fun]
 draft: false
 ---
 
