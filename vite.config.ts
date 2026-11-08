@@ -3,7 +3,7 @@ import path from 'path'
 import { resolve } from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import { handleAdmin } from './server/admin-core.ts'
+import { handleAdmin } from './api/admin.ts'
 
 const securityHeaders = {
   'X-Content-Type-Options': 'nosniff',
