@@ -32,6 +32,8 @@ export default function Cassette() {
   const spidey = useRef<HTMLDivElement>(null);
   const [typing, setTyping] = useState<0 | 1>(0);
   const [leg, setLeg] = useState(0);
+  const [gaze, setGaze] = useState(0);
+  const firstRun = useRef(true);
   const [wire, setWire] = useState<{ d: string; x: number; y: number } | null>(null);
 
   const album = albums[a];
@@ -55,6 +57,16 @@ export default function Cassette() {
     const id = setInterval(() => setTyping((v) => (v ? 0 : 1)), 170);
     return () => clearInterval(id);
   }, [playing]);
+
+  // changing tape or song: he looks at us, blinks twice, then goes back to the laptop
+  useEffect(() => {
+    if (firstRun.current) { firstRun.current = false; return; }
+    const steps: [number, number][] = [[1, 450], [2, 130], [1, 170], [2, 130], [1, 250], [0, 0]];
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    let at = 0;
+    for (const [g, hold] of steps) { timers.push(setTimeout(() => setGaze(g), at)); at += hold; }
+    return () => { timers.forEach(clearTimeout); setGaze(0); };
+  }, [a, t]);
 
   // his legs keep swinging
   useEffect(() => {
@@ -164,7 +176,7 @@ export default function Cassette() {
 
       <div className="cs-stage">
       <div className={`cs-spidey ${playing ? 'on' : ''}`} ref={spidey} aria-hidden="true">
-        <CoderSprite leg={leg} typing={playing ? typing : 0} />
+        <CoderSprite leg={leg} typing={playing ? typing : 0} gaze={gaze} />
         {playing && <><i className="cs-note n1">♪</i><i className="cs-note n2">♫</i></>}
       </div>
       <div className="cs-deck">

@@ -104,14 +104,14 @@ export function SpiderSprite({ frame }: { frame: Frame }) {
   );
 }
 
-/** Spider-Man in profile, sitting on a ledge and coding on a laptop with a headset. `leg` (0-3) swings his legs, `typing` alternates the hand. */
+/** Spider-Man in profile (facing left), sitting on a ledge and coding on a laptop with a headset. `leg` (0-3) swings his legs, `typing` alternates the hand. */
 const CP_W = 28;
 const CP_H = 28;
 const CODER_FILL: Record<string, string> = { ...SM_FILL, L: '#8d939e', G: '#5f646d', H: '#2c2c36', C: '#5ad1ff', D: '#142a70' };
 const NEAR_FOOT = [12, 16, 20, 16];
 const FAR_FOOT = [20, 16, 12, 16];
 
-function buildCoder(leg: number, typing: number): { x: number; y: number; c: string }[] {
+function buildCoder(leg: number, typing: number, gaze: number): { x: number; y: number; c: string }[] {
   const cells = new Map<string, string>();
   const put = (x: number, y: number, c: string) => { if (x >= 0 && y >= 0 && x < CP_W && y < CP_H) cells.set(`${x},${y}`, c); };
   const rect = (x0: number, y0: number, x1: number, y1: number, c: string) => { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) put(x, y, c); };
@@ -135,30 +135,45 @@ function buildCoder(leg: number, typing: number): { x: number; y: number; c: str
   rect(8, 11, 13, 17, 'R'); rect(8, 18, 13, 20, 'B');
   // head facing the laptop (right) with its eye
   for (let y = 0; y < CP_H; y++) for (let x = 0; x < CP_W; x++) if (((x - 11) / 3.4) ** 2 + ((y - 6) / 3.6) ** 2 <= 1.05) put(x, y, 'R');
-  for (const [x, y] of [[13, 5], [14, 5], [14, 6]]) put(x, y, 'W');
+  if (gaze === 0) for (const [x, y] of [[13, 5], [14, 5], [14, 6]]) put(x, y, 'W'); // eye on the laptop
+  else if (gaze === 1) for (const [x, y] of [[8, 5], [8, 6], [9, 6], [12, 5], [12, 6], [11, 6]]) put(x, y, 'W'); // both eyes on the viewer
+  else for (const [x, y] of [[8, 6], [9, 6], [11, 6], [12, 6]]) put(x, y, 'K'); // blink
   // arm reaching the keys
   line(11, 12, 12, 15, 'R'); line(12, 15, 18, typing ? 15 : 16, 'R');
   // laptop on his knees, screen towards him
   rect(15, 17, 22, 18, 'G'); rect(21, 8, 22, 16, 'L'); rect(20, 9, 20, 15, 'C'); put(23, 12, 'Y');
-  // headset: band over the head, ear cup, mic boom
-  rect(9, 2, 13, 2, 'H'); put(8, 3, 'H'); put(8, 4, 'H'); put(14, 3, 'H'); put(14, 4, 'H'); put(8, 5, 'H'); put(8, 6, 'H');
-  rect(9, 5, 11, 8, 'H'); put(10, 6, 'C'); put(10, 7, 'C');
-  put(12, 9, 'H'); put(13, 10, 'H'); put(14, 10, 'C');
+  // headset: band over the head, ear cup(s), mic boom
+  if (gaze === 0) {
+    rect(9, 2, 13, 2, 'H'); put(8, 3, 'H'); put(8, 4, 'H'); put(14, 3, 'H'); put(14, 4, 'H'); put(8, 5, 'H'); put(8, 6, 'H');
+    rect(9, 5, 11, 8, 'H'); put(10, 6, 'C'); put(10, 7, 'C');
+    put(12, 9, 'H'); put(13, 10, 'H'); put(14, 10, 'C');
+  } else {
+    // head turned to face us: a cup on each side
+    rect(8, 2, 14, 2, 'H'); put(7, 3, 'H'); put(7, 4, 'H'); put(15, 3, 'H'); put(15, 4, 'H');
+    rect(6, 5, 7, 8, 'H'); rect(15, 5, 16, 8, 'H'); put(6, 6, 'C'); put(6, 7, 'C'); put(16, 6, 'C'); put(16, 7, 'C');
+    put(8, 9, 'H'); put(9, 10, 'H'); put(10, 10, 'C');
+  }
   for (const k of [...cells.keys()]) {
     const [x, y] = k.split(',').map(Number);
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (!cells.has(`${x + dx},${y + dy}`)) put(x + dx, y + dy, 'K');
   }
-  return [...cells.entries()].map(([k, c]) => { const [x, y] = k.split(',').map(Number); return { x, y, c }; });
+  return [...cells.entries()].map(([k, c]) => { const [x, y] = k.split(',').map(Number); return { x: CP_W - 1 - x, y, c }; }); // mirrored: he faces left
 }
-const CODER_FRAMES = [0, 1, 2, 3].map((leg) => [0, 1].map((t) => buildCoder(leg, t)));
+const coderCache = new Map<string, { x: number; y: number; c: string }[]>();
+const coderFrame = (leg: number, typing: number, gaze: number) => {
+  const key = `${leg}${typing}${gaze}`;
+  if (!coderCache.has(key)) coderCache.set(key, buildCoder(leg, typing, gaze));
+  return coderCache.get(key)!;
+};
 
 /** Pixel offsets inside the sprite: the top of the headband, where the headset wire leaves. */
-export const CODER_SIZE = { w: CP_W * SM_CELL, h: CP_H * SM_CELL, ear: [44, 8], seat: 21 * SM_CELL } as const;
+export const CODER_SIZE = { w: CP_W * SM_CELL, h: CP_H * SM_CELL, ear: [68, 8], seat: 21 * SM_CELL } as const;
 
-export function CoderSprite({ leg, typing }: { leg: number; typing: number }) {
+/** gaze: 0 = on the laptop, 1 = looking at the viewer, 2 = blinking at the viewer. */
+export function CoderSprite({ leg, typing, gaze = 0 }: { leg: number; typing: number; gaze?: number }) {
   return (
     <svg className="spider-sprite" width={CP_W * SM_CELL} height={CP_H * SM_CELL} viewBox={`0 0 ${CP_W * SM_CELL} ${CP_H * SM_CELL}`} shapeRendering="crispEdges" aria-hidden="true">
-      {CODER_FRAMES[leg % 4][typing ? 1 : 0].map((p) => (
+      {coderFrame(leg % 4, typing ? 1 : 0, gaze).map((p) => (
         <rect key={`${p.x},${p.y}`} x={p.x * SM_CELL} y={p.y * SM_CELL} width={SM_CELL} height={SM_CELL} fill={CODER_FILL[p.c]} />
       ))}
     </svg>

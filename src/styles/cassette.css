@@ -77,11 +77,11 @@
 @keyframes csNote { 0% { opacity: 0; transform: translate(0, 10px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(14px, -34px); } }
 .site .cs-wire { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; overflow: visible; }
 .site .cs-wire path { fill: none; stroke-linecap: round; }
-.site .cs-wire .w-base { stroke: var(--ink); stroke-width: 3; }
-.site .cs-wire .w-flow { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 2 12; opacity: 0; }
+.site .cs-wire .w-base { stroke: #7f838d; stroke-width: 3; }
+.site .cs-wire .w-flow { stroke: #cdd0d6; stroke-width: 3; stroke-dasharray: 2 12; opacity: 0; }
 .site .cs-wire.on .w-flow { opacity: 1; animation: csFlow 0.7s linear infinite; }
 @keyframes csFlow { to { stroke-dashoffset: -14; } }
-.site .cs-wire .w-plug { fill: var(--ink); }
+.site .cs-wire .w-plug { fill: #5b5f68; }
 .site .cs-wire .w-led { fill: var(--muted); }
 .site .cs-wire.on .w-led { fill: var(--accent); animation: csLed 0.7s steps(2, end) infinite; }
 @keyframes csLed { 50% { opacity: 0.25; } }
