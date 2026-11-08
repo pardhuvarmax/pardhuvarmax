@@ -10,19 +10,25 @@
           "title": "Friends (Intro loop)",
           "src": "/uploads/chase-atlantic-friends.mp3",
           "artist": "Chase Atlantic",
-          "cover": "/uploads/friends-cover.jpg"
+          "cover": "/uploads/friends-cover.jpg",
+          "year": "2015",
+          "note": "That slow, hazy intro stretched to ten minutes. It sits in the background so I can stay inside one problem for hours."
         },
         {
           "title": "Drugs & Money (Instrumental)",
           "src": "/uploads/chase-atlantic-drugs-and-money-instrumental.mp3",
           "artist": "Chase Atlantic",
-          "cover": "/uploads/drugs-and-money-cover.jpg"
+          "cover": "/uploads/drugs-and-money-cover.jpg",
+          "year": "2017",
+          "note": "Dark, steady bass with room on top. The instrumental keeps all the mood and none of the words, so it works while I read code."
         },
         {
           "title": "Slow Down (Instrumental)",
           "src": "/uploads/chase-atlantic-slow-down-instrumental.mp3",
           "artist": "Chase Atlantic",
-          "cover": "/uploads/slow-down-cover.jpg"
+          "cover": "/uploads/slow-down-cover.jpg",
+          "year": "2016",
+          "note": "Dreamy, half-speed and a little sad. I put it on when I want to stop rushing and think properly."
         }
       ]
     },
@@ -35,13 +41,17 @@
           "title": "Blinding Lights (Instrumental)",
           "src": "/uploads/the-weeknd-blinding-lights-instrumental.mp3",
           "artist": "The Weeknd",
-          "cover": "/uploads/blinding-lights-cover.jpg"
+          "cover": "/uploads/blinding-lights-cover.jpg",
+          "year": "2019",
+          "note": "Pure 80s synth drive with no vocals in the way. The fastest tape on the shelf, good for a last push before a deadline."
         },
         {
           "title": "High For This (Instrumental)",
           "src": "/uploads/the-weeknd-high-for-this-instrumental.mp3",
           "artist": "The Weeknd",
-          "cover": "/uploads/high-for-this-cover.jpg"
+          "cover": "/uploads/high-for-this-cover.jpg",
+          "year": "2011",
+          "note": "Cold, spacious and slow-building. Without the vocals the production is what stands out; the whole track is mood."
         }
       ]
     }

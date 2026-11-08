@@ -160,7 +160,7 @@ export default function Cassette() {
         {(gaze === 0 ? [[70, 28]] : [[48, 28], [88, 28]]).map(([x, y]) => (
           <i key={x} className={`cs-glow ${link} ${playing ? 'live' : ''}`} style={{ left: x, top: y }} />
         ))}
-        {playing && <><i className="cs-note n1">♪</i><i className="cs-note n2">♫</i></>}
+        {playing && <><i className="cs-tune n1">♪</i><i className="cs-tune n2">♫</i></>}
       </div>
       <div className="cs-deck">
         <audio
@@ -187,7 +187,7 @@ export default function Cassette() {
           <div className="cs-now">
             <span className="cs-kick">{playing ? 'Now playing' : 'Loaded'}</span>
             <h3>{track?.title}</h3>
-            <p>{track?.artist || album.artist}</p>
+            <p>{track?.artist || album.artist}{track?.year ? ` · ${track.year}` : ''}</p>
           </div>
         </div>
         <div className="cs-ctrl">
@@ -217,7 +217,7 @@ export default function Cassette() {
           />
           <span>{clock(dur)}</span>
         </div>
-        {album.note && <p className="cs-note">{album.note}</p>}
+        {(track?.note || album.note) && <p className="cs-note">{track?.note || album.note}</p>}
         <ol className="cs-tracks">
           {tracks.map((x, i) => (
             <li key={x.src + i}>

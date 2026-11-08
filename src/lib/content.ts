@@ -11,7 +11,7 @@ import { readingTime } from './markdown';
 
 export { site, publications, projects, experience, honors, skills, news };
 
-export interface CassetteTrack { title: string; artist?: string; cover?: string; src: string }
+export interface CassetteTrack { title: string; artist?: string; year?: string; note?: string; cover?: string; src: string }
 export interface CassetteAlbum { title: string; artist: string; year?: string; cover?: string; note?: string; tracks: CassetteTrack[] }
 export const cassette = cassetteData as { intro: string; disclaimer?: string; albums: CassetteAlbum[] };
 

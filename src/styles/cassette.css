@@ -72,11 +72,11 @@
 .site .cs-spidey { position: absolute; z-index: 4; left: 6px; top: -81px; width: 112px; height: 112px; pointer-events: none; }
 .site .cs-spidey.on .spider-sprite { animation: csBob 0.6s steps(2, end) infinite; }
 @keyframes csBob { 50% { transform: translateY(-2px); } }
-.site .cs-note { position: absolute; top: 4px; left: 70px; font-style: normal; font-size: 18px; font-weight: 900; color: var(--accent-text); opacity: 0; animation: csNote 1.8s ease-out infinite; }
-.site .cs-note.n2 { left: 84px; animation-delay: 0.9s; }
-@keyframes csNote { 0% { opacity: 0; transform: translate(0, 10px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(14px, -34px); } }
+.site .cs-tune { position: absolute; top: 4px; left: 70px; font-style: normal; font-size: 18px; font-weight: 900; color: var(--accent-text); opacity: 0; animation: csTune 1.8s ease-out infinite; }
+.site .cs-tune.n2 { left: 84px; animation-delay: 0.9s; }
+@keyframes csTune { 0% { opacity: 0; transform: translate(0, 10px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(14px, -34px); } }
 @media (max-width: 900px) { .site .cs-rig .cs-stage { margin-top: 118px; } }
-@media (prefers-reduced-motion: reduce) { .site .cs-spidey.on .spider-sprite, .site .cs-note { animation: none; } .site .cs-note { display: none; } }
+@media (prefers-reduced-motion: reduce) { .site .cs-spidey.on .spider-sprite, .site .cs-tune { animation: none; } .site .cs-tune { display: none; } }
 
 /* click feedback on the transport buttons: press in, ring burst, icon pop */
 .site .cs-btn { position: relative; transition: transform 0.08s, box-shadow 0.08s, background-color 0.15s; }
