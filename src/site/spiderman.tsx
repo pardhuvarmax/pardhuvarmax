@@ -4,10 +4,10 @@ const SM_W = 25;
 const SM_H = 27;
 const SM_CELL = 4;
 
-type Pose = 'hang' | 'stand' | 'run' | 'sit' | 'point' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold' | 'clutch';
+type Pose = 'hang' | 'stand' | 'run' | 'sit' | 'point' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold' | 'clutch' | 'wr';
 const STANDING: Pose[] = ['stand', 'point', 'reach', 'shrug', 'throwA', 'throwB', 'shout', 'hold', 'clutch'];
 
-function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: number; c: string }[] {
+function buildSpiderMan(pose: Pose, look = 0, sense = false, alt = false): { x: number; y: number; c: string }[] {
   const cells = new Map<string, string>();
   const put = (x: number, y: number, c: string) => {
     if (x >= 0 && y >= 0 && x < SM_W && y < SM_H) cells.set(`${x},${y}`, c);
@@ -40,6 +40,9 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   } else if (STANDING.includes(pose)) {
     line(10, 19, 9, 25, 'B');
     line(14, 19, 15, 25, 'B');
+  } else if (pose === 'wr') {
+    if (!alt) { line(10, 19, 7, 21, 'B'); line(7, 21, 9, 24, 'B'); line(14, 19, 16, 22, 'B'); line(16, 22, 18, 25, 'B'); }
+    else { line(14, 19, 17, 21, 'B'); line(17, 21, 15, 24, 'B'); line(10, 19, 8, 22, 'B'); line(8, 22, 6, 25, 'B'); }
   } else {
     line(10, 19, 7, 21, 'B'); line(7, 21, 9, 24, 'B'); // lifted knee
     line(14, 19, 16, 22, 'B'); line(16, 22, 18, 25, 'B'); // push-off leg
@@ -83,7 +86,7 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   } else if (pose === 'clutch') {
     line(8, 12, 5, 9, 'R'); line(5, 9, 8, 6, 'R');
     line(16, 12, 19, 9, 'R'); line(19, 9, 16, 6, 'R'); // both hands clamped on his head
-  } else if (pose === 'hold') {
+  } else if (pose === 'hold' || pose === 'wr') {
     line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
     line(16, 12, 19, 8, 'R'); line(19, 8, 19, 4, 'R'); // holding a board up
   } else if (pose === 'stand' || pose === 'sit') {
@@ -109,7 +112,7 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   });
 }
 
-export type Frame = 'hang' | 'look-left' | 'look-right' | 'alert' | 'runA' | 'runB' | 'sit' | 'sit-left' | 'sit-right' | 'sit-sense' | 'point' | 'point-left' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold-left' | 'hold' | 'hold-right' | 'clutch';
+export type Frame = 'hang' | 'look-left' | 'look-right' | 'alert' | 'runA' | 'runB' | 'sit' | 'sit-left' | 'sit-right' | 'sit-sense' | 'point' | 'point-left' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold-left' | 'hold' | 'hold-right' | 'clutch' | 'wrA' | 'wrB' | 'wlA' | 'wlB';
 const SM_FRAMES: Record<Frame, { x: number; y: number; c: string }[]> = (() => {
   const mirror = (cs: { x: number; y: number; c: string }[]) => cs.map((p) => ({ ...p, x: 24 - p.x }));
   const run = buildSpiderMan('run');
@@ -135,6 +138,10 @@ const SM_FRAMES: Record<Frame, { x: number; y: number; c: string }[]> = (() => {
     'hold-left': buildSpiderMan('hold', -1),
     hold: buildSpiderMan('hold', 0),
     clutch: buildSpiderMan('clutch', 0),
+    wrA: buildSpiderMan('wr', 1),
+    wrB: buildSpiderMan('wr', 1, false, true),
+    wlA: mirror(buildSpiderMan('wr', 1)),
+    wlB: mirror(buildSpiderMan('wr', 1, false, true)),
     'hold-right': buildSpiderMan('hold', 1),
     'point-left': mirror(buildSpiderMan('point', 1)),
   };

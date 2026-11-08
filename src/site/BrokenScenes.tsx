@@ -21,7 +21,7 @@ const GREY = { W: '#f2f2f2', G: '#9a9a9a', D: '#3a3a3a', K: '#000000', Y: '#ffff
 
 /** Plays a sequence of Spider-Man poses on a loop: [pose, start] pairs, `start` being a fraction of `ms`. Each pose is held until the next starts,
  *  so his arms and legs actually move (no rotating pixel art). Runs on the Web Animations API, so it stays in step with the CSS timelines. */
-function Seq({ steps, ms }: { steps: [Frame, number, string?][]; ms: number }) {
+function Seq({ steps, ms }: { steps: [Frame, number, string?, ReactNode?][]; ms: number }) {
   const refs = useRef<(HTMLDivElement | null)[]>([]);
   useEffect(() => {
     if (reduced()) return;
@@ -38,9 +38,10 @@ function Seq({ steps, ms }: { steps: [Frame, number, string?][]; ms: number }) {
   }, [ms]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
-      {steps.map(([f, , cls], i) => (
+      {steps.map(([f, , cls, extra], i) => (
         <div key={i} className={`bs-fl ${cls ?? ''}`} ref={(el) => { refs.current[i] = el; }} style={{ opacity: i === 0 ? 1 : 0 }}>
           <SpiderSprite frame={f} />
+          {extra}
         </div>
       ))}
     </>
@@ -208,7 +209,21 @@ export function Scene429({ progress, done }: { progress: number; done: boolean }
 /* ---------- offline: the tower looks dead. He tries for a bar (three times), loses it, hurls the phone at you, then panics ---------- */
 const TOWER = ['....WW....', '....WW....', '...W..W...', '...WWWW...', '...W..W...', '..W.WW.W..', '..WWWWWW..', '..W.WW.W..', '.W..WW..W.', '.WWWWWWWW.', '.W..WW..W.', 'WWWWWWWWWW'];
 const TRY_LINES = ['One bar. Please.', 'Come on...', 'JUST ONE BAR!!'];
-const S_TRY: [Frame, number][] = [['hold-right', 0], ['hold', 0.55]];
+const PhoneIn = ({ side }: { side: 'r' | 'l' }) => <div className={`bs-phone-in ${side}`}><div className="bs-bars"><i /><i /><i /><i /></div></div>;
+/** One try for signal: he walks one way holding the phone up, stops to check the bars, then walks back. `first` is the way he sets off. */
+const tryWalk = (first: 'r' | 'l'): [Frame, number, string?, ReactNode?][] => {
+  const out = first === 'r' ? 'wr' : 'wl';
+  const back = first === 'r' ? 'wl' : 'wr';
+  const phone = (side: 'r' | 'l') => <PhoneIn side={side} />;
+  const steps: [Frame, number, string?, ReactNode?][] = [];
+  [0, 0.06, 0.12, 0.18, 0.24].forEach((t, i) => steps.push([`${out}${i % 2 ? 'B' : 'A'}` as Frame, t, undefined, phone(first)]));
+  steps.push([(first === 'r' ? 'hold-right' : 'hold-left') as Frame, 0.3, undefined, phone(first)]);
+  [0.55, 0.61, 0.67, 0.73, 0.79].forEach((t, i) => steps.push([`${back}${i % 2 ? 'B' : 'A'}` as Frame, t, undefined, phone(first === 'r' ? 'l' : 'r')]));
+  steps.push([(first === 'r' ? 'hold-left' : 'hold-right') as Frame, 0.85, undefined, phone(first === 'r' ? 'l' : 'r')]);
+  return steps;
+};
+const S_TRY_R = tryWalk('r');
+const S_TRY_L = tryWalk('l');
 const S_MAD: [Frame, number][] = [['brace', 0], ['throwA', 0.6]];
 export function SceneOffline({ online = false }: { online?: boolean }) {
   const [taps, setTaps] = useState(0);
@@ -226,7 +241,7 @@ export function SceneOffline({ online = false }: { online?: boolean }) {
     setTaps(t);
     if (t <= 3) {
       setPhase('try');
-      at(1600, () => setPhase('idle'));
+      at(2600, () => setPhase('idle'));
       return;
     }
     setPhase('mad');
@@ -240,7 +255,7 @@ export function SceneOffline({ online = false }: { online?: boolean }) {
   // nobody tapping: he keeps trying by himself
   useEffect(() => {
     if (online || reduced()) return;
-    const id = setInterval(() => tapRef.current(), 4200);
+    const id = setInterval(() => tapRef.current(), 5200);
     return () => clearInterval(id);
   }, [online]);
 
@@ -259,9 +274,9 @@ export function SceneOffline({ online = false }: { online?: boolean }) {
           <span className="bs-x" />
         </>
       )}
-      <div className="bs-sp">
+      <div className={`bs-sp ${phase === 'try' ? (taps % 2 ? 'walk-r' : 'walk-l') : ''}`}>
         {online ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="hold" /></div>
-          : phase === 'try' ? <Seq key={taps} steps={S_TRY} ms={1600} />
+          : phase === 'try' ? <Seq key={taps} steps={taps % 2 ? S_TRY_R : S_TRY_L} ms={2600} />
           : phase === 'mad' ? <Seq steps={S_MAD} ms={1200} />
           : phase === 'throw' ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="throwB" /></div>
           : phase === 'panic' ? <div className="bs-fl bs-jit" style={{ opacity: 1 }}><SpiderSprite frame="clutch" /></div>
