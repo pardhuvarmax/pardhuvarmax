@@ -223,16 +223,14 @@ export function Scene429({ progress, done }: { progress: number; done: boolean }
   );
 }
 
-/* ---------- offline: the tower is broken. He tries for a bar three times, smashes his phone, then panics ---------- */
+/* ---------- offline: the tower looks dead. He tries for a bar three times, hurls his phone at you, then panics ---------- */
 const TOWER = ['....WW....', '....WW....', '...W..W...', '...WWWW...', '...W..W...', '..W.WW.W..', '..WWWWWW..', '..W.WW.W..', '.W..WW..W.', '.WWWWWWWW.', '.W..WW..W.', 'WWWWWWWWWW'];
-const TOWER_BROKEN = ['..........', '..........', '..........', '..........', '..........', '..........', '..W.WW....', '..WWWWWW..', '..W.WW.W..', '.W..WW..W.', '.WWWWWWWW.', 'WWWWWWWWWW'];
-const TOWER_TOP = ['.WW.....', '..WW.WW.', '..WWWWW.', '.W..W..W'];
 const SOFF: [Frame, number, string?][] = [
   ['look-right', 0], ['hold-right', 0.05], ['look-right', 0.15], ['hold', 0.19], ['look-left', 0.3], ['hold-right', 0.33],
-  ['brace', 0.44], ['throwA', 0.48], ['throwB', 0.54], ['look-right', 0.58], ['clutch', 0.64, 'bs-jit'], ['alert', 0.92],
+  ['brace', 0.44], ['throwA', 0.48], ['throwB', 0.54], ['look-right', 0.62], ['clutch', 0.66, 'bs-jit'], ['alert', 0.92],
 ];
 const TRIES: [string, number, number][] = [
-  ['One bar. Please.', 0.05, 0.19], ['Come on...', 0.19, 0.33], ['JUST ONE BAR!!', 0.33, 0.47], ['AAARGH!', 0.47, 0.58], ['...', 0.58, 0.64], ['I BROKE IT!!', 0.64, 0.92],
+  ['One bar. Please.', 0.05, 0.19], ['Come on...', 0.19, 0.33], ['JUST ONE BAR!!', 0.33, 0.47], ['AAARGH!', 0.47, 0.62], ['...', 0.62, 0.66], ['I BROKE IT!!', 0.66, 0.92],
 ];
 export function SceneOffline({ online = false }: { online?: boolean }) {
   return (
@@ -245,9 +243,8 @@ export function SceneOffline({ online = false }: { online?: boolean }) {
         </>
       ) : (
         <>
-          <PixelArt className="bs-tower" rows={TOWER_BROKEN} palette={GREY} cell={4} />
-          <PixelArt className="bs-tower-top" rows={TOWER_TOP} palette={GREY} cell={4} />
-          <i className="bs-zap a" /><i className="bs-zap b" />
+          <PixelArt className="bs-tower dead" rows={TOWER} palette={GREY} cell={4} />
+          <span className="bs-x" />
         </>
       )}
       <div className="bs-sp">
@@ -256,7 +253,11 @@ export function SceneOffline({ online = false }: { online?: boolean }) {
       <div className={`bs-phone ${online ? 'lit' : ''}`}>
         <div className={`bs-bars ${online ? 'lit' : ''}`}><i /><i /><i /><i /></div>
       </div>
-      {!online && <div className="bs-wreck"><i /><i /><i /><i /></div>}
+      {!online && (
+        <div className="bs-crack">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none"><g fill="none" stroke="#fff">{CRACKS.map((d) => <path key={d} d={d} vectorEffect="non-scaling-stroke" strokeWidth="3" />)}</g></svg>
+        </div>
+      )}
     </div>
   );
 }
