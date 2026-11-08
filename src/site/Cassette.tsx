@@ -37,7 +37,7 @@ export default function Cassette() {
   const album = albums[a];
   const tracks = album?.tracks.filter((x) => x.src) ?? [];
   const track = tracks[t];
-  const link: 'bluetooth' | 'wifi' = t % 2 === 0 ? 'bluetooth' : 'wifi'; // consecutive songs alternate connections
+  const link: 'bluetooth' | 'wifi' = (a + t) % 2 === 0 ? 'bluetooth' : 'wifi'; // consecutive songs alternate connections; each tape starts on the opposite one
 
   useEffect(() => {
     const el = audio.current;
