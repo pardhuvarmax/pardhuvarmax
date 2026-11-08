@@ -98,7 +98,10 @@ export default function Cassette() {
     if (!box) return;
     const ro = new ResizeObserver(measure);
     ro.observe(box);
-    return () => ro.disconnect();
+    box.querySelectorAll('.cs-tape').forEach((el) => ro.observe(el)); // a tape reflowing (e.g. its label wrapping) moves the plug
+    window.addEventListener('resize', measure);
+    document.fonts?.ready.then(measure); // web fonts change label heights after first paint
+    return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
   }, [measure, albums.length]);
 
   if (!albums.length) {
