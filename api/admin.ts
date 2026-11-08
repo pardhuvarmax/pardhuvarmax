@@ -6,6 +6,7 @@
 // Storage: local filesystem in dev, GitHub Contents API in production.
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
+import { execFile } from 'node:child_process';
 import path from 'node:path';
 
 export interface AdminRequest {
@@ -224,9 +225,20 @@ function safeDir(p: unknown): string {
 }
 
 /* ---------------- Storage ---------------- */
+interface Revision {
+  sha: string;
+  date: string;
+  author: string;
+  message: string;
+}
+
 interface Storage {
   list(dir: string): Promise<string[]>;
   read(file: string): Promise<string | null>;
+  /** Recent commits that touched this file, newest first. */
+  history(file: string): Promise<Revision[]>;
+  /** The file as it was at a commit, or null. */
+  revision(file: string, sha: string): Promise<string | null>;
   write(file: string, data: Buffer, message: string): Promise<void>;
   remove(file: string, message: string): Promise<void>;
 }
@@ -245,6 +257,23 @@ const localStorage: Storage = {
     } catch {
       return null;
     }
+  },
+  async history(file) {
+    const out = await new Promise<string>((resolve) => {
+      execFile('git', ['log', '-n', '15', '--format=%H%x1f%an%x1f%aI%x1f%s', '--', file], { cwd: process.cwd(), timeout: 8000 }, (err, stdout) => resolve(err ? '' : stdout));
+    });
+    return out
+      .split('\n')
+      .filter(Boolean)
+      .map((line) => {
+        const [sha, author, date, message] = line.split('\x1f');
+        return { sha, author, date, message };
+      });
+  },
+  async revision(file, sha) {
+    return new Promise<string | null>((resolve) => {
+      execFile('git', ['show', `${sha}:${file}`], { cwd: process.cwd(), timeout: 8000, maxBuffer: 5_000_000 }, (err, stdout) => resolve(err ? null : stdout));
+    });
   },
   async write(file, data) {
     const full = path.join(process.cwd(), file);
@@ -291,6 +320,23 @@ function githubStorage(): Storage {
       if (!r.ok) throw new HttpError(502, `GitHub error ${r.status}`);
       const j = (await r.json()) as { content: string };
       return Buffer.from(j.content, 'base64').toString('utf8');
+    },
+    async history(file) {
+      const r = await fetch(`https://api.github.com/repos/${repo}/commits?path=${encodeURIComponent(file)}&sha=${encodeURIComponent(branch)}&per_page=15`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'User-Agent': 'portfolio-cms', 'X-GitHub-Api-Version': '2022-11-28' },
+      });
+      if (!r.ok) throw new HttpError(502, `GitHub error ${r.status}`);
+      const list = (await r.json()) as { sha: string; commit: { message: string; author: { name: string; date: string } } }[];
+      return list.map((c) => ({ sha: c.sha, author: c.commit.author?.name ?? '', date: c.commit.author?.date ?? '', message: c.commit.message.split('\n')[0] }));
+    },
+    async revision(file, sha) {
+      const r = await fetch(`https://api.github.com/repos/${repo}/contents/${file.split('/').map(encodeURIComponent).join('/')}?ref=${sha}`, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'User-Agent': 'portfolio-cms', 'X-GitHub-Api-Version': '2022-11-28' },
+      });
+      if (r.status === 404) return null;
+      if (!r.ok) throw new HttpError(502, `GitHub error ${r.status}`);
+      const j = (await r.json()) as { content?: string };
+      return j.content ? Buffer.from(j.content, 'base64').toString('utf8') : null;
     },
     async write(file, data, message) {
       const r = await api(file, {
@@ -414,6 +460,16 @@ export async function handleAdmin(req: AdminRequest, opts: AdminOptions = {}): P
     if (action === 'read') {
       const content = await store.read(safePath(req.query.path));
       if (content === null) throw new HttpError(404, 'Not found.');
+      return ok({ content });
+    }
+
+    if (action === 'history') return ok({ revisions: await store.history(safePath(req.query.path)) });
+
+    if (action === 'revision') {
+      const sha = String(req.query.sha ?? '');
+      if (!/^[0-9a-f]{7,40}$/.test(sha)) throw new HttpError(400, 'Invalid revision.');
+      const content = await store.revision(safePath(req.query.path), sha);
+      if (content === null) throw new HttpError(404, 'That version no longer exists.');
       return ok({ content });
     }
 

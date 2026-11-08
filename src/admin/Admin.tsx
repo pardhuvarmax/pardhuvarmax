@@ -7,6 +7,7 @@ import { blankItem, ImageField, SchemaForm } from './SchemaForm';
 import { EMPTY_META, parsePost, slugify, stringifyPost, type PostMeta } from '../lib/frontmatter';
 import { renderMarkdown } from '../lib/markdown';
 import { confirmDiscard, useUnsavedGuard } from './unsaved';
+import { HistoryMenu, ReviewDialog } from './History';
 import '../styles/site.css';
 import '../styles/admin.css';
 
@@ -16,6 +17,8 @@ type Status = { authed: boolean; local: boolean; configured: boolean; totp?: boo
 /* ---------- File (JSON) editor ---------- */
 export function FileEditor({ col, notify, saveNote, addItem }: { col: FileCollection; notify: (t: Toast) => void; saveNote: string; addItem?: boolean }) {
   const [data, setData] = useState<Record<string, any> | null>(null);
+  const [orig, setOrig] = useState(''); // what is saved right now, for the review step
+  const [review, setReview] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [busy, setBusy] = useState(false);
   useUnsavedGuard(dirty);
@@ -26,6 +29,7 @@ export function FileEditor({ col, notify, saveNote, addItem }: { col: FileCollec
     api<{ content: string }>('read', { query: { path: col.path } })
       .then((r) => {
         const parsed = JSON.parse(r.content);
+        setOrig(JSON.stringify(parsed, null, 2));
         // "Add a ..." shortcuts: append a blank entry to the first list so the form opens ready to fill in
         const list = col.fields.find((f) => f.type === 'list');
         if (addItem && list) {
@@ -42,14 +46,41 @@ export function FileEditor({ col, notify, saveNote, addItem }: { col: FileCollec
     <>
       <div className="bar">
         <h2>{col.label}</h2>
-        <button
-          className="abtn primary"
-          disabled={!dirty || busy}
-          onClick={async () => {
+        <div className="bar-r">
+          <HistoryMenu
+            path={col.path}
+            onError={(m) => notify({ kind: 'err', text: m })}
+            onRestore={(content) => {
+              try {
+                setData(JSON.parse(content));
+                setDirty(true);
+                notify({ kind: 'ok', text: 'Earlier version loaded. Review it, then save to keep it.' });
+              } catch {
+                notify({ kind: 'err', text: 'That version could not be read.' });
+              }
+            }}
+          />
+          <button className="abtn primary" disabled={!dirty || busy} onClick={() => setReview(true)}>
+            <Save size={15} /> {busy ? 'Saving…' : dirty ? 'Review & save' : 'Saved'}
+          </button>
+        </div>
+      </div>
+      {review && (
+        <ReviewDialog
+          title={col.label}
+          before={orig}
+          after={JSON.stringify(data, null, 2)}
+          busy={busy}
+          confirmLabel="Save changes"
+          onCancel={() => setReview(false)}
+          onConfirm={async () => {
             setBusy(true);
             try {
-              await api('write', { body: { path: col.path, content: JSON.stringify(data, null, 2) + '\n', message: `cms: update ${col.label}` } });
+              const content = JSON.stringify(data, null, 2) + '\n';
+              await api('write', { body: { path: col.path, content, message: `cms: update ${col.label}` } });
+              setOrig(JSON.stringify(data, null, 2));
               setDirty(false);
+              setReview(false);
               notify({ kind: 'ok', text: saveNote });
             } catch (e) {
               notify({ kind: 'err', text: (e as Error).message });
@@ -57,10 +88,8 @@ export function FileEditor({ col, notify, saveNote, addItem }: { col: FileCollec
               setBusy(false);
             }
           }}
-        >
-          <Save size={15} /> {busy ? 'Saving…' : dirty ? 'Save changes' : 'Saved'}
-        </button>
-      </div>
+        />
+      )}
       <SchemaForm openLast={addItem} fields={col.fields} value={data} onChange={(v) => { setData(v); setDirty(true); }} onError={(m) => notify({ kind: 'err', text: m })} />
     </>
   );
@@ -73,6 +102,8 @@ export function PostEditor({ notify, saveNote, dir, startNew, openSlug }: { noti
   const [rows, setRows] = useState<PostRow[] | null>(null);
   const [current, setCurrent] = useState<{ slug: string | null; meta: PostMeta; body: string } | null>(null);
   const [dirty, setDirty] = useState(false);
+  const [origText, setOrigText] = useState(''); // the saved file, for the review step
+  const [review, setReview] = useState(false);
   useUnsavedGuard(dirty && !!current);
   const [busy, setBusy] = useState(false);
   const [preview, setPreview] = useState(false);
@@ -105,6 +136,7 @@ export function PostEditor({ notify, saveNote, dir, startNew, openSlug }: { noti
     try {
       const { content } = await api<{ content: string }>('read', { query: { path: `${dir}/${slug}.md` } });
       const { meta, body } = parsePost(content);
+      setOrigText(content);
       setCurrent({ slug, meta, body });
       setDirty(false);
       setPreview(false);
@@ -145,16 +177,23 @@ export function PostEditor({ notify, saveNote, dir, startNew, openSlug }: { noti
   const isNew = current.slug === null;
   const slug = current.slug ?? slugify(current.meta.title);
 
-  const save = async () => {
+  const save = () => {
     if (!current.meta.title.trim()) return notify({ kind: 'err', text: 'Title is required.' });
     if (!slug) return notify({ kind: 'err', text: 'Title must contain letters or numbers.' });
     if (!/^\d{4}-\d{2}-\d{2}$/.test(current.meta.date)) return notify({ kind: 'err', text: 'Pick a valid date.' });
     if (isNew && rows?.some((r) => r.slug === slug)) return notify({ kind: 'err', text: 'A post with this title already exists.' });
+    setReview(true);
+  };
+
+  const commit = async () => {
     setBusy(true);
     try {
-      await api('write', { body: { path: `${dir}/${slug}.md`, content: stringifyPost(current.meta, current.body), message: `cms: ${isNew ? 'add' : 'update'} post ${slug}` } });
+      const content = stringifyPost(current.meta, current.body);
+      await api('write', { body: { path: `${dir}/${slug}.md`, content, message: `cms: ${isNew ? 'add' : 'update'} post ${slug}` } });
       setCurrent({ ...current, slug });
+      setOrigText(content);
       setDirty(false);
+      setReview(false);
       notify({ kind: 'ok', text: saveNote });
       load();
     } catch (e) {
@@ -200,9 +239,33 @@ export function PostEditor({ notify, saveNote, dir, startNew, openSlug }: { noti
               <Trash2 size={15} /> Delete
             </button>
           )}
-          <button className="abtn primary" disabled={!dirty || busy} onClick={save}><Save size={15} /> {busy ? 'Saving…' : dirty ? 'Save post' : 'Saved'}</button>
+          {!isNew && (
+            <HistoryMenu
+              path={`${dir}/${slug}.md`}
+              onError={(m) => notify({ kind: 'err', text: m })}
+              onRestore={(content) => {
+                const { meta, body } = parsePost(content);
+                setCurrent({ slug, meta, body });
+                setDirty(true);
+                notify({ kind: 'ok', text: 'Earlier version loaded. Review it, then save to keep it.' });
+              }}
+            />
+          )}
+          <button className="abtn primary" disabled={!dirty || busy} onClick={save}><Save size={15} /> {busy ? 'Saving…' : dirty ? 'Review & save' : 'Saved'}</button>
         </div>
       </div>
+
+      {review && (
+        <ReviewDialog
+          title={current.meta.title || 'New post'}
+          before={isNew ? '' : origText}
+          after={stringifyPost(current.meta, current.body)}
+          busy={busy}
+          confirmLabel={isNew ? 'Publish post' : 'Save changes'}
+          onCancel={() => setReview(false)}
+          onConfirm={commit}
+        />
+      )}
 
       <div className="form">
         <div className="fld"><label>Title</label><input className="inp big" value={current.meta.title} onChange={(e) => patch({ title: e.target.value })} /></div>
