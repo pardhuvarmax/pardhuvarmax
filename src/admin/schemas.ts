@@ -215,6 +215,7 @@ export const COLLECTIONS: Collection[] = [
         titleKey: 'title',
         fields: [
           { key: 'title', label: 'Album title', type: 'text' },
+          { key: 'link', label: 'Headset connection', type: 'select', options: ['bluetooth', 'wifi'], help: 'Bluetooth shows a blue glow on his headset, Wi-Fi a green one.' },
           { key: 'artist', label: 'Artist', type: 'text' },
           { key: 'year', label: 'Year (optional)', type: 'text' },
           { key: 'cover', label: 'Tape cover (optional)', type: 'image', help: 'Shown on the cassette. Leave empty to use the first song\'s cover.' },

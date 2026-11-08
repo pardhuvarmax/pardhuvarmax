@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
-import { Pause, Play, SkipBack, SkipForward } from 'lucide-react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { Bluetooth, Pause, Play, SkipBack, SkipForward, Wifi } from 'lucide-react';
 import { cassette, safeHref } from '../lib/content';
 import { SectionHead } from './Reveal';
-import { CODER_SIZE, CoderSprite } from './spiderman';
+import { CoderSprite } from './spiderman';
 import '../styles/cassette.css';
 
 const TINTS = ['--accent', '--accent-2', '--accent-3', '--accent-4'];
@@ -28,16 +28,14 @@ export default function Cassette() {
   const [pos, setPos] = useState(0);
   const [dur, setDur] = useState(0);
 
-  const rig = useRef<HTMLDivElement>(null);
-  const spidey = useRef<HTMLDivElement>(null);
   const [typing, setTyping] = useState<0 | 1>(0);
   const [leg, setLeg] = useState(0);
   const [gaze, setGaze] = useState(0);
   const [hit, setHit] = useState({ k: '', n: 0 }); // which control was just clicked, to replay its click animation
   const firstRun = useRef(true);
-  const [wire, setWire] = useState<{ d: string; x: number; y: number } | null>(null);
 
   const album = albums[a];
+  const link: 'bluetooth' | 'wifi' = album?.link === 'wifi' ? 'wifi' : 'bluetooth';
   const tracks = album?.tracks.filter((x) => x.src) ?? [];
   const track = tracks[t];
 
@@ -75,35 +73,6 @@ export default function Cassette() {
     const id = setInterval(() => setLeg((v) => (v + 1) % 4), 280);
     return () => clearInterval(id);
   }, []);
-
-  // headset wire: from the nearer ear cup to the plug on the selected tape
-  const measure = useCallback(() => {
-    const box = rig.current;
-    const sp = spidey.current;
-    const tape = box?.querySelectorAll<HTMLElement>('.cs-tape')[a];
-    if (!box || !sp || !tape) return;
-    const r = box.getBoundingClientRect();
-    const s = sp.getBoundingClientRect();
-    const tr = tape.getBoundingClientRect();
-    const jx = tr.left - r.left + tr.width * 0.78;
-    const jy = tr.bottom - r.top - 2; // the plug sits on the underside of the tape
-    const [ex, ey] = CODER_SIZE.ear;
-    const ax = s.left - r.left + ex;
-    const ay = s.top - r.top + ey;
-    const sag = Math.min(110, 34 + Math.abs(jx - ax) * 0.25);
-    setWire({ d: `M ${ax} ${ay} C ${ax} ${ay - 34}, ${jx} ${jy + sag}, ${jx} ${jy + 6}`, x: jx, y: jy });
-  }, [a]);
-  useLayoutEffect(() => {
-    measure();
-    const box = rig.current;
-    if (!box) return;
-    const ro = new ResizeObserver(measure);
-    ro.observe(box);
-    box.querySelectorAll('.cs-tape').forEach((el) => ro.observe(el)); // a tape reflowing (e.g. its label wrapping) moves the plug
-    window.addEventListener('resize', measure);
-    document.fonts?.ready.then(measure); // web fonts change label heights after first paint
-    return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
-  }, [measure, albums.length]);
 
   if (!albums.length) {
     return (
@@ -149,7 +118,7 @@ export default function Cassette() {
     <section className="wrap sec cs">
       <SectionHead kicker="Cassette" title={<>On <em>repeat</em></>}>{cassette.intro}</SectionHead>
 
-      <div className="cs-rig" ref={rig}>
+      <div className="cs-rig">
       <div className="cs-shelf" role="list">
         {albums.map((al, i) => (
           <button
@@ -174,13 +143,19 @@ export default function Cassette() {
               </span>
             </span>
             <Reels />
+            <span className={`cs-link ${al.link === 'wifi' ? 'wifi' : 'bluetooth'} ${i === a ? 'on' : ''} ${i === a && playing ? 'live' : ''}`} aria-label={al.link === 'wifi' ? 'Wi-Fi' : 'Bluetooth'}>
+              {al.link === 'wifi' ? <Wifi size={14} /> : <Bluetooth size={14} />}
+            </span>
           </button>
         ))}
       </div>
 
       <div className="cs-stage">
-      <div className={`cs-spidey ${playing ? 'on' : ''}`} ref={spidey} aria-hidden="true">
-        <CoderSprite leg={leg} typing={playing ? typing : 0} gaze={gaze} />
+      <div className={`cs-spidey ${playing ? 'on' : ''}`} aria-hidden="true">
+        <CoderSprite leg={leg} typing={playing ? typing : 0} gaze={gaze} link={link} />
+        {(gaze === 0 ? [[70, 28]] : [[48, 28], [88, 28]]).map(([x, y]) => (
+          <i key={x} className={`cs-glow ${link} ${playing ? 'live' : ''}`} style={{ left: x, top: y }} />
+        ))}
         {playing && <><i className="cs-note n1">♪</i><i className="cs-note n2">♫</i></>}
       </div>
       <div className="cs-deck">
@@ -253,14 +228,6 @@ export default function Cassette() {
       </div>
       {disclaimer}
       </div>
-      {wire && (
-        <svg className={`cs-wire ${playing ? 'on' : ''}`} aria-hidden="true">
-          <path className="w-base" d={wire.d} />
-          <path className="w-flow" d={wire.d} />
-          <rect className="w-plug" x={wire.x - 6} y={wire.y - 1} width="12" height="8" />
-          <circle className="w-led" cx={wire.x} cy={wire.y + 3} r="2" />
-        </svg>
-      )}
       </div>
     </section>
   );

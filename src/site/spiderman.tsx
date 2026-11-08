@@ -107,7 +107,7 @@ export function SpiderSprite({ frame }: { frame: Frame }) {
 /** Spider-Man in profile (facing left), sitting on a ledge and coding on a laptop with a headset. `leg` (0-3) swings his legs, `typing` alternates the hand. */
 const CP_W = 28;
 const CP_H = 28;
-const CODER_FILL: Record<string, string> = { ...SM_FILL, r: '#b4141a', L: '#8d939e', G: '#5f646d', H: '#2c2c36', C: '#5ad1ff', D: '#142a70' };
+const CODER_FILL: Record<string, string> = { ...SM_FILL, r: '#b4141a', L: '#8d939e', G: '#5f646d', H: '#2c2c36', C: '#5ad1ff', E: '#4aa3ff', D: '#142a70' };
 const NEAR_FOOT = [12, 16, 20, 16];
 const FAR_FOOT = [20, 16, 12, 16];
 
@@ -145,12 +145,12 @@ function buildCoder(leg: number, typing: number, gaze: number): { x: number; y: 
   // headset: band over the head, ear cup(s), mic boom
   if (gaze === 0) {
     rect(9, 2, 13, 2, 'H'); put(8, 3, 'H'); put(8, 4, 'H'); put(14, 3, 'H'); put(14, 4, 'H'); put(8, 5, 'H'); put(8, 6, 'H');
-    rect(9, 5, 11, 8, 'H'); put(10, 6, 'C'); put(10, 7, 'C');
+    rect(9, 5, 11, 8, 'H'); put(10, 6, 'E'); put(10, 7, 'E');
     put(12, 9, 'H'); put(13, 10, 'H'); put(14, 10, 'C');
   } else {
     // head turned to face us: a cup on each side
     rect(8, 2, 14, 2, 'H'); put(7, 3, 'H'); put(7, 4, 'H'); put(15, 3, 'H'); put(15, 4, 'H');
-    rect(6, 5, 7, 8, 'H'); rect(15, 5, 16, 8, 'H'); put(6, 6, 'C'); put(6, 7, 'C'); put(16, 6, 'C'); put(16, 7, 'C');
+    rect(6, 5, 7, 8, 'H'); rect(15, 5, 16, 8, 'H'); put(6, 6, 'E'); put(6, 7, 'E'); put(16, 6, 'E'); put(16, 7, 'E');
     put(8, 9, 'H'); put(9, 10, 'H'); put(10, 10, 'C');
   }
   // faint web grid on the red suit (a slightly darker red every 4th row and column)
@@ -168,15 +168,14 @@ const coderFrame = (leg: number, typing: number, gaze: number) => {
   return coderCache.get(key)!;
 };
 
-/** Pixel offsets inside the sprite: the top of the headband, where the headset wire leaves. */
-export const CODER_SIZE = { w: CP_W * SM_CELL, h: CP_H * SM_CELL, ear: [68, 8], seat: 21 * SM_CELL } as const;
 
 /** gaze: 0 = on the laptop, 1 = looking at the viewer, 2 = blinking at the viewer. */
-export function CoderSprite({ leg, typing, gaze = 0 }: { leg: number; typing: number; gaze?: number }) {
+export function CoderSprite({ leg, typing, gaze = 0, link = 'bluetooth' }: { leg: number; typing: number; gaze?: number; link?: 'bluetooth' | 'wifi' }) {
+  const earLight = link === 'wifi' ? '#35e07a' : '#3b8bff'; // the headset's connected light
   return (
     <svg className="spider-sprite" width={CP_W * SM_CELL} height={CP_H * SM_CELL} viewBox={`0 0 ${CP_W * SM_CELL} ${CP_H * SM_CELL}`} shapeRendering="crispEdges" aria-hidden="true">
       {coderFrame(leg % 4, typing ? 1 : 0, gaze).map((p) => (
-        <rect key={`${p.x},${p.y}`} x={p.x * SM_CELL} y={p.y * SM_CELL} width={SM_CELL} height={SM_CELL} fill={CODER_FILL[p.c]} />
+        <rect key={`${p.x},${p.y}`} x={p.x * SM_CELL} y={p.y * SM_CELL} width={SM_CELL} height={SM_CELL} fill={p.c === 'E' ? earLight : CODER_FILL[p.c]} />
       ))}
     </svg>
   );

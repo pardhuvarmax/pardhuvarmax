@@ -66,7 +66,7 @@
 .site .cs-stage .cs-notice { flex: none; width: 290px; }
 @media (max-width: 900px) { .site .cs-stage { flex-direction: column; } .site .cs-stage .cs-notice { width: 100%; } }
 
-/* Spider-Man sits on top of the player, sideways, legs swinging; his headset wire plugs into the playing tape */
+/* Spider-Man sits on top of the player, sideways, legs swinging */
 .site .cs-rig { position: relative; }
 .site .cs-rig .cs-stage { position: relative; margin-top: 118px; }
 .site .cs-spidey { position: absolute; z-index: 4; left: -54px; top: -81px; width: 112px; height: 112px; pointer-events: none; }
@@ -75,18 +75,8 @@
 .site .cs-note { position: absolute; top: 4px; left: 70px; font-style: normal; font-size: 18px; font-weight: 900; color: var(--accent-text); opacity: 0; animation: csNote 1.8s ease-out infinite; }
 .site .cs-note.n2 { left: 84px; animation-delay: 0.9s; }
 @keyframes csNote { 0% { opacity: 0; transform: translate(0, 10px); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(14px, -34px); } }
-.site .cs-wire { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; overflow: visible; }
-.site .cs-wire path { fill: none; stroke-linecap: round; }
-.site .cs-wire .w-base { stroke: #7f838d; stroke-width: 3; }
-.site .cs-wire .w-flow { stroke: #cdd0d6; stroke-width: 3; stroke-dasharray: 2 12; opacity: 0; }
-.site .cs-wire.on .w-flow { opacity: 1; animation: csFlow 0.7s linear infinite; }
-@keyframes csFlow { to { stroke-dashoffset: -14; } }
-.site .cs-wire .w-plug { fill: #5b5f68; }
-.site .cs-wire .w-led { fill: var(--muted); }
-.site .cs-wire.on .w-led { fill: var(--accent); animation: csLed 0.7s steps(2, end) infinite; }
-@keyframes csLed { 50% { opacity: 0.25; } }
 @media (max-width: 900px) { .site .cs-rig .cs-stage { margin-top: 118px; } }
-@media (prefers-reduced-motion: reduce) { .site .cs-spidey.on .spider-sprite, .site .cs-note, .site .cs-wire.on .w-flow, .site .cs-wire.on .w-led { animation: none; } .site .cs-note { display: none; } }
+@media (prefers-reduced-motion: reduce) { .site .cs-spidey.on .spider-sprite, .site .cs-note { animation: none; } .site .cs-note { display: none; } }
 @media (max-width: 700px) { .site .cs-spidey { left: -4px; } }
 
 /* click feedback on the transport buttons: press in, ring burst, icon pop */
@@ -99,3 +89,16 @@
 .site .cs-ripple { position: absolute; inset: -3px; border: 3px solid var(--accent); pointer-events: none; animation: csRipple 0.55s ease-out forwards; }
 @keyframes csRipple { from { opacity: 0.95; transform: scale(1); } to { opacity: 0; transform: scale(1.9); } }
 @media (prefers-reduced-motion: reduce) { .site .cs-ico[data-pop], .site .cs-ripple { animation: none; } .site .cs-ripple { display: none; } .site .cs-btn:active:not(:disabled) { transform: none; } }
+
+/* wireless link: a chip on each tape (bright on the connected one) and a matching glow on his headset */
+.site .cs-link { position: absolute; top: -13px; right: 14px; display: grid; place-items: center; width: 26px; height: 26px; border: 2px solid var(--ink); background: var(--bg); color: var(--muted); transition: background-color 0.2s, color 0.2s, box-shadow 0.2s; }
+.site .cs-link.bluetooth.on { background: #3b8bff; color: #fff; box-shadow: 0 0 12px 2px rgba(59, 139, 255, 0.75); }
+.site .cs-link.wifi.on { background: #35e07a; color: #06220f; box-shadow: 0 0 12px 2px rgba(53, 224, 122, 0.75); }
+.site .cs-link.live { animation: csLink 1.2s ease-in-out infinite; }
+@keyframes csLink { 50% { transform: scale(1.12); } }
+.site .cs-glow { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; pointer-events: none; opacity: 0.8; }
+.site .cs-glow.bluetooth { background: radial-gradient(circle, rgba(59, 139, 255, 0.95) 0%, rgba(59, 139, 255, 0) 70%); }
+.site .cs-glow.wifi { background: radial-gradient(circle, rgba(53, 224, 122, 0.95) 0%, rgba(53, 224, 122, 0) 70%); }
+.site .cs-glow.live { animation: csGlow 1s ease-in-out infinite; }
+@keyframes csGlow { 50% { opacity: 1; transform: scale(1.45); } }
+@media (prefers-reduced-motion: reduce) { .site .cs-link.live, .site .cs-glow.live { animation: none; } }
