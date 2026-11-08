@@ -4,6 +4,7 @@ import { BookOpen, ExternalLink, FilePlus2, FolderPlus, LogOut, Pencil, User, X 
 import { api } from './api';
 import { COLLECTIONS, type FileCollection } from './schemas';
 import { FileEditor, PostEditor, type Toast } from './Admin';
+import { confirmDiscard } from './unsaved';
 import '../styles/admin.css';
 import '../styles/editmode.css';
 
@@ -85,7 +86,7 @@ export default function EditMode({ request }: { request: number }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
-      if (action) setAction(null);
+      if (action) { if (confirmDiscard()) setAction(null); }
       else setMenu(false);
     };
     window.addEventListener('keydown', onKey);
@@ -94,7 +95,7 @@ export default function EditMode({ request }: { request: number }) {
 
   if (!status) return null;
   const saveNote = status.local ? 'Saved to disk. The site updates instantly in dev.' : 'Committed to GitHub. The live site updates in about a minute.';
-  const open = (a: Action) => { setAction({ ...a, n: Date.now() }); setMenu(false); };
+  const open = (a: Action) => { if (!confirmDiscard()) return; setAction({ ...a, n: Date.now() }); setMenu(false); };
   const ctx = contextAction(pathname);
   const col = action && action.id !== 'posts' ? (COLLECTIONS.find((c) => c.id === action.id) as FileCollection | undefined) : undefined;
   const title = action ? (action.startNew || action.addItem ? action.label : COLLECTIONS.find((c) => c.id === action.id)?.label) : '';
@@ -122,6 +123,7 @@ export default function EditMode({ request }: { request: number }) {
                 <button
                   role="menuitem"
                   onClick={async () => {
+                    if (!confirmDiscard()) return;
                     await api('logout', { body: {} });
                     setMenu(false);
                     refresh();
@@ -138,11 +140,11 @@ export default function EditMode({ request }: { request: number }) {
       {/* editor panel */}
       {status.authed && action && (
         <>
-          <div className="em-backdrop" onClick={() => setAction(null)} />
+          <div className="em-backdrop" onClick={() => { if (confirmDiscard()) setAction(null); }} />
           <aside className="em-drawer" role="dialog" aria-modal="true" aria-label={title}>
             <header>
               <strong>{title}</strong>
-              <button className="em-x" aria-label="Close editor" onClick={() => setAction(null)}><X size={18} /></button>
+              <button className="em-x" aria-label="Close editor" onClick={() => { if (confirmDiscard()) setAction(null); }}><X size={18} /></button>
             </header>
             <div className="adm em-adm">
               {action.id === 'posts' ? (

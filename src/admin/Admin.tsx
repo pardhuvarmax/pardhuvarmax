@@ -6,6 +6,7 @@ import { COLLECTIONS, type FileCollection } from './schemas';
 import { blankItem, ImageField, SchemaForm } from './SchemaForm';
 import { EMPTY_META, parsePost, slugify, stringifyPost, type PostMeta } from '../lib/frontmatter';
 import { renderMarkdown } from '../lib/markdown';
+import { confirmDiscard, useUnsavedGuard } from './unsaved';
 import '../styles/site.css';
 import '../styles/admin.css';
 
@@ -17,6 +18,7 @@ export function FileEditor({ col, notify, saveNote, addItem }: { col: FileCollec
   const [data, setData] = useState<Record<string, any> | null>(null);
   const [dirty, setDirty] = useState(false);
   const [busy, setBusy] = useState(false);
+  useUnsavedGuard(dirty);
 
   useEffect(() => {
     setData(null);
@@ -71,6 +73,7 @@ export function PostEditor({ notify, saveNote, dir, startNew, openSlug }: { noti
   const [rows, setRows] = useState<PostRow[] | null>(null);
   const [current, setCurrent] = useState<{ slug: string | null; meta: PostMeta; body: string } | null>(null);
   const [dirty, setDirty] = useState(false);
+  useUnsavedGuard(dirty && !!current);
   const [busy, setBusy] = useState(false);
   const [preview, setPreview] = useState(false);
   const ta = useRef<HTMLTextAreaElement>(null);
@@ -261,13 +264,13 @@ export default function Admin() {
         {status.local && <span className="tag">Local mode</span>}
         <nav>
           {COLLECTIONS.map((c) => (
-            <button key={c.id} className={c.id === active ? 'on' : ''} onClick={() => setActive(c.id)}>{c.label}</button>
+            <button key={c.id} className={c.id === active ? 'on' : ''} onClick={() => { if (c.id !== active && confirmDiscard()) setActive(c.id); }}>{c.label}</button>
           ))}
         </nav>
         <div className="side-foot">
           <a href="/"><ExternalLink size={14} /> View site</a>
           {!status.local && (
-            <button onClick={async () => { await api('logout', { body: {} }); refresh(); }}><LogOut size={14} /> Sign out</button>
+            <button onClick={async () => { if (!confirmDiscard()) return; await api('logout', { body: {} }); refresh(); }}><LogOut size={14} /> Sign out</button>
           )}
         </div>
        </div>
