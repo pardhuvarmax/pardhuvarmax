@@ -62,7 +62,6 @@ export function Scene500() {
 /* ---------- 403: he webs a NO ENTRY sign up, hops over, taps it, hops back ---------- */
 const NOPES = ['Nope. Taped off.', 'Still no.', 'Read the sign.', 'Tap tap. Solid.'];
 const STRANDS = [[250, 52, 200, 0], [392, 52, 440, 0], [250, 132, 214, 190], [392, 132, 440, 176]];
-const BRICK = ['GGGGGGGGGGGG', 'GWWWWWGWWWWG', 'GWWWWWGWWWWG', 'GGGGGGGGGGGG'];
 const CRACKS = ['M50 50 L38 30 L40 12 L30 0', 'M50 50 L66 34 L62 14 L74 0', 'M50 50 L28 56 L12 50 L0 58', 'M50 50 L72 62 L88 56 L100 64', 'M50 50 L44 74 L48 90 L40 100', 'M50 50 L58 72 L70 84 L66 100'];
 export function Scene403() {
   const [taps, setTaps] = useState(0);
@@ -97,7 +96,6 @@ export function Scene403() {
         <div className="bs-fl vis-b"><SpiderSprite frame="alert" /></div>
         <div className="bs-rage"><i /><i /><i /></div>
       </div></div></div>
-      {phase === 'throw' && <PixelArt className="bs-brick" rows={BRICK} palette={GREY} cell={4} />}
       {phase === 'hit' && (
         <div className="bs-hit" aria-hidden="true">
           <svg viewBox="0 0 100 100" preserveAspectRatio="none"><g fill="none" stroke="#fff" strokeWidth="0.7" vectorEffect="non-scaling-stroke">{CRACKS.map((d) => <path key={d} d={d} vectorEffect="non-scaling-stroke" strokeWidth="3" />)}</g></svg>
