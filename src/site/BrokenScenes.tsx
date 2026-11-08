@@ -122,27 +122,33 @@ export function Scene403() {
   );
 }
 
-/* ---------- 401: disguised, inspecting you with a magnifying glass ---------- */
+/* ---------- 401: Spider-Man the cop, scanning the crowd outside two parked patrol cars, then asking who you are ---------- */
 const GLASSES = ['KKKKKKK', 'K..K..K', 'K..K..K', 'KKKKKKK'];
-const MOUSTACHE = ['KKKKK', 'K...K'];
-const Card = <div className="bs-card"><i /><b /><b /></div>;
-const S401: [Frame, number, string?, ReactNode?][] = [
-  ['cross-left', 0], ['cross', 0.08], ['cross-right', 0.16], ['cross', 0.24],
-  ['hold-right', 0.3, undefined, Card], ['hold', 0.4, undefined, Card], ['hold-right', 0.5, undefined, Card],
-  ['shrug', 0.58], ['cross-left', 0.7], ['cross-right', 0.78], ['cross', 0.86],
+const CAP = ['.DDDDDDD.', 'DDDDWDDDD', 'KKKKKKKKK'];
+const CAR = [
+  '.......WWWWWW.......', '......WKKKKKKW......', '.....WKKKKWKKKKW....', '..WWWWWWWWWWWWWWWW..',
+  '.WGGGGGGGGGGGGGGGGW.', '.WGGGWWWWWWGGGGGGGGW.', '.WWWWWWWWWWWWWWWWWW.', '..KKK..........KKK..', '..KWK..........KWK..',
 ];
+const S401: [Frame, number][] = [
+  ['cross-left', 0], ['cross', 0.08], ['cross-right', 0.16], ['cross', 0.22],
+  ['point', 0.26], ['alert', 0.52], ['point', 0.56], ['cross', 0.76], ['cross-left', 0.86],
+];
+const Patrol = ({ side, delay }: { side: 'l' | 'r'; delay: number }) => (
+  <div className={`bs-car ${side}`}>
+    <PixelArt rows={CAR} palette={GREY} cell={4} />
+    <i className="lb red" style={{ animationDelay: `${delay}s` }} /><i className="lb blue" style={{ animationDelay: `${delay}s` }} />
+  </div>
+);
 export function Scene401() {
   return (
     <div className="bs bs401" aria-hidden="true">
+      <Patrol side="l" delay={0} />
+      <Patrol side="r" delay={0.3} />
+      <div className="bs-cop-say bs-bubble">WHO ARE UH??</div>
       <div className="bs-sp bs-guard">
         <Seq steps={S401} ms={6000} />
+        <PixelArt className="bs-over" style={{ left: 30, top: 5 }} rows={CAP} palette={GREY} cell={4} />
         <PixelArt className="bs-over" style={{ left: 40, top: 20 }} rows={GLASSES} palette={GREY} cell={4} />
-        <PixelArt className="bs-over" style={{ left: 44, top: 36 }} rows={MOUSTACHE} palette={GREY} cell={4} />
-      </div>
-      <div className="bs-board">
-        <div className="bs-board-b">WHO ARE<br />UH??</div>
-        <div className="bs-stick" />
-        <span className="bs-qm q1">?</span><span className="bs-qm q2">?</span><span className="bs-qm q3">?</span>
       </div>
     </div>
   );

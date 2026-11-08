@@ -221,19 +221,19 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 @keyframes bsHitFlash { 0% { background: rgba(255, 255, 255, 0.9); opacity: 1; } 12% { background: rgba(255, 255, 255, 0.0); } 80% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes bsHitShake { 0%, 100% { translate: 0 0; } 20% { translate: -6px 3px; } 40% { translate: 5px -3px; } 60% { translate: -3px 2px; } 80% { translate: 2px -1px; } }
 
-/* 401: disguised, inspecting you with a magnifying glass */
-.nfb .bs401 .bs-guard { left: 24px; animation: bsBreath 2.2s steps(1, end) infinite; }
-.nfb .bs401 .bs-board { position: absolute; left: 214px; top: 12px; width: 214px; }
-.nfb .bs401 .bs-board-b { padding: 12px 10px; border: 4px solid #f2f2f2; background: #000; font: 900 1.6rem/1.05 'Archivo', 'Arial Black', sans-serif; text-align: center; color: #f2f2f2; }
-.nfb .bs401 .bs-stick { width: 6px; height: 74px; margin-left: 100px; background: #f2f2f2; }
-.nfb .bs401 .bs-card { position: absolute; left: 62px; top: -6px; width: 34px; height: 22px; border: 3px solid #f2f2f2; background: #000; transform-origin: 50% 50%; animation: bsCardFlip 1s ease-in-out infinite; }
-.nfb .bs401 .bs-card i { position: absolute; left: 3px; top: 3px; width: 8px; height: 10px; background: #f2f2f2; }
-.nfb .bs401 .bs-card b { position: absolute; left: 14px; height: 2px; width: 12px; background: #888; top: 4px; } .nfb .bs401 .bs-card b + b { top: 9px; width: 8px; }
-@keyframes bsCardFlip { 0%, 100% { transform: scaleX(1); } 45% { transform: scaleX(0.12); } 55% { transform: scaleX(0.12); } }
-.nfb .bs401 .bs-qm { position: absolute; top: -8px; font: 900 1.4rem/1 'Archivo', 'Arial Black', sans-serif; color: #f2f2f2; opacity: 0; animation: bsQm 2.2s steps(5, end) infinite; }
-.nfb .bs401 .q1 { left: 18px; } .nfb .bs401 .q2 { left: 98px; animation-delay: 0.7s; } .nfb .bs401 .q3 { left: 188px; animation-delay: 1.4s; }
+/* 401: Spider-Man the cop, two patrol cars flashing behind him */
+.nfb .bs401 .bs-guard { left: 150px; animation: bsBreath 2.2s steps(1, end) infinite; }
+.nfb .bs401 .bs-car { position: absolute; top: 146px; width: 80px; height: 36px; opacity: 0.8; }
+.nfb .bs401 .bs-car.l { left: 84px; } .nfb .bs401 .bs-car.r { left: 276px; transform: scaleX(-1); }
+.nfb .bs401 .bs-car svg { display: block; }
+.nfb .bs401 .lb { position: absolute; top: -6px; width: 10px; height: 6px; animation: bsLight 0.7s steps(1, end) infinite; }
+.nfb .bs401 .lb.red { left: 28px; background: #e0242c; box-shadow: 0 0 16px 6px rgba(224, 36, 44, 0.65); }
+.nfb .bs401 .lb.blue { left: 40px; background: #2f5bff; box-shadow: 0 0 16px 6px rgba(47, 91, 255, 0.65); animation-name: bsLightB; }
+.nfb .bs401 .bs-cop-say { left: 120px; top: 6px; font-size: 1.15rem; max-width: none; padding: 10px 16px; opacity: 0; transform-origin: 40px 100%; animation: bsCopSay 6s infinite; }
 @keyframes bsBreath { 0% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-@keyframes bsQm { 0% { opacity: 0; transform: translateY(8px) scale(0.6); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-16px) scale(1.2); } }
+@keyframes bsLight { 0% { opacity: 1; } 50% { opacity: 0.1; } }
+@keyframes bsLightB { 0% { opacity: 0.1; } 50% { opacity: 1; } }
+@keyframes bsCopSay { 0%, 25% { opacity: 0; transform: scale(0.5); } 28% { opacity: 1; transform: scale(1.1); } 31%, 72% { opacity: 1; transform: scale(1); } 78%, 100% { opacity: 0; transform: scale(0.95); } }
 
 /* 429: hamster wheel (speed is driven from the component) */
 .nfb .bs429 .bs-wheel { position: absolute; left: 110px; top: 0; width: 220px; height: 220px; }
