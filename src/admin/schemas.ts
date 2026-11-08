@@ -1,4 +1,4 @@
-export type FieldType = 'text' | 'textarea' | 'url' | 'date' | 'select' | 'boolean' | 'strings' | 'list' | 'image' | 'audio';
+export type FieldType = 'text' | 'textarea' | 'url' | 'date' | 'select' | 'boolean' | 'strings' | 'list' | 'image' | 'audio' | 'number';
 
 export interface Field {
   key: string;
@@ -9,6 +9,9 @@ export interface Field {
   fields?: Field[]; // for type "list": the fields of each item
   multiline?: boolean; // for type "strings": each entry is a textarea
   titleKey?: string; // for type "list": which item field names the row
+  min?: number; // for type "number"
+  max?: number;
+  step?: number;
 }
 
 export interface FileCollection {
@@ -245,6 +248,16 @@ export const COLLECTIONS: Collection[] = [
     path: 'src/content/special.json',
     fields: [
       { key: 'bgText', label: 'Background text', type: 'text', help: 'Huge, faint text behind the dot grid on every page except the main page. Leave empty to hide it.' },
+      { key: 'bgTextPosition', label: 'Background text position', type: 'select', options: ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'center'] },
+      { key: 'dotShape', label: 'Dots: shape', type: 'select', options: ['circle', 'square', 'diamond'] },
+      { key: 'dotSize', label: 'Dots: size', type: 'number', min: 0.5, max: 5, step: 0.1, help: 'Resting dot width in px. Default 1.5.' },
+      { key: 'dotSpacing', label: 'Dots: spacing', type: 'number', min: 12, max: 60, step: 1, help: 'Gap between dots in px. Default 26.' },
+      { key: 'dotOpacity', label: 'Dots: resting opacity (%)', type: 'number', min: 2, max: 60, step: 1, help: 'How visible the dots are when the cursor is away. Default 16.' },
+      { key: 'cursorEnabled', label: 'Cursor effect on', type: 'boolean', help: 'Turn the cursor depth effect off to keep a plain dot grid.' },
+      { key: 'cursorRadius', label: 'Cursor: reach', type: 'number', min: 60, max: 400, step: 5, help: 'Radius of the lens around the cursor in px. Default 190.' },
+      { key: 'cursorDepth', label: 'Cursor: depth strength', type: 'number', min: 0, max: 50, step: 1, help: 'How far dots are pushed outward at the cursor, in px. Default 15.' },
+      { key: 'cursorGrow', label: 'Cursor: dot growth', type: 'number', min: 0, max: 8, step: 0.1, help: 'How much dots swell at the cursor, in px. Default 2.6.' },
+      { key: 'cursorGlow', label: 'Cursor: glow (%)', type: 'number', min: 0, max: 40, step: 1, help: 'Strength of the soft coloured pit under the cursor. Default 10.' },
     ],
   },
   {

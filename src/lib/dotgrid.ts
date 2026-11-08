@@ -11,6 +11,10 @@ export interface DotGridOptions {
   baseAlpha?: number; // resting dot opacity
   lift?: number; // px a dot is pushed outward at the cursor
   grow?: number; // extra dot radius at the cursor
+  size?: number; // resting dot width in px
+  shape?: 'circle' | 'square' | 'diamond';
+  glow?: number; // 0..1 strength of the soft pit under the cursor
+  lens?: boolean; // false = plain grid, no cursor effect
 }
 
 type RGB = [number, number, number];
@@ -37,6 +41,11 @@ export function initDotGrid(canvas: HTMLCanvasElement, opts: DotGridOptions): ()
   const baseAlpha = opts.baseAlpha ?? 0.14;
   const lift = opts.lift ?? 15;
   const grow = opts.grow ?? 2.6;
+  const size = opts.size ?? 1.5;
+  const shape = opts.shape ?? 'circle';
+  const glow = opts.glow ?? 0.1;
+  const lens = opts.lens ?? true;
+  const half = size / 2;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let w = 0;
@@ -66,18 +75,33 @@ export function initDotGrid(canvas: HTMLCanvasElement, opts: DotGridOptions): ()
     draw();
   };
 
+  // one dot of the configured shape, r = half-width
+  const dotPath = (x: number, y: number, r: number) => {
+    if (shape === 'square') ctx!.rect(x - r, y - r, r * 2, r * 2);
+    else if (shape === 'diamond') {
+      ctx!.moveTo(x, y - r * 1.25);
+      ctx!.lineTo(x + r * 1.25, y);
+      ctx!.lineTo(x, y + r * 1.25);
+      ctx!.lineTo(x - r * 1.25, y);
+      ctx!.closePath();
+    } else {
+      ctx!.moveTo(x + r, y);
+      ctx!.arc(x, y, r, 0, Math.PI * 2);
+    }
+  };
+
   function draw() {
     ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx!.clearRect(0, 0, w, h);
     const cols = Math.ceil(w / spacing) + 1;
     const rows = Math.ceil(h / spacing) + 1;
     const [ir, ig, ib] = ink;
-    const active = presence > 0.01;
+    const active = lens && presence > 0.01;
 
     // soft pit under the cursor sells the depth
     if (active) {
       const g = ctx!.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, R * 1.15);
-      g.addColorStop(0, `rgba(${accent[0]},${accent[1]},${accent[2]},${0.1 * presence})`);
+      g.addColorStop(0, `rgba(${accent[0]},${accent[1]},${accent[2]},${glow * presence})`);
       g.addColorStop(1, `rgba(${accent[0]},${accent[1]},${accent[2]},0)`);
       ctx!.fillStyle = g;
       ctx!.fillRect(pos.x - R * 1.2, pos.y - R * 1.2, R * 2.4, R * 2.4);
@@ -85,6 +109,7 @@ export function initDotGrid(canvas: HTMLCanvasElement, opts: DotGridOptions): ()
 
     // resting dots in one batch
     ctx!.fillStyle = `rgba(${ir},${ig},${ib},${baseAlpha})`;
+    ctx!.beginPath();
     const near: [number, number, number][] = [];
     for (let j = 0; j < rows; j++) {
       const y = j * spacing + spacing / 2;
@@ -98,9 +123,10 @@ export function initDotGrid(canvas: HTMLCanvasElement, opts: DotGridOptions): ()
             continue;
           }
         }
-        ctx!.fillRect(x - 0.75, y - 0.75, 1.5, 1.5);
+        dotPath(x, y, half);
       }
     }
+    ctx!.fill();
 
     // dots in the lens, individually styled
     for (const [x, y] of near) {
@@ -112,7 +138,7 @@ export function initDotGrid(canvas: HTMLCanvasElement, opts: DotGridOptions): ()
       const push = e * lift;
       const px = x + (dx / d) * push;
       const py = y + (dy / d) * push;
-      const r = 0.75 + e * grow;
+      const r = half + e * grow;
       const mix = Math.min(1, e * e * 1.6);
       const cr = Math.round(ir + (accent[0] - ir) * mix);
       const cg = Math.round(ig + (accent[1] - ig) * mix);
@@ -120,7 +146,7 @@ export function initDotGrid(canvas: HTMLCanvasElement, opts: DotGridOptions): ()
       const a = baseAlpha + e * (0.95 - baseAlpha);
       ctx!.fillStyle = `rgba(${cr},${cg},${cb},${a})`;
       ctx!.beginPath();
-      ctx!.arc(px, py, r, 0, Math.PI * 2);
+      dotPath(px, py, r);
       ctx!.fill();
     }
   }

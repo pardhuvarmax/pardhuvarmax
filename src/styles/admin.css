@@ -137,3 +137,7 @@ html .adm:has(.login) .login { margin-top: 0; }
 /* audio upload field: player, path, button */
 .adm .audio-field, .adm .audio-field:not(:has(img)) { grid-template-columns: 1fr auto; }
 .adm .audio-field audio { grid-column: 1 / -1; width: 100%; height: 36px; }
+
+/* number field: slider plus exact value */
+.adm .num-field { display: grid; grid-template-columns: 1fr 96px; gap: 14px; align-items: center; }
+.adm .num-field input[type='range'] { width: 100%; accent-color: var(--accent); }

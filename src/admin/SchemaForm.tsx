@@ -93,6 +93,13 @@ function FieldInput({ f, value, onChange, onError, openLast }: { f: Field; value
   switch (f.type) {
     case 'textarea':
       return <textarea className="inp" rows={3} value={value ?? ''} onChange={(e) => onChange(e.target.value)} />;
+    case 'number':
+      return (
+        <div className="num-field">
+          <input type="range" min={f.min} max={f.max} step={f.step} value={Number(value ?? f.min ?? 0)} onChange={(e) => onChange(Number(e.target.value))} />
+          <input className="inp" type="number" min={f.min} max={f.max} step={f.step} value={value ?? ''} onChange={(e) => onChange(e.target.value === '' ? '' : Number(e.target.value))} />
+        </div>
+      );
     case 'select':
       return (
         <select className="inp" value={value ?? ''} onChange={(e) => onChange(e.target.value)}>

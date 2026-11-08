@@ -1,3 +1,13 @@
 {
-  "bgText": "11:19"
+  "bgText": "11:19",
+  "bgTextPosition": "bottom-right",
+  "dotShape": "circle",
+  "dotSize": 1.5,
+  "dotSpacing": 26,
+  "dotOpacity": 16,
+  "cursorEnabled": true,
+  "cursorRadius": 190,
+  "cursorDepth": 15,
+  "cursorGrow": 2.6,
+  "cursorGlow": 10
 }

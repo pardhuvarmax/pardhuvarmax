@@ -20,6 +20,9 @@ const isOwnerHint = () => {
   return ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
 };
 
+const BG_POSITIONS = ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'center'];
+const bgPos = BG_POSITIONS.includes(String((special as Record<string, unknown>).bgTextPosition)) ? String((special as Record<string, unknown>).bgTextPosition) : 'bottom-right';
+
 const NAV = [
   { to: '/me', label: 'Me' },
   { to: '/research', label: 'Research' },
@@ -98,7 +101,7 @@ export default function SiteLayout() {
   return (
     <div className="site">
       {special.bgText && pathname !== '/' && (
-        <div className="bgtime" aria-hidden="true" style={{ '--bt-len': Math.max(special.bgText.length, 3) } as CSSProperties}>{special.bgText}</div>
+        <div className="bgtime" data-pos={bgPos} aria-hidden="true" style={{ '--bt-len': Math.max(special.bgText.length, 3) } as CSSProperties}>{special.bgText}</div>
       )}
       <DotGrid />
       <div className="site-bg" aria-hidden="true">
