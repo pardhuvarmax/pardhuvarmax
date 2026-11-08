@@ -14,6 +14,7 @@ export default function BrokenPage({
   actions,
   seed = 7,
   noindex = false,
+  tint = false,
 }: {
   code: string;
   title: string;
@@ -24,6 +25,8 @@ export default function BrokenPage({
   actions?: ReactNode;
   seed?: number;
   noindex?: boolean;
+  /** Good news (back online, new version, timer finished): a faint wash of colour fades in behind the black and white. */
+  tint?: boolean;
 }) {
   const num = useRef<HTMLDivElement>(null);
 
@@ -89,6 +92,7 @@ export default function BrokenPage({
       <div className="nfb-num" ref={num} aria-hidden="true" style={{ filter: `url(#${filter})` }}>
         <div className="nfb-s" data-text={code}><span className="nfb-t">{code}</span></div>
       </div>
+      {tint && <div className="nfb-glow" aria-hidden="true" />}
       <div className="nfb-noise" aria-hidden="true" />
       <div className="nfb-scan" aria-hidden="true" />
 

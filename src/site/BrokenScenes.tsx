@@ -48,29 +48,19 @@ function Seq({ steps, ms }: { steps: [Frame, number][]; ms: number }) {
 }
 
 
-/* ---------- 500: he pulls the plug out, the screen dies, he shrugs, then pushes it back in ---------- */
-const SOCKET = ['WWWWWWWW', 'WKKWWKKW', 'WKKWWKKW', 'WKKWWKKW', 'WWWWWWWW'];
-const PLUG = ['..GG..GG..', '..GG..GG..', 'GGGGGGGGGG', 'GGGGGGGGGG', 'GGGGGGGGGG', '..GGGGGG..', '...GGGG...'];
-const CABLE_ON = 'M75 104 C 90 196, 270 196, 352 144';
-const CABLE_OUT = 'M75 104 C 90 196, 226 196, 308 144';
-const S500: [Frame, number][] = [['look-right', 0], ['reach', 0.14], ['brace', 0.27], ['shrug', 0.42], ['reach', 0.66], ['brace', 0.7], ['alert', 0.8]];
+/* ---------- 500: percussive maintenance. He hits the monitor with a wrench until it behaves ---------- */
+const S500: [Frame, number][] = [['look-right', 0], ['throwA', 0.08], ['throwB', 0.17], ['look-right', 0.23], ['throwA', 0.33], ['throwB', 0.42], ['look-right', 0.48], ['throwA', 0.58], ['throwB', 0.67], ['shrug', 0.74], ['alert', 0.88]];
 export function Scene500() {
   return (
     <div className="bs bs500" aria-hidden="true">
-      <Bubble style={{ left: 130, top: 0 }}>Have you tried turning it off and on again?</Bubble>
-      <div className="bs-mon"><div className="bs-mon-in"><span>500</span></div></div>
-      <svg className="bs-cable" viewBox="0 0 440 210">
-        <path fill="none" stroke="#f2f2f2" strokeWidth="5" strokeLinecap="round" d={CABLE_ON}>
-          <animate attributeName="d" dur="8s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.3;0.36;0.7;0.76;1" keySplines="0 0 1 1;0.1 0.9 0.2 1;0 0 1 1;0.5 0 0.3 1;0 0 1 1" values={`${CABLE_ON};${CABLE_ON};${CABLE_OUT};${CABLE_OUT};${CABLE_ON};${CABLE_ON}`} />
-        </path>
-      </svg>
-      <PixelArt className="bs-socket" rows={SOCKET} palette={GREY} cell={5} />
-      <i className="bs-spark a" /><i className="bs-spark b" /><i className="bs-spark c" />
-      <i className="bs-spark d" /><i className="bs-spark e" /><i className="bs-spark f" />
-      <div className="bs-pullers">
-        <PixelArt className="bs-plug" rows={PLUG} palette={GREY} cell={4} />
-        <div className="bs-sp"><Seq steps={S500} ms={8000} /></div>
+      <Bubble style={{ left: 6, top: 2 }}>Hold on. I know a trick.</Bubble>
+      <div className="bs-mon">
+        <div className="bs-mon-in"><span>500</span></div>
       </div>
+      <div className="bs-mon-neck" /><div className="bs-mon-foot" />
+      <i className="bs-smoke a" /><i className="bs-smoke b" /><i className="bs-smoke c" />
+      <div className="bs-sp"><Seq steps={S500} ms={8000} /></div>
+      <div className="bs-wrench"><i /></div>
     </div>
   );
 }
@@ -124,29 +114,32 @@ export function Scene403() {
   );
 }
 
-/* ---------- 401: disguised, scanning the crowd, pushing his glasses up ---------- */
+/* ---------- 401: disguised, inspecting you with a magnifying glass ---------- */
 const GLASSES = ['KKKKKKK', 'K..K..K', 'K..K..K', 'KKKKKKK'];
 const MOUSTACHE = ['KKKKK', 'K...K'];
-const S401: [Frame, number][] = [['hold-left', 0], ['hold', 0.2], ['hold-right', 0.4], ['hold', 0.7]];
+const S401: [Frame, number][] = [['reach', 0], ['alert', 0.52], ['reach', 0.64]];
 export function Scene401() {
   return (
     <div className="bs bs401" aria-hidden="true">
-      <div className="bs-sp bs-guard"><div className="bs-scan">
+      <div className="bs-sp bs-guard">
         <Seq steps={S401} ms={4400} />
-        <PixelArt className="bs-over bs-glasses" style={{ left: 36, top: 20 }} rows={GLASSES} palette={GREY} cell={4} />
-        <PixelArt className="bs-over" style={{ left: 40, top: 36 }} rows={MOUSTACHE} palette={GREY} cell={4} />
-      </div></div>
+        <PixelArt className="bs-over" style={{ left: 40, top: 20 }} rows={GLASSES} palette={GREY} cell={4} />
+        <PixelArt className="bs-over" style={{ left: 44, top: 36 }} rows={MOUSTACHE} palette={GREY} cell={4} />
+      </div>
+      <div className="bs-mag"><b /><i /></div>
       <div className="bs-board">
         <div className="bs-board-b">WHO ARE<br />UH??</div>
         <div className="bs-stick" />
+        <span className="bs-qm q1">?</span><span className="bs-qm q2">?</span><span className="bs-qm q3">?</span>
       </div>
     </div>
   );
 }
 
-/* ---------- 429: treadmill. The speed is driven frame by frame so it eases down instead of jumping ---------- */
+/* ---------- 429: hamster wheel. The speed is driven frame by frame so it eases down instead of jumping ---------- */
+const RUNGS = Array.from({ length: 24 }, (_, k) => (k * Math.PI * 2) / 24);
 export function Scene429({ progress, done }: { progress: number; done: boolean }) {
-  const belt = useRef<HTMLDivElement>(null);
+  const wheel = useRef<SVGGElement>(null);
   const body = useRef<HTMLDivElement>(null);
   const a = useRef<HTMLDivElement>(null);
   const b = useRef<HTMLDivElement>(null);
@@ -157,21 +150,22 @@ export function Scene429({ progress, done }: { progress: number; done: boolean }
   useEffect(() => {
     const show = (el: HTMLElement | null, on: boolean) => { if (el) el.style.opacity = on ? '1' : '0'; };
     if (reduced()) { show(a.current, false); show(rest.current, true); return; }
-    let speed = 1, phase = 0, last = performance.now(), raf = 0;
+    let speed = 1, phase = 0, angle = 0, last = performance.now(), raf = 0;
     const tick = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const { progress: p, done: d } = aim.current;
-      const target = d ? 0 : 1 - 0.82 * Math.pow(p, 1.4);
-      speed += (target - speed) * Math.min(1, dt * 2.2);
+      const target = d ? 0 : 1 - 0.85 * Math.pow(p, 1.3);
+      speed += (target - speed) * Math.min(1, dt * 1.6);
       phase += dt * 7 * speed;
-      const idle = speed < 0.07;
-      const tired = !idle && speed < 0.3; // too slow to run: arms hang
+      angle += dt * 150 * speed;
+      const idle = speed < 0.06;
+      const tired = !idle && speed < 0.3; // too slow to run: he just hangs there
       show(a.current, !idle && !tired && Math.floor(phase) % 2 === 0);
       show(b.current, !idle && !tired && Math.floor(phase) % 2 === 1);
       show(rest.current, idle || tired);
-      if (belt.current) belt.current.style.backgroundPositionX = `${-phase * 14}px`;
-      if (body.current) body.current.style.transform = `translateY(${Math.round(-Math.abs(Math.sin(phase * Math.PI)) * 3 * speed) }px)`;
+      wheel.current?.setAttribute('transform', `rotate(${angle.toFixed(1)} 110 110)`);
+      if (body.current) body.current.style.transform = `translateY(${Math.round(-Math.abs(Math.sin(phase * Math.PI)) * 3 * speed)}px)`;
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -182,6 +176,15 @@ export function Scene429({ progress, done }: { progress: number; done: boolean }
   return (
     <div className="bs bs429" aria-hidden="true">
       <Bubble style={{ left: 6, top: 2 }}>{done ? 'Okay. Go.' : 'Whoa. Breathe.'}</Bubble>
+      <svg className="bs-wheel" viewBox="0 0 220 220">
+        <g ref={wheel}>
+          <circle cx="110" cy="110" r="100" fill="none" stroke="#f2f2f2" strokeWidth="5" />
+          <circle cx="110" cy="110" r="88" fill="none" stroke="#777" strokeWidth="2" />
+          {RUNGS.map((t, k) => <line key={k} x1={110 + Math.cos(t) * 88} y1={110 + Math.sin(t) * 88} x2={110 + Math.cos(t) * 100} y2={110 + Math.sin(t) * 100} stroke="#f2f2f2" strokeWidth="3" />)}
+          {[0, 1, 2, 3].map((k) => <line key={k} x1="110" y1="110" x2={110 + Math.cos((k * Math.PI) / 2) * 88} y2={110 + Math.sin((k * Math.PI) / 2) * 88} stroke="#555" strokeWidth="2" />)}
+          <circle cx="110" cy="110" r="6" fill="#f2f2f2" />
+        </g>
+      </svg>
       <div className="bs-run">
         <div className="bs-sp" ref={body}>
           <div className="bs-fl" ref={a}><SpiderSprite frame="runA" /></div>
@@ -191,70 +194,47 @@ export function Scene429({ progress, done }: { progress: number; done: boolean }
         <i className="bs-sweat s1" style={{ '--w': wet } as CSSProperties} /><i className="bs-sweat s2" style={{ '--w': wet } as CSSProperties} /><i className="bs-sweat s3" style={{ '--w': wet } as CSSProperties} />
         <i className="bs-puff" style={{ '--w': done ? 0 : Math.max(0, progress - 0.3) } as CSSProperties} />
       </div>
-      <div className="bs-belt" ref={belt} />
-      <div className="bs-belt-legs" />
     </div>
   );
 }
 
-/* ---------- offline: a tin-can phone with a cut string ---------- */
-const CAN = ['.WWWWWW.', 'WGGGGGGW', '.GGGGGG.', '.GGWGGG.', '.GGWGGG.', '.GGGGGG.', '.GGGGGG.', 'WGGGGGGW', '.WWWWWW.'];
-const SHOUTS = ['HELLO??', 'ANYONE??', 'HELLOOO??'];
-const STRING_A = 'M162 146 Q 280 196 398 152';
-const STRING_B = 'M162 146 Q 280 188 398 152';
-const SOFF: [Frame, number][] = [['look-right', 0], ['shout', 0.08], ['look-right', 0.5]];
+/* ---------- offline: he walks about holding his phone up, hunting for a signal ---------- */
+const TOWER = ['....WW....', '....WW....', '...W..W...', '...WWWW...', '...W..W...', '..W.WW.W..', '..WWWWWW..', '..W.WW.W..', '.W..WW..W.', '.WWWWWWWW.', '.W..WW..W.', 'WWWWWWWWWW'];
+const HUNT = ['One bar. Please.', 'Come on...', 'Nope.'];
+const SOFF: [Frame, number][] = [['hold-right', 0], ['hold', 0.46], ['hold-left', 0.6]];
+const Bars = ({ lit }: { lit?: boolean }) => (
+  <div className={`bs-bars ${lit ? 'lit' : ''}`}><i /><i /><i /><i /></div>
+);
 export function SceneOffline({ online = false }: { online?: boolean }) {
   const [i, setI] = useState(0);
   return (
-    <div className="bs bsoff" aria-hidden="true">
-      <Bubble className={online ? 'say-once' : 'say'} style={{ left: 120, top: 8 }}>
-        <span onAnimationIteration={online ? undefined : () => setI((v) => (v + 1) % SHOUTS.length)} className="bs-say">{online ? 'Loud and clear!' : SHOUTS[i]}</span>
+    <div className={`bs bsoff ${online ? 'on' : ''}`} aria-hidden="true">
+      <Bubble className={online ? 'say-once' : 'say'} style={{ left: 6, top: 2 }}>
+        <span onAnimationIteration={online ? undefined : () => setI((v) => (v + 1) % HUNT.length)}>{online ? 'Got signal!' : HUNT[i]}</span>
       </Bubble>
-      <svg className="bs-string" viewBox="0 0 440 210">
-        {online ? (
-          <>
-            <path d={STRING_A} fill="none" stroke="#e8e8e8" strokeWidth="2">
-              <animate attributeName="d" dur="0.5s" repeatCount="indefinite" values={`${STRING_A};${STRING_B};${STRING_A}`} />
-            </path>
-            <circle r="3.5" fill="#fff"><animateMotion dur="1.1s" repeatCount="indefinite" path={STRING_A} /></circle>
-          </>
-        ) : (
-          <g className="bs-frayed" fill="none" stroke="#e8e8e8" strokeWidth="2">
-            <path d="M162 146 Q 240 180 312 154" /><path d="M312 154 l9 -5 M312 154 l10 4 M312 154 l6 11" />
-          </g>
-        )}
-      </svg>
-      {!online && <><i className="bs-wave w1" /><i className="bs-wave w2" /><i className="bs-wave w3" /></>}
-      <div className="bs-sp bs-talk">{online ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="alert" /></div> : <Seq steps={SOFF} ms={3200} />}</div>
-      <PixelArt className="bs-can bs-can-l" rows={CAN} palette={GREY} cell={4} style={{ left: 126, top: 128 }} />
-      {online && <PixelArt className="bs-can bs-pop" rows={CAN} palette={GREY} cell={4} style={{ left: 398, top: 134 }} />}
+      <PixelArt className="bs-tower" rows={TOWER} palette={GREY} cell={4} />
+      <i className="bs-sig s1" /><i className="bs-sig s2" /><i className="bs-sig s3" />
+      <div className="bs-sp bs-walkabout">
+        {online ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="hold" /></div> : <Seq steps={SOFF} ms={6400} />}
+        <div className="bs-phone"><Bars lit={online} /></div>
+      </div>
     </div>
   );
 }
 
-/* ---------- 503: lunch break, one slice at a time ---------- */
-const PIZ = [
-  ['CCCCCCCCCC', 'CCCCCCCCCC', '.YYYYYYYY.', '.YPYYYYPY.', '..YYYYYY..', '..YYPYYY..', '...YYYY...', '...YYPY...', '....YY....', '.....Y....'],
-  ['..CCCCCCCC', '..CCCCCCCC', '..YYYYYYY.', '..YYYYYPY.', '..YYYYYY..', '..YYPYYY..', '...YYYY...', '...YYPY...', '....YY....', '.....Y....'],
-  ['CCCC......', 'CCCC......', '..........', '..........', '..........', '..........', '..........', '....YY....', '....YY....', '.....Y....'],
-  ['..........', '..........', '..........', '..........', '..........', '..........', '..........', '..........', '..........', '..........'],
-];
-const S503: [Frame, number][] = [['sit', 0], ['sit-left', 0.28], ['eat', 0.56], ['sit', 0.96]];
+/* ---------- 503: asleep in a web hammock, until a fly goes past ---------- */
+const S503: [Frame, number][] = [['sit', 0], ['sit-sense', 0.52], ['sit-right', 0.66], ['sit', 0.8]];
 export function Scene503() {
   return (
     <div className="bs bs503" aria-hidden="true">
-      <Bubble style={{ left: 6, top: 2 }}>Lunch break. Back soon.</Bubble>
-      <div className="bs-beam" />
-      <div className="bs-sp bs-sit"><div className="bs-chew"><Seq steps={S503} ms={3000} /></div></div>
-      <div className="bs-pizza">
-        <div className="bs-bite">
-          {PIZ.map((rows, i) => (
-            <div key={i} className="bs-fl on4" style={{ animationDuration: '12s', animationDelay: i ? `${-(12 - i * 3)}s` : '0s' }}><PixelArt rows={rows} palette={GREY} cell={3} /></div>
-          ))}
-        </div>
-        <i className="bs-steam a" /><i className="bs-steam b" /><i className="bs-steam c" />
+      <Bubble style={{ left: 6, top: 2 }}>Shh. Nap time. Back soon.</Bubble>
+      <i className="bs-post l" /><i className="bs-post r" />
+      <div className="bs-sway">
+        <svg className="bs-hammock" viewBox="0 0 440 210"><path d="M44 50 Q 220 230 396 50" fill="none" stroke="#e8e8e8" strokeWidth="3" strokeDasharray="6 3" /><path d="M44 54 Q 220 236 396 54" fill="none" stroke="#777" strokeWidth="2" /></svg>
+        <div className="bs-sp bs-sleeper"><Seq steps={S503} ms={8000} /></div>
+        <span className="bs-z z1">z</span><span className="bs-z z2">z</span><span className="bs-z z3">Z</span>
       </div>
-      <svg className="bs-hang" viewBox="0 0 440 210"><g stroke="#e8e8e8" strokeWidth="2"><line x1="252" y1="160" x2="252" y2="178" /><line x1="322" y1="160" x2="322" y2="178" /></g></svg>
+      <i className="bs-fly" />
       <div className="bs-closed">BACK SOON</div>
     </div>
   );

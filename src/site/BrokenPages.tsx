@@ -14,6 +14,7 @@ export function CrashPage({ error }: { error?: Error | null }) {
     <BrokenPage
       code="500"
       seed={3}
+      tint={stale}
       title={stale ? 'New version out' : 'Something broke'}
       line={<>ERROR <b>500</b> · <span className="nfb-blink">{stale ? 'page files changed' : 'the page crashed'}</span></>}
       copy={stale ? 'The site was updated while this tab was open, so some of its files are gone. Reload to get the new version.' : 'Something went wrong while drawing this page. It is not you, and Spider-Man is on it. Reloading usually helps.'}
@@ -84,6 +85,7 @@ export function SlowDownPage({ seconds, onRetry }: { seconds: number; onRetry: (
     <BrokenPage
       code="429"
       seed={13}
+      tint={left === 0}
       title="Slow down"
       line={<>ERROR <b>429</b> · try again in <b>{mm}:{ss}</b></>}
       copy="Too many sign-in attempts. Spider-Man is out of breath. Wait for the timer to run out, then try again."
@@ -104,6 +106,7 @@ export function OfflinePage({ online = false, onDismiss }: { online?: boolean; o
     <BrokenPage
       code="OFF"
       seed={17}
+      tint={online}
       title={online ? 'Back online' : 'No signal'}
       line={online ? <>CONNECTION <b>restored</b></> : <>NETWORK <b>unreachable</b> · <span className="nfb-blink">waiting for signal</span></>}
       copy={online ? 'Got it. Carry on.' : 'Your connection dropped. What is already on this page still works, but anything new has to wait. Spider-Man is shouting down the line.'}
