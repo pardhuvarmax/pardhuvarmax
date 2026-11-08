@@ -685,3 +685,12 @@ html[data-cms='on'] .site .edit-dot:hover, html[data-cms='on'] .site .edit-dot:f
 .bgtime[data-pos='top-right'] { bottom: auto; top: -9vw; }
 .bgtime[data-pos='top-left'] { right: auto; bottom: auto; left: -5vw; top: -9vw; }
 .bgtime[data-pos='center'] { right: auto; bottom: auto; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+
+/* it is that time: the background text pulses for the minute the visitor's clock matches it */
+.bgtime[data-now] { animation: bgNow 2.4s ease-in-out infinite; }
+@keyframes bgNow { 0%, 100% { opacity: 0.028; } 50% { opacity: 0.1; } }
+@media (prefers-reduced-motion: reduce) { .bgtime[data-now] { animation: none; opacity: 0.08; } }
+
+/* Spider-Man sitting on the footer edge */
+.footer-spidey { position: absolute; top: -79px; right: clamp(24px, 8vw, 120px); width: 100px; height: 108px; pointer-events: none; }
+.footer-spidey .spider-sprite { display: block; }

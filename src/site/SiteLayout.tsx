@@ -7,6 +7,7 @@ import { site, special } from '../lib/content';
 import { useTheme } from './useTheme';
 import DotGrid from './DotGrid';
 import MiniPlayer from './MiniPlayer';
+import { SpiderSprite, type Frame } from './spiderman';
 import { useDynamicColors } from './useDynamicColors';
 import '../styles/site.css';
 
@@ -20,6 +21,37 @@ const isOwnerHint = () => {
   }
   return ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
 };
+
+/** True during the minute when the visitor's clock shows the same time as the background text (e.g. 11:19, am or pm). */
+function useClockMatch(text: string): boolean {
+  const [hit, setHit] = useState(false);
+  useEffect(() => {
+    const m = /^(\d{1,2}):(\d{2})$/.exec(text.trim());
+    if (!m) { setHit(false); return; }
+    const hh = Number(m[1]);
+    const mm = Number(m[2]);
+    const check = () => {
+      const d = new Date();
+      setHit(d.getMinutes() === mm && (d.getHours() === hh || d.getHours() % 12 === hh % 12));
+    };
+    check();
+    const id = setInterval(check, 10000);
+    return () => clearInterval(id);
+  }, [text]);
+  return hit;
+}
+
+/** Spider-Man sits on the edge of the footer and glances around. Not on the main page or Cassette (he lives there). */
+const LOOKS: Frame[] = ['sit', 'sit-left', 'sit', 'sit-right'];
+function FooterSpidey() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => setI((v) => (v + 1) % LOOKS.length), 2400);
+    return () => clearInterval(id);
+  }, []);
+  return <div className="footer-spidey" aria-hidden="true"><SpiderSprite frame={LOOKS[i]} /></div>;
+}
 
 const BG_POSITIONS = ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'center'];
 const bgPos = BG_POSITIONS.includes(String((special as Record<string, unknown>).bgTextPosition)) ? String((special as Record<string, unknown>).bgTextPosition) : 'bottom-right';
@@ -67,6 +99,7 @@ export default function SiteLayout() {
   const { theme, toggle } = useTheme();
   useDynamicColors();
   const { pathname, hash } = useLocation();
+  const clockHit = useClockMatch(String((special as Record<string, unknown>).bgText ?? ''));
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [editLoaded, setEditLoaded] = useState(isOwnerHint);
@@ -102,7 +135,7 @@ export default function SiteLayout() {
   return (
     <div className="site">
       {special.bgText && pathname !== '/' && (
-        <div className="bgtime" data-pos={bgPos} aria-hidden="true" style={{ '--bt-len': Math.max(special.bgText.length, 3) } as CSSProperties}>{special.bgText}</div>
+        <div className="bgtime" data-pos={bgPos} data-now={clockHit ? '1' : undefined} aria-hidden="true" style={{ '--bt-len': Math.max(special.bgText.length, 3) } as CSSProperties}>{special.bgText}</div>
       )}
       <DotGrid />
       {pathname !== '/cassette' && <MiniPlayer />}
@@ -149,6 +182,7 @@ export default function SiteLayout() {
       </motion.div>
 
       <footer className="footer">
+        {pathname !== '/' && pathname !== '/cassette' && <FooterSpidey />}
         <div className="wrap footer-in">
           <span>
             &copy; {new Date().getFullYear()} {site.name} &middot; {site.location}
