@@ -57,9 +57,11 @@ export function Scene500({ stale = false }: { stale?: boolean }) {
       <div className="bs-mon">
         <div className="bs-mon-in">
           <span>500</span>
-          <div className="bs-site">
-            <b /><u /><u /><u /><s /><s /><s />
-          </div>
+          {stale && (
+            <div className="bs-site">
+              <b /><u /><u /><u /><s /><s /><s />
+            </div>
+          )}
         </div>
       </div>
       <div className="bs-mon-neck" /><div className="bs-mon-foot" />
