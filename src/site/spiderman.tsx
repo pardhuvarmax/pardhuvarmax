@@ -63,11 +63,11 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false, alt = false): { x: 
     line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
     line(16, 12, 20, 11, 'R'); line(20, 11, 22, 11, 'R'); put(24, 11, 'R'); put(24, 12, 'R'); // arm out, one finger pointing
   } else if (pose === 'reach') {
-    line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
-    line(16, 12, 22, 12, 'R'); line(15, 15, 21, 15, 'R'); // both arms out, gripping
+    line(16, 12, 22, 12, 'R'); // right arm out
+    line(8, 12, 14, 15, 'R'); line(14, 15, 21, 15, 'R'); // left arm reaching across the body
   } else if (pose === 'brace') {
-    line(16, 13, 21, 15, 'R'); line(15, 16, 20, 17, 'R'); // arms drawn in, pulling
-    line(8, 12, 6, 15, 'R');
+    line(16, 13, 21, 15, 'R'); // right arm drawn in, pulling
+    line(8, 12, 6, 15, 'R'); // left arm tucked
   } else if (pose === 'shrug') {
     line(8, 12, 4, 14, 'R'); line(4, 14, 3, 12, 'R');
     line(16, 12, 20, 14, 'R'); line(20, 14, 21, 12, 'R');
