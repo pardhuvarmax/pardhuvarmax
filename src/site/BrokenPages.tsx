@@ -9,21 +9,23 @@ export const isChunkError = (e?: Error | null) => !!e && /dynamically imported m
 
 /** 500: a page crashed while drawing. Replaces what used to be a blank white screen. */
 const stamp = () => new Date().toTimeString().slice(0, 8);
+const useStamp = () => useState(stamp)[0]; // fixed at first render so the log does not tick
 const clean = (l: string) => l.trim().replace(/https?:\/\/[^/\s)]+/g, '').replace(/\?[^\s):]*/g, '').slice(0, 96);
 /** What the console would print for a crash: the error, then the first few stack frames. */
-const crashLog = (e?: Error | null): string[] => {
+const crashLog = (e: Error | null | undefined, t: string): string[] => {
   const frames = (e?.stack ?? '').split('\n').filter((l) => /\bat\s|@/.test(l)).slice(0, 4).map(clean);
-  return [`[${stamp()}] ERROR ${clean(`${e?.name ?? 'Error'}: ${e?.message ?? 'unknown'}`)}`, ...frames, `[${stamp()}] render aborted, page unmounted`];
+  return [`[${t}] ERROR ${clean(`${e?.name ?? 'Error'}: ${e?.message ?? 'unknown'}`)}`, ...frames, `[${t}] render aborted, page unmounted`];
 };
 
 export function CrashPage({ error }: { error?: Error | null }) {
   const stale = isChunkError(error);
+  const t = useStamp();
   return (
     <BrokenPage
       code="500"
       seed={3}
       tint={stale}
-      log={stale ? undefined : crashLog(error)}
+      log={stale ? undefined : crashLog(error, t)}
       title={stale ? 'New version out' : 'Something broke'}
       line={<>ERROR <b>500</b> · <span className="nfb-blink">{stale ? 'page files changed' : 'the page crashed'}</span></>}
       copy={stale ? 'The site was updated while this tab was open, so some of its files are gone. Reload to get the new version.' : 'Something went wrong while drawing this page. It is not you, and Spider-Man is on it. Reloading usually helps.'}
@@ -42,10 +44,12 @@ export function CrashPage({ error }: { error?: Error | null }) {
 
 /** 403: signed in, or tried to, but not allowed. */
 export function ForbiddenPage({ message, onClose, closeLabel = 'Try another way' }: { message?: string; onClose?: () => void; closeLabel?: string }) {
+  const t = useStamp();
   return (
     <BrokenPage
       code="403"
       seed={5}
+      log={[`[${t}] WARN  auth: sign-in attempt`, `[${t}] ERROR 403 forbidden`, 'account is not on the allow list', 'session not created']}
       title="Not allowed"
       line={<>ERROR <b>403</b> · <span className="nfb-blink">access denied</span></>}
       copy={message || 'This account is not on the list, so Spider-Man is not letting it through.'}
@@ -62,10 +66,12 @@ export function ForbiddenPage({ message, onClose, closeLabel = 'Try another way'
 
 /** 401: the session ended, or you are not signed in. */
 export function SignedOutPage({ onSignIn }: { onSignIn: () => void }) {
+  const t = useStamp();
   return (
     <BrokenPage
       code="401"
       seed={11}
+      log={[`[${t}] ERROR 401 unauthorized`, 'session token expired or missing', `[${t}] WARN  redirecting to /login`]}
       title="Signed out"
       line={<>ERROR <b>401</b> · <span className="nfb-blink">session ended</span></>}
       copy="Your session ended, or you were never signed in. Spider-Man needs to see some ID before you carry on."
@@ -82,6 +88,7 @@ export function SignedOutPage({ onSignIn }: { onSignIn: () => void }) {
 
 /** 429: too many sign-in attempts, with a live countdown. */
 export function SlowDownPage({ seconds, onRetry }: { seconds: number; onRetry: () => void }) {
+  const t = useStamp();
   const total = Math.max(1, Math.round(seconds));
   const [left, setLeft] = useState(total);
   useEffect(() => {
@@ -95,6 +102,7 @@ export function SlowDownPage({ seconds, onRetry }: { seconds: number; onRetry: (
       code="429"
       seed={13}
       tint={left === 0}
+      log={left === 0 ? undefined : [`[${t}] ERROR 429 too many requests`, 'rate limit: sign-in attempts', `retry-after: ${left}s`]}
       title="Slow down"
       line={<>ERROR <b>429</b> · try again in <b>{mm}:{ss}</b></>}
       copy="Too many sign-in attempts. Spider-Man is out of breath. Wait for the timer to run out, then try again."
@@ -111,11 +119,13 @@ export function SlowDownPage({ seconds, onRetry }: { seconds: number; onRetry: (
 
 /** Offline: the connection dropped. */
 export function OfflinePage({ online = false, onDismiss }: { online?: boolean; onDismiss?: () => void }) {
+  const t = useStamp();
   return (
     <BrokenPage
       code="OFF"
       seed={17}
       tint={online}
+      log={online ? undefined : [`[${t}] ERROR network unreachable`, 'fetch failed: ERR_INTERNET_DISCONNECTED', `[${t}] WARN  waiting for connection`]}
       title={online ? 'Back online' : 'No signal'}
       line={online ? <>CONNECTION <b>restored</b></> : <>NETWORK <b>unreachable</b> · <span className="nfb-blink">waiting for signal</span></>}
       copy={online ? 'Got it. Carry on.' : 'Your connection dropped. What is already on this page still works, but anything new has to wait. Spider-Man is shouting down the line.'}
@@ -134,11 +144,12 @@ export function OfflinePage({ online = false, onDismiss }: { online?: boolean; o
 
 /** 503: maintenance mode, switched on under Special in the admin. */
 export function MaintenancePage({ text }: { text?: string }) {
+  const t = useStamp();
   return (
     <BrokenPage
       code="503"
       seed={19}
-      log={[`[${stamp()}] WARN  maintenance mode is on`, `[${stamp()}] ERROR 503 service unavailable`, 'upstream: paused by owner', 'retry: automatic, 30s']}
+      log={[`[${t}] WARN  maintenance mode is on`, `[${t}] ERROR 503 service unavailable`, 'upstream: paused by owner', 'retry: automatic, 30s']}
       title="Back soon"
       line={<>ERROR <b>503</b> · <span className="nfb-blink">down for maintenance</span></>}
       copy={text || 'The site is getting a little maintenance. Spider-Man is taking a short nap meanwhile, and both will be back soon.'}
