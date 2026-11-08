@@ -247,46 +247,46 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 @keyframes bsSweat { 0% { opacity: 0; transform: translate(0, 0); } 15% { opacity: var(--w, 0.5); } 100% { opacity: 0; transform: translate(-16px, 22px); } }
 @keyframes bsPuff { 0% { opacity: 0; transform: translate(0, 0) scale(0.4); } 20% { opacity: var(--w, 0); } 100% { opacity: 0; transform: translate(22px, -10px) scale(2.2); } }
 
-/* offline: broken tower, three failed tries, a smashed phone, a panic */
+/* offline: tower looks dead; same escalation as the 403 */
+.nfb .bsoff { cursor: pointer; }
 .nfb .bsoff .bs-tower { position: absolute; left: 380px; top: 64px; }
 .nfb .bsoff .bs-tower.dead { opacity: 0.45; }
 .nfb .bsoff .bs-x { position: absolute; left: 388px; top: 30px; width: 24px; height: 24px; animation: bsX 1.8s steps(1, end) infinite; }
 .nfb .bsoff .bs-x::before, .nfb .bsoff .bs-x::after { content: ''; position: absolute; left: 10px; top: -3px; width: 4px; height: 30px; background: #f2f2f2; transform: rotate(45deg); }
 .nfb .bsoff .bs-x::after { transform: rotate(-45deg); }
-.nfb .bsoff .bs-crack { position: fixed; inset: 0; z-index: 7; pointer-events: none; opacity: 0; animation: bsCrack 9s infinite; background: transparent; }
-.nfb .bsoff .bs-crack svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .nfb .bsoff .bs-sp { left: 60px; }
 .nfb .bsoff.on .bs-sp { left: 150px; }
 .nfb .bsoff .bs-jit { animation: bsJit 0.14s steps(1, end) infinite; }
-.nfb .bsoff .bs-phone { position: absolute; left: 124px; top: 96px; width: 18px; height: 30px; border: 3px solid #f2f2f2; background: #000; animation: bsPhoneTry 9s infinite; }
-.nfb .bsoff.on .bs-phone { left: 214px; animation: bsPhoneBlink 0.9s steps(1, end) infinite; }
+.nfb .bsoff .bs-rage { position: absolute; left: 62px; top: -6px; width: 30px; height: 20px; display: none; }
+.nfb .bsoff.ph-mad .bs-rage, .nfb .bsoff.ph-throw .bs-rage { display: block; }
+.nfb .bsoff .bs-rage i { position: absolute; left: 0; top: 0; width: 14px; height: 14px; background: linear-gradient(#fff, #fff) 6px 0 / 3px 14px no-repeat, linear-gradient(#fff, #fff) 0 6px / 14px 3px no-repeat; animation: bsVein 0.35s steps(2, end) infinite; }
+.nfb .bsoff .bs-rage i:nth-child(2) { left: 16px; top: 4px; animation-delay: 0.12s; transform: scale(0.8); } .nfb .bsoff .bs-rage i:nth-child(3) { left: 6px; top: -10px; animation-delay: 0.2s; transform: scale(0.65); }
+.nfb .bsoff.ph-mad .bs-sp { animation: bsRage 0.12s linear infinite; }
+.nfb .bsoff.ph-mad .bs-bubble { animation: bsRage 0.1s linear infinite; }
+
+/* the phone: hangs by his side, comes up for each try, shakes in his fist, then goes flying */
+.nfb .bsoff .bs-phone { position: absolute; left: 124px; top: 96px; width: 18px; height: 30px; border: 3px solid #f2f2f2; background: #000; translate: 0 26px; }
+.nfb .bsoff.ph-try .bs-phone { animation: bsPhoneUp 1.6s ease-in-out both; }
+.nfb .bsoff.ph-mad .bs-phone { translate: 0 -10px; rotate: -12deg; animation: bsRage 0.1s linear infinite; }
+.nfb .bsoff.ph-throw .bs-phone { animation: bsPhoneFly 0.85s cubic-bezier(0.6, 0, 1, 0.5) forwards; }
+.nfb .bsoff.ph-hit .bs-phone, .nfb .bsoff.ph-panic .bs-phone { opacity: 0; }
+.nfb .bsoff.on .bs-phone { left: 214px; translate: 0 0; animation: bsPhoneBlink 0.9s steps(1, end) infinite; }
 .nfb .bsoff .bs-bars { position: absolute; left: -2px; top: -26px; display: flex; align-items: flex-end; gap: 2px; height: 16px; }
 .nfb .bsoff .bs-bars i { width: 4px; background: #f2f2f2; opacity: 0.2; }
-.nfb .bsoff .bs-bars i:nth-child(1) { height: 4px; animation: bsBar1 9s steps(1, end) infinite; } .nfb .bsoff .bs-bars i:nth-child(2) { height: 8px; }
+.nfb .bsoff .bs-bars i:nth-child(1) { height: 4px; } .nfb .bsoff .bs-bars i:nth-child(2) { height: 8px; }
 .nfb .bsoff .bs-bars i:nth-child(3) { height: 12px; } .nfb .bsoff .bs-bars i:nth-child(4) { height: 16px; }
-.nfb .bsoff .bs-bars.lit i { opacity: 1; animation: none; }
+.nfb .bsoff.ph-try .bs-bars i:nth-child(1) { animation: bsBarTry 1.6s steps(1, end) both; }
+.nfb .bsoff .bs-bars.lit i { opacity: 1; }
+.nfb .bsoff .bs-hit { position: fixed; inset: 0; z-index: 7; pointer-events: none; animation: bsHitFlash 1.6s ease-out forwards; }
+.nfb .bsoff .bs-hit svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .nfb .bsoff .bs-sig { position: absolute; left: 352px; top: 66px; width: 18px; height: 30px; border-left: 4px dotted #f2f2f2; border-radius: 50%; opacity: 0; animation: bsSigOn 2.4s steps(6, end) infinite; }
 .nfb .bsoff .bs-sig.s2 { animation-delay: 0.5s; } .nfb .bsoff .bs-sig.s3 { animation-delay: 1s; }
 .nfb .bsoff .bs-bubble.say-once { animation: bsPopBubble 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4) both; }
-.nfb .bsoff.on .bs-phone { animation: bsPhoneBlink 0.9s steps(1, end) infinite; }
 @keyframes bsX { 0%, 70% { opacity: 1; } 71%, 100% { opacity: 0.25; } }
-@keyframes bsCrack { 0%, 61.9% { opacity: 0; background: transparent; } 62% { opacity: 1; background: rgba(255, 255, 255, 0.85); } 63.5% { background: transparent; } 74% { opacity: 1; } 80%, 100% { opacity: 0; } }
 @keyframes bsJit { 0% { translate: -3px 0; } 50% { translate: 3px 1px; } }
-@keyframes bsPhoneTry {
-  0%, 5% { translate: 0 0; rotate: 0deg; opacity: 1; animation-timing-function: ease-out; }
-  8%, 14% { translate: 0 -8px; animation-timing-function: ease-in-out; }
-  17%, 19% { translate: 0 0; animation-timing-function: ease-out; }
-  23%, 28% { translate: 4px -10px; animation-timing-function: ease-in-out; }
-  31%, 33% { translate: 0 0; animation-timing-function: ease-out; }
-  37%, 42% { translate: -2px -12px; animation-timing-function: ease-in-out; }
-  45%, 48% { translate: 0 0; animation-timing-function: ease-out; }
-  53% { translate: 10px -16px; rotate: -20deg; opacity: 1; animation-timing-function: cubic-bezier(0.6, 0, 1, 0.5); }
-  61.8% { translate: 70px 20px; scale: 26; rotate: 25deg; opacity: 1; }
-  62% { translate: 70px 20px; scale: 26; opacity: 0; }
-  99% { translate: 0 0; rotate: 0deg; scale: 1; opacity: 0; }
-  100% { translate: 0 0; rotate: 0deg; scale: 1; opacity: 1; }
-}
-@keyframes bsBar1 { 0%, 7% { opacity: 0.2; } 8%, 10% { opacity: 1; } 11%, 21% { opacity: 0.2; } 22%, 24% { opacity: 1; } 25%, 35% { opacity: 0.2; } 36%, 38% { opacity: 1; } 39%, 100% { opacity: 0.2; } }
+@keyframes bsPhoneUp { 0% { translate: 0 26px; } 25%, 78% { translate: 0 -8px; } 100% { translate: 0 26px; } }
+@keyframes bsBarTry { 0%, 30% { opacity: 0.2; } 35%, 45% { opacity: 1; } 50%, 100% { opacity: 0.2; } }
+@keyframes bsPhoneFly { 0% { translate: 0 -10px; rotate: -12deg; scale: 1; opacity: 1; } 12% { translate: 10px -18px; rotate: -20deg; } 100% { translate: 70px 20px; rotate: 25deg; scale: 26; opacity: 1; } }
 @keyframes bsSigOn { 0% { opacity: 0; transform: translateX(0) scale(0.5); } 15% { opacity: 1; } 100% { opacity: 0; transform: translateX(-200px) scale(1.4); } }
 @keyframes bsPopBubble { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
 @keyframes bsPhoneBlink {

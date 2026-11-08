@@ -17,24 +17,6 @@ export function Bubble({ children, style, className = '' }: { children: ReactNod
 }
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-/** Speech bubbles that take turns on a loop: [text, start, end] as fractions of `ms`. */
-function Say({ lines, ms, style }: { lines: [string, number, number][]; ms: number; style?: CSSProperties }) {
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
-  useEffect(() => {
-    if (reduced()) return;
-    const anims = lines.map(([, start, end], i) => refs.current[i]?.animate(
-      [{ offset: 0, opacity: 0 }, { offset: Math.max(0, start - 0.0004), opacity: 0 }, { offset: start, opacity: 1 }, { offset: end - 0.0004, opacity: 1 }, { offset: end, opacity: 0 }, { offset: 1, opacity: 0 }],
-      { duration: ms, iterations: Infinity },
-    ));
-    return () => anims.forEach((a) => a?.cancel());
-  }, [ms]); // eslint-disable-line react-hooks/exhaustive-deps
-  return (
-    <>
-      {lines.map(([t], i) => <div key={i} className="bs-bubble" ref={(el) => { refs.current[i] = el; }} style={{ ...style, opacity: i === 0 ? 1 : 0 }}>{t}</div>)}
-    </>
-  );
-}
-
 const GREY = { W: '#f2f2f2', G: '#9a9a9a', D: '#3a3a3a', K: '#000000', Y: '#ffffff', C: '#cfcfcf', P: '#7a7a7a' };
 
 /** Plays a sequence of Spider-Man poses on a loop: [pose, start] pairs, `start` being a fraction of `ms`. Each pose is held until the next starts,
@@ -223,19 +205,49 @@ export function Scene429({ progress, done }: { progress: number; done: boolean }
   );
 }
 
-/* ---------- offline: the tower looks dead. He tries for a bar three times, hurls his phone at you, then panics ---------- */
+/* ---------- offline: the tower looks dead. He tries for a bar (three times), loses it, hurls the phone at you, then panics ---------- */
 const TOWER = ['....WW....', '....WW....', '...W..W...', '...WWWW...', '...W..W...', '..W.WW.W..', '..WWWWWW..', '..W.WW.W..', '.W..WW..W.', '.WWWWWWWW.', '.W..WW..W.', 'WWWWWWWWWW'];
-const SOFF: [Frame, number, string?][] = [
-  ['look-right', 0], ['hold-right', 0.05], ['look-right', 0.15], ['hold', 0.19], ['look-left', 0.3], ['hold-right', 0.33],
-  ['brace', 0.44], ['throwA', 0.48], ['throwB', 0.54], ['look-right', 0.62], ['clutch', 0.66, 'bs-jit'], ['alert', 0.92],
-];
-const TRIES: [string, number, number][] = [
-  ['One bar. Please.', 0.05, 0.19], ['Come on...', 0.19, 0.33], ['JUST ONE BAR!!', 0.33, 0.47], ['AAARGH!', 0.47, 0.62], ['...', 0.62, 0.66], ['I BROKE IT!!', 0.66, 0.92],
-];
+const TRY_LINES = ['One bar. Please.', 'Come on...', 'JUST ONE BAR!!'];
+const S_TRY: [Frame, number][] = [['hold-right', 0], ['hold', 0.55]];
+const S_MAD: [Frame, number][] = [['brace', 0], ['throwA', 0.6]];
 export function SceneOffline({ online = false }: { online?: boolean }) {
+  const [taps, setTaps] = useState(0);
+  const [phase, setPhase] = useState<'idle' | 'try' | 'mad' | 'throw' | 'hit' | 'panic'>('idle');
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const state = useRef({ taps, phase });
+  state.current = { taps, phase };
+  const at = (ms: number, fn: () => void) => timers.current.push(setTimeout(fn, ms));
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  // Same rhythm as the 403: three tries for signal, and the fourth is one too many
+  const tap = () => {
+    if (online || state.current.phase !== 'idle') return;
+    const t = state.current.taps + 1;
+    setTaps(t);
+    if (t <= 3) {
+      setPhase('try');
+      at(1600, () => setPhase('idle'));
+      return;
+    }
+    setPhase('mad');
+    at(1200, () => setPhase('throw'));
+    at(2050, () => setPhase('hit'));
+    at(3700, () => setPhase('panic'));
+    at(6300, () => { setPhase('idle'); setTaps(0); });
+  };
+  const tapRef = useRef(tap);
+  tapRef.current = tap;
+  // nobody tapping: he keeps trying by himself
+  useEffect(() => {
+    if (online || reduced()) return;
+    const id = setInterval(() => tapRef.current(), 4200);
+    return () => clearInterval(id);
+  }, [online]);
+
+  const line = online ? 'Got signal!' : phase === 'mad' ? 'NO SIGNAL?? AGAIN??' : phase === 'throw' ? 'TAKE IT!' : phase === 'hit' ? '...' : phase === 'panic' ? 'I BROKE IT!!' : phase === 'try' ? TRY_LINES[Math.min(taps, 3) - 1] : taps === 0 ? 'Tap to help him find signal.' : 'Hmm.';
   return (
-    <div className={`bs bsoff ${online ? 'on' : ''}`} aria-hidden="true">
-      {online ? <Bubble className="say-once" style={{ left: 6, top: 2 }}>Got signal!</Bubble> : <Say lines={TRIES} ms={9000} style={{ left: 6, top: 2 }} />}
+    <div className={`bs bsoff ${online ? 'on' : `ph-${phase}`}`} onClick={tap} role="presentation">
+      <Bubble className={online ? 'say-once' : ''} style={{ left: 6, top: 2 }}>{line}</Bubble>
       {online ? (
         <>
           <PixelArt className="bs-tower" rows={TOWER} palette={GREY} cell={4} />
@@ -248,13 +260,19 @@ export function SceneOffline({ online = false }: { online?: boolean }) {
         </>
       )}
       <div className="bs-sp">
-        {online ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="hold" /></div> : <Seq steps={SOFF} ms={9000} />}
+        {online ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="hold" /></div>
+          : phase === 'try' ? <Seq key={taps} steps={S_TRY} ms={1600} />
+          : phase === 'mad' ? <Seq steps={S_MAD} ms={1200} />
+          : phase === 'throw' ? <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="throwB" /></div>
+          : phase === 'panic' ? <div className="bs-fl bs-jit" style={{ opacity: 1 }}><SpiderSprite frame="clutch" /></div>
+          : <div className="bs-fl" style={{ opacity: 1 }}><SpiderSprite frame="look-right" /></div>}
+        <div className="bs-rage"><i /><i /><i /></div>
       </div>
       <div className={`bs-phone ${online ? 'lit' : ''}`}>
         <div className={`bs-bars ${online ? 'lit' : ''}`}><i /><i /><i /><i /></div>
       </div>
-      {!online && (
-        <div className="bs-crack">
+      {phase === 'hit' && (
+        <div className="bs-hit" aria-hidden="true">
           <svg viewBox="0 0 100 100" preserveAspectRatio="none"><g fill="none" stroke="#fff">{CRACKS.map((d) => <path key={d} d={d} vectorEffect="non-scaling-stroke" strokeWidth="3" />)}</g></svg>
         </div>
       )}
