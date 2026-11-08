@@ -44,10 +44,21 @@
 .site .cs-cover { flex: none; width: clamp(96px, 20vw, 168px); aspect-ratio: 1; object-fit: cover; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--accent); }
 .site .cs-head .cs-now { min-width: 0; }
 
-/* outlined notice: "!" icon + bold text, no fill */
-.site .cs-notice { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border: 3px solid var(--ink); background: transparent; color: var(--text); }
-.site .cs-bang { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border: 3px solid var(--ink); font-family: var(--display); font-weight: 900; font-size: 1.3rem; line-height: 1; }
+/* outlined notice: "!" icon + bold text, no fill; hard shadow for depth, hazard stripe and pulsing "!" for effect */
+.site .cs-notice { position: relative; display: flex; gap: 14px; align-items: flex-start; padding: 26px 16px 16px; border: 3px solid var(--ink); background: transparent; color: var(--text); box-shadow: 7px 7px 0 var(--accent), 7px 7px 0 3px var(--ink); transition: transform 0.18s, box-shadow 0.18s; }
+.site .cs-notice::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 10px; border-bottom: 3px solid var(--ink); background: repeating-linear-gradient(-45deg, var(--accent) 0 8px, transparent 8px 16px); background-size: 22.63px 100%; }
+.site .cs-notice:hover { transform: translate(-3px, -3px); box-shadow: 10px 10px 0 var(--accent), 10px 10px 0 3px var(--ink); }
+.site .cs-bang { position: relative; flex: none; display: grid; place-items: center; width: 34px; height: 34px; border: 3px solid var(--ink); background: var(--accent); color: var(--on-accent, #fff); font-family: var(--display); font-weight: 900; font-size: 1.3rem; line-height: 1; box-shadow: 3px 3px 0 var(--ink); }
+.site .cs-bang::after { content: ''; position: absolute; inset: -3px; border: 2px solid var(--accent); pointer-events: none; opacity: 0; }
 .site .cs-notice p { margin: 0; font-weight: 800; font-size: 0.84rem; line-height: 1.5; letter-spacing: 0.01em; color: inherit; }
+@media (prefers-reduced-motion: no-preference) {
+  .site .cs-notice::before { animation: csStripe 1.4s linear infinite; }
+  .site .cs-bang::after { animation: csPing 2.2s ease-out infinite; }
+  .site .cs-bang { animation: csBang 2.2s ease-in-out infinite; }
+}
+@keyframes csStripe { to { background-position: 22.63px 0; } }
+@keyframes csPing { 0% { opacity: 0.9; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.7); } }
+@keyframes csBang { 0%, 86%, 100% { transform: none; } 90% { transform: translateX(-2px) rotate(-6deg); } 94% { transform: translateX(2px) rotate(6deg); } }
 
 /* player on the left, notice on its right side (stacks on narrow screens) */
 .site .cs-stage { display: flex; align-items: flex-start; gap: clamp(24px, 4vw, 56px); margin-top: clamp(34px, 5vw, 56px); }
