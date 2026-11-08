@@ -103,3 +103,39 @@ export function SpiderSprite({ frame }: { frame: Frame }) {
     </svg>
   );
 }
+
+/** Spider-Man coding on a laptop with a headset: the sitting pose, a laptop in his lap and headphones on. `typing` alternates the hands. */
+const CODER_FILL: Record<string, string> = { ...SM_FILL, L: '#8d939e', G: '#5f646d', H: '#2c2c36', C: '#5ad1ff' };
+const CODER_FRAMES: { x: number; y: number; c: string }[][] = [0, 1].map((typing) => {
+  const cells = new Map<string, string>();
+  for (const p of buildSpiderMan('sit', 0)) if (p.c !== 'K') cells.set(`${p.x},${p.y}`, p.c); // re-outline below
+  const put = (x: number, y: number, c: string) => { if (x >= 0 && y >= 0 && x < SM_W && y < SM_H) cells.set(`${x},${y}`, c); };
+  const rect = (x0: number, y0: number, x1: number, y1: number, c: string) => { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) put(x, y, c); };
+  // laptop: lid facing us, logo, base
+  rect(7, 13, 17, 19, 'L'); put(12, 16, 'Y'); put(11, 16, 'Y'); put(13, 16, 'Y'); put(12, 15, 'Y'); put(12, 17, 'Y');
+  rect(5, 20, 19, 21, 'G');
+  // hands tapping at the base
+  const l = typing ? 19 : 20, r = typing ? 20 : 19;
+  rect(5, l, 6, l, 'R'); rect(18, r, 19, r, 'R');
+  // headset: band over the head, ear cups, mic boom
+  rect(9, 3, 15, 3, 'H'); put(8, 4, 'H'); put(8, 5, 'H'); put(16, 4, 'H'); put(16, 5, 'H');
+  rect(7, 6, 8, 9, 'H'); rect(16, 6, 17, 9, 'H'); put(7, 7, 'C'); put(7, 8, 'C'); put(17, 7, 'C'); put(17, 8, 'C');
+  put(8, 10, 'H'); put(9, 11, 'H'); put(10, 11, 'C');
+  for (const k of [...cells.keys()]) {
+    const [x, y] = k.split(',').map(Number);
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (!cells.has(`${x + dx},${y + dy}`)) put(x + dx, y + dy, 'K');
+  }
+  return [...cells.entries()].map(([k, c]) => { const [x, y] = k.split(',').map(Number); return { x, y, c }; });
+});
+
+export const CODER_SIZE = { w: SM_W * SM_CELL, h: SM_H * SM_CELL, earL: [30, 40], earR: [70, 40] } as const;
+
+export function CoderSprite({ typing }: { typing: 0 | 1 }) {
+  return (
+    <svg className="spider-sprite" width={SM_W * SM_CELL} height={SM_H * SM_CELL} viewBox={`0 0 ${SM_W * SM_CELL} ${SM_H * SM_CELL}`} shapeRendering="crispEdges" aria-hidden="true">
+      {CODER_FRAMES[typing].map((p) => (
+        <rect key={`${p.x},${p.y}`} x={p.x * SM_CELL} y={p.y * SM_CELL} width={SM_CELL} height={SM_CELL} fill={CODER_FILL[p.c]} />
+      ))}
+    </svg>
+  );
+}

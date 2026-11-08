@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { Pause, Play, SkipBack, SkipForward } from 'lucide-react';
 import { cassette, safeHref } from '../lib/content';
 import { SectionHead } from './Reveal';
+import { CODER_SIZE, CoderSprite } from './spiderman';
 import '../styles/cassette.css';
 
 const TINTS = ['--accent', '--accent-2', '--accent-3', '--accent-4'];
@@ -27,6 +28,11 @@ export default function Cassette() {
   const [pos, setPos] = useState(0);
   const [dur, setDur] = useState(0);
 
+  const rig = useRef<HTMLDivElement>(null);
+  const spidey = useRef<HTMLDivElement>(null);
+  const [typing, setTyping] = useState<0 | 1>(0);
+  const [wire, setWire] = useState<{ d: string; x: number; y: number } | null>(null);
+
   const album = albums[a];
   const tracks = album?.tracks.filter((x) => x.src) ?? [];
   const track = tracks[t];
@@ -41,6 +47,40 @@ export default function Cassette() {
   }, [a, t, track?.src]);
 
   useEffect(() => () => audio.current?.pause(), []);
+
+  // Spider-Man types while the tape plays
+  useEffect(() => {
+    if (!playing) return;
+    const id = setInterval(() => setTyping((v) => (v ? 0 : 1)), 170);
+    return () => clearInterval(id);
+  }, [playing]);
+
+  // headset wire: from the nearer ear cup to the plug on the selected tape
+  const measure = useCallback(() => {
+    const box = rig.current;
+    const sp = spidey.current;
+    const tape = box?.querySelectorAll<HTMLElement>('.cs-tape')[a];
+    if (!box || !sp || !tape) return;
+    const r = box.getBoundingClientRect();
+    const s = sp.getBoundingClientRect();
+    const tr = tape.getBoundingClientRect();
+    const jx = tr.left - r.left + tr.width * 0.78;
+    const jy = tr.top - r.top + 2;
+    const right = jx > s.left - r.left + s.width / 2;
+    const [ex, ey] = right ? CODER_SIZE.earR : CODER_SIZE.earL;
+    const ax = s.left - r.left + ex;
+    const ay = s.top - r.top + ey;
+    const sag = Math.min(150, 46 + Math.abs(jx - ax) * 0.3);
+    setWire({ d: `M ${ax} ${ay} C ${ax + (right ? 26 : -26)} ${ay + sag}, ${jx} ${Math.max(ay, jy) + sag * 0.8}, ${jx} ${jy}`, x: jx, y: jy });
+  }, [a]);
+  useLayoutEffect(() => {
+    measure();
+    const box = rig.current;
+    if (!box) return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(box);
+    return () => ro.disconnect();
+  }, [measure, albums.length]);
 
   if (!albums.length) {
     return (
@@ -86,6 +126,7 @@ export default function Cassette() {
     <section className="wrap sec cs">
       <SectionHead kicker="Cassette" title={<>On <em>repeat</em></>}>{cassette.intro}</SectionHead>
 
+      <div className="cs-rig" ref={rig}>
       <div className="cs-shelf" role="list">
         {albums.map((al, i) => (
           <button
@@ -112,6 +153,19 @@ export default function Cassette() {
             <Reels />
           </button>
         ))}
+      </div>
+      <div className={`cs-spidey ${playing ? 'on' : ''}`} ref={spidey} aria-hidden="true">
+        <CoderSprite typing={playing ? typing : 0} />
+        {playing && <><i className="cs-note n1">♪</i><i className="cs-note n2">♫</i></>}
+      </div>
+      {wire && (
+        <svg className={`cs-wire ${playing ? 'on' : ''}`} aria-hidden="true">
+          <path className="w-base" d={wire.d} />
+          <path className="w-flow" d={wire.d} />
+          <rect className="w-plug" x={wire.x - 6} y={wire.y - 3} width="12" height="8" />
+          <circle className="w-led" cx={wire.x} cy={wire.y + 1} r="2" />
+        </svg>
+      )}
       </div>
 
       <div className="cs-stage">
