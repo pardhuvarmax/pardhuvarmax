@@ -97,6 +97,7 @@ export default function SiteLayout() {
 
   return (
     <div className="site">
+      {pathname === '/cassette' && <div className="bgtime" aria-hidden="true">11:19</div>}
       <DotGrid />
       <div className="site-bg" aria-hidden="true">
         <i className="blob b1" />
