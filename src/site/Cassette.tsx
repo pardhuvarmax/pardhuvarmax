@@ -31,6 +31,7 @@ export default function Cassette() {
   const rig = useRef<HTMLDivElement>(null);
   const spidey = useRef<HTMLDivElement>(null);
   const [typing, setTyping] = useState<0 | 1>(0);
+  const [leg, setLeg] = useState(0);
   const [wire, setWire] = useState<{ d: string; x: number; y: number } | null>(null);
 
   const album = albums[a];
@@ -55,6 +56,13 @@ export default function Cassette() {
     return () => clearInterval(id);
   }, [playing]);
 
+  // his legs keep swinging
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => setLeg((v) => (v + 1) % 4), 280);
+    return () => clearInterval(id);
+  }, []);
+
   // headset wire: from the nearer ear cup to the plug on the selected tape
   const measure = useCallback(() => {
     const box = rig.current;
@@ -65,13 +73,12 @@ export default function Cassette() {
     const s = sp.getBoundingClientRect();
     const tr = tape.getBoundingClientRect();
     const jx = tr.left - r.left + tr.width * 0.78;
-    const jy = tr.top - r.top + 2;
-    const right = jx > s.left - r.left + s.width / 2;
-    const [ex, ey] = right ? CODER_SIZE.earR : CODER_SIZE.earL;
+    const jy = tr.bottom - r.top - 2; // the plug sits on the underside of the tape
+    const [ex, ey] = CODER_SIZE.ear;
     const ax = s.left - r.left + ex;
     const ay = s.top - r.top + ey;
-    const sag = Math.min(150, 46 + Math.abs(jx - ax) * 0.3);
-    setWire({ d: `M ${ax} ${ay} C ${ax + (right ? 26 : -26)} ${ay + sag}, ${jx} ${Math.max(ay, jy) + sag * 0.8}, ${jx} ${jy}`, x: jx, y: jy });
+    const sag = Math.min(110, 34 + Math.abs(jx - ax) * 0.25);
+    setWire({ d: `M ${ax} ${ay} C ${ax} ${ay - 34}, ${jx} ${jy + sag}, ${jx} ${jy + 6}`, x: jx, y: jy });
   }, [a]);
   useLayoutEffect(() => {
     measure();
@@ -154,21 +161,12 @@ export default function Cassette() {
           </button>
         ))}
       </div>
-      <div className={`cs-spidey ${playing ? 'on' : ''}`} ref={spidey} aria-hidden="true">
-        <CoderSprite typing={playing ? typing : 0} />
-        {playing && <><i className="cs-note n1">♪</i><i className="cs-note n2">♫</i></>}
-      </div>
-      {wire && (
-        <svg className={`cs-wire ${playing ? 'on' : ''}`} aria-hidden="true">
-          <path className="w-base" d={wire.d} />
-          <path className="w-flow" d={wire.d} />
-          <rect className="w-plug" x={wire.x - 6} y={wire.y - 3} width="12" height="8" />
-          <circle className="w-led" cx={wire.x} cy={wire.y + 1} r="2" />
-        </svg>
-      )}
-      </div>
 
       <div className="cs-stage">
+      <div className={`cs-spidey ${playing ? 'on' : ''}`} ref={spidey} aria-hidden="true">
+        <CoderSprite leg={leg} typing={playing ? typing : 0} />
+        {playing && <><i className="cs-note n1">♪</i><i className="cs-note n2">♫</i></>}
+      </div>
       <div className="cs-deck">
         <audio
           ref={audio}
@@ -229,6 +227,15 @@ export default function Cassette() {
         </ol>
       </div>
       {disclaimer}
+      </div>
+      {wire && (
+        <svg className={`cs-wire ${playing ? 'on' : ''}`} aria-hidden="true">
+          <path className="w-base" d={wire.d} />
+          <path className="w-flow" d={wire.d} />
+          <rect className="w-plug" x={wire.x - 6} y={wire.y - 1} width="12" height="8" />
+          <circle className="w-led" cx={wire.x} cy={wire.y + 3} r="2" />
+        </svg>
+      )}
       </div>
     </section>
   );

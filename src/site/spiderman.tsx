@@ -104,36 +104,61 @@ export function SpiderSprite({ frame }: { frame: Frame }) {
   );
 }
 
-/** Spider-Man coding on a laptop with a headset: the sitting pose, a laptop in his lap and headphones on. `typing` alternates the hands. */
-const CODER_FILL: Record<string, string> = { ...SM_FILL, L: '#8d939e', G: '#5f646d', H: '#2c2c36', C: '#5ad1ff' };
-const CODER_FRAMES: { x: number; y: number; c: string }[][] = [0, 1].map((typing) => {
+/** Spider-Man in profile, sitting on a ledge and coding on a laptop with a headset. `leg` (0-3) swings his legs, `typing` alternates the hand. */
+const CP_W = 28;
+const CP_H = 28;
+const CODER_FILL: Record<string, string> = { ...SM_FILL, L: '#8d939e', G: '#5f646d', H: '#2c2c36', C: '#5ad1ff', D: '#142a70' };
+const NEAR_FOOT = [12, 16, 20, 16];
+const FAR_FOOT = [20, 16, 12, 16];
+
+function buildCoder(leg: number, typing: number): { x: number; y: number; c: string }[] {
   const cells = new Map<string, string>();
-  for (const p of buildSpiderMan('sit', 0)) if (p.c !== 'K') cells.set(`${p.x},${p.y}`, p.c); // re-outline below
-  const put = (x: number, y: number, c: string) => { if (x >= 0 && y >= 0 && x < SM_W && y < SM_H) cells.set(`${x},${y}`, c); };
+  const put = (x: number, y: number, c: string) => { if (x >= 0 && y >= 0 && x < CP_W && y < CP_H) cells.set(`${x},${y}`, c); };
   const rect = (x0: number, y0: number, x1: number, y1: number, c: string) => { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) put(x, y, c); };
-  // laptop: lid facing us, logo, base
-  rect(7, 13, 17, 19, 'L'); put(12, 16, 'Y'); put(11, 16, 'Y'); put(13, 16, 'Y'); put(12, 15, 'Y'); put(12, 17, 'Y');
-  rect(5, 20, 19, 21, 'G');
-  // hands tapping at the base
-  const l = typing ? 19 : 20, r = typing ? 20 : 19;
-  rect(5, l, 6, l, 'R'); rect(18, r, 19, r, 'R');
-  // headset: band over the head, ear cups, mic boom
-  rect(9, 3, 15, 3, 'H'); put(8, 4, 'H'); put(8, 5, 'H'); put(16, 4, 'H'); put(16, 5, 'H');
-  rect(7, 6, 8, 9, 'H'); rect(16, 6, 17, 9, 'H'); put(7, 7, 'C'); put(7, 8, 'C'); put(17, 7, 'C'); put(17, 8, 'C');
-  put(8, 10, 'H'); put(9, 11, 'H'); put(10, 11, 'C');
+  const line = (x0: number, y0: number, x1: number, y1: number, c: string) => {
+    const dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1, dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    let err = dx + dy;
+    for (;;) {
+      put(x0, y0, c); put(x0 + 1, y0, c);
+      if (x0 === x1 && y0 === y1) break;
+      const e2 = 2 * err;
+      if (e2 >= dy) { err += dy; x0 += sx; }
+      if (e2 <= dx) { err += dx; y0 += sy; }
+    }
+  };
+  const boots = (c: string, from: number) => { for (const [k, v] of [...cells]) { const [x, y] = k.split(',').map(Number); if (y >= from && v === c) put(x, y, 'R'); } };
+  // legs hang over the ledge and swing: far leg (darker) behind, near leg in front
+  line(14, 20, FAR_FOOT[leg], 26, 'D'); boots('D', 24);
+  line(16, 20, NEAR_FOOT[leg], 26, 'B'); boots('B', 24);
+  rect(8, 19, 17, 20, 'B'); // thighs
+  // torso, side on
+  rect(8, 11, 13, 17, 'R'); rect(8, 18, 13, 20, 'B');
+  // head facing the laptop (right) with its eye
+  for (let y = 0; y < CP_H; y++) for (let x = 0; x < CP_W; x++) if (((x - 11) / 3.4) ** 2 + ((y - 6) / 3.6) ** 2 <= 1.05) put(x, y, 'R');
+  for (const [x, y] of [[13, 5], [14, 5], [14, 6]]) put(x, y, 'W');
+  // arm reaching the keys
+  line(11, 12, 12, 15, 'R'); line(12, 15, 18, typing ? 15 : 16, 'R');
+  // laptop on his knees, screen towards him
+  rect(15, 17, 22, 18, 'G'); rect(21, 8, 22, 16, 'L'); rect(20, 9, 20, 15, 'C'); put(23, 12, 'Y');
+  // headset: band over the head, ear cup, mic boom
+  rect(9, 2, 13, 2, 'H'); put(8, 3, 'H'); put(8, 4, 'H'); put(14, 3, 'H'); put(14, 4, 'H'); put(8, 5, 'H'); put(8, 6, 'H');
+  rect(9, 5, 11, 8, 'H'); put(10, 6, 'C'); put(10, 7, 'C');
+  put(12, 9, 'H'); put(13, 10, 'H'); put(14, 10, 'C');
   for (const k of [...cells.keys()]) {
     const [x, y] = k.split(',').map(Number);
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (!cells.has(`${x + dx},${y + dy}`)) put(x + dx, y + dy, 'K');
   }
   return [...cells.entries()].map(([k, c]) => { const [x, y] = k.split(',').map(Number); return { x, y, c }; });
-});
+}
+const CODER_FRAMES = [0, 1, 2, 3].map((leg) => [0, 1].map((t) => buildCoder(leg, t)));
 
-export const CODER_SIZE = { w: SM_W * SM_CELL, h: SM_H * SM_CELL, earL: [30, 40], earR: [70, 40] } as const;
+/** Pixel offsets inside the sprite: the top of the headband, where the headset wire leaves. */
+export const CODER_SIZE = { w: CP_W * SM_CELL, h: CP_H * SM_CELL, ear: [44, 8], seat: 21 * SM_CELL } as const;
 
-export function CoderSprite({ typing }: { typing: 0 | 1 }) {
+export function CoderSprite({ leg, typing }: { leg: number; typing: number }) {
   return (
-    <svg className="spider-sprite" width={SM_W * SM_CELL} height={SM_H * SM_CELL} viewBox={`0 0 ${SM_W * SM_CELL} ${SM_H * SM_CELL}`} shapeRendering="crispEdges" aria-hidden="true">
-      {CODER_FRAMES[typing].map((p) => (
+    <svg className="spider-sprite" width={CP_W * SM_CELL} height={CP_H * SM_CELL} viewBox={`0 0 ${CP_W * SM_CELL} ${CP_H * SM_CELL}`} shapeRendering="crispEdges" aria-hidden="true">
+      {CODER_FRAMES[leg % 4][typing ? 1 : 0].map((p) => (
         <rect key={`${p.x},${p.y}`} x={p.x * SM_CELL} y={p.y * SM_CELL} width={SM_CELL} height={SM_CELL} fill={CODER_FILL[p.c]} />
       ))}
     </svg>
