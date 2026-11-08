@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { site, special } from '../lib/content';
 import { useTheme } from './useTheme';
 import DotGrid from './DotGrid';
+import MiniPlayer from './MiniPlayer';
 import { useDynamicColors } from './useDynamicColors';
 import '../styles/site.css';
 
@@ -104,6 +105,7 @@ export default function SiteLayout() {
         <div className="bgtime" data-pos={bgPos} aria-hidden="true" style={{ '--bt-len': Math.max(special.bgText.length, 3) } as CSSProperties}>{special.bgText}</div>
       )}
       <DotGrid />
+      {pathname !== '/cassette' && <MiniPlayer />}
       <div className="site-bg" aria-hidden="true">
         <i className="blob b1" />
         <i className="blob b2" />

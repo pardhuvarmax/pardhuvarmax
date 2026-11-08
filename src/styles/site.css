@@ -61,7 +61,7 @@
 @keyframes drift1 { to { transform: translate(14vw, 12vh) scale(1.15); } }
 @keyframes drift2 { to { transform: translate(-16vw, 10vh) scale(0.9); } }
 @keyframes drift3 { to { transform: translate(-12vw, -14vh) scale(1.2); } }
-.site > *:not(.site-bg):not(.progress):not(.nav):not(.skip):not(.dotgrid):not(.cam):not(.web):not(.polaroid):not(.em):not(.edit-dot):not(.bgtime) { position: relative; z-index: 1; }
+.site > *:not(.site-bg):not(.progress):not(.nav):not(.skip):not(.dotgrid):not(.cam):not(.web):not(.polaroid):not(.em):not(.edit-dot):not(.bgtime):not(.mini) { position: relative; z-index: 1; }
 
 .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 120; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform-origin: 0 50%; }
 

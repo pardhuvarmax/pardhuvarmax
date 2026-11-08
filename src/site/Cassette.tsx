@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { Bluetooth, Pause, Play, SkipBack, SkipForward, Wifi } from 'lucide-react';
+import { Bluetooth, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, Volume2, VolumeX, Wifi } from 'lucide-react';
 import { cassette, safeHref } from '../lib/content';
+import { albums, player, usePlayer } from '../lib/player';
 import { SectionHead } from './Reveal';
 import { CoderSprite } from './spiderman';
 import '../styles/cassette.css';
@@ -20,14 +21,7 @@ function Reels() {
 export default function Cassette() {
   const favLabel = cassette.favLabel ?? 'Peak favourite';
   const disclaimer = cassette.disclaimer ? <aside className="cs-notice" role="note"><span className="cs-bang" aria-hidden="true">!</span><p>{cassette.disclaimer}</p></aside> : null;
-  const albums = cassette.albums.filter((a) => a.tracks?.some((t) => t.src));
-  const audio = useRef<HTMLAudioElement>(null);
-  const wantPlay = useRef(false);
-  const [a, setA] = useState(0);
-  const [t, setT] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [pos, setPos] = useState(0);
-  const [dur, setDur] = useState(0);
+  const { a, t, playing, pos, dur, loop, shuffle, volume, muted } = usePlayer();
 
   const [typing, setTyping] = useState<0 | 1>(0);
   const [leg, setLeg] = useState(0);
@@ -36,20 +30,26 @@ export default function Cassette() {
   const firstRun = useRef(true);
 
   const album = albums[a];
-  const tracks = album?.tracks.filter((x) => x.src) ?? [];
+  const tracks = album?.tracks ?? [];
   const track = tracks[t];
   const link: 'bluetooth' | 'wifi' = (a + t) % 2 === 0 ? 'bluetooth' : 'wifi'; // consecutive songs alternate connections; each tape starts on the opposite one
 
-  useEffect(() => {
-    const el = audio.current;
-    if (!el || !track) return;
-    el.load();
-    setPos(0);
-    setDur(0);
-    if (wantPlay.current) el.play().catch(() => setPlaying(false));
-  }, [a, t, track?.src]);
+  useEffect(() => { player.warm(); }, []);
 
-  useEffect(() => () => audio.current?.pause(), []);
+  // keyboard: space play/pause, arrows seek, shift+arrows change song, M mute (ignored while typing or on a focused control)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const el = e.target as HTMLElement | null;
+      if (el && (el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'A'].includes(el.tagName))) return;
+      if (e.code === 'Space') { e.preventDefault(); player.toggle(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); e.shiftKey ? player.next() : player.seekBy(5); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); e.shiftKey ? player.prev() : player.seekBy(-5); }
+      else if (e.key === 'm' || e.key === 'M') player.toggleMute();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // Spider-Man types while the tape plays
   useEffect(() => {
@@ -88,33 +88,6 @@ export default function Cassette() {
     );
   }
 
-  const play = (ai: number, ti: number) => {
-    wantPlay.current = true;
-    if (ai === a && ti === t) {
-      audio.current?.play().catch(() => setPlaying(false));
-    } else {
-      setA(ai);
-      setT(ti);
-    }
-  };
-  const toggle = () => {
-    const el = audio.current;
-    if (!el) return;
-    if (el.paused) {
-      wantPlay.current = true;
-      el.play().catch(() => setPlaying(false));
-    } else {
-      wantPlay.current = false;
-      el.pause();
-    }
-  };
-  const step = (d: number) => {
-    const n = t + d;
-    if (n < 0 || n >= tracks.length) return;
-    wantPlay.current = playing;
-    setT(n);
-  };
-
   return (
     <section className="wrap sec cs">
       <SectionHead kicker="Cassette" title={<>On <em>repeat</em></>}>{cassette.intro}</SectionHead>
@@ -127,13 +100,7 @@ export default function Cassette() {
             role="listitem"
             className={`cs-tape ${i === a ? 'on' : ''} ${i === a && playing ? 'spin' : ''}`}
             style={{ '--tc': `var(${TINTS[i % TINTS.length]})` } as CSSProperties}
-            onClick={() => {
-              if (i === a) return;
-              wantPlay.current = false;
-              audio.current?.pause();
-              setA(i);
-              setT(0);
-            }}
+            onClick={() => player.selectTape(i)}
             aria-pressed={i === a}
           >
             <span className="cs-label">
@@ -164,25 +131,6 @@ export default function Cassette() {
         {playing && <><i className="cs-tune n1">♪</i><i className="cs-tune n2">♫</i></>}
       </div>
       <div className="cs-deck">
-        <audio
-          ref={audio}
-          preload="metadata"
-          src={track ? safeHref(track.src) : undefined}
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          onTimeUpdate={(e) => setPos(e.currentTarget.currentTime)}
-          onLoadedMetadata={(e) => setDur(e.currentTarget.duration)}
-          onEnded={() => {
-            if (t + 1 < tracks.length) {
-              wantPlay.current = true;
-              setT(t + 1);
-            } else {
-              wantPlay.current = false;
-              setPlaying(false);
-              setT(0);
-            }
-          }}
-        />
         <div className="cs-head">
           {(track?.cover || album.cover) && <img className="cs-cover" src={safeHref((track?.cover || album.cover)!)} alt={`${track?.title ?? album.title} cover`} />}
           <div className="cs-now">
@@ -193,18 +141,24 @@ export default function Cassette() {
           </div>
         </div>
         <div className="cs-ctrl">
-          <button className="cs-btn" onClick={() => { setHit((h) => ({ k: 'prev', n: h.n + 1 })); step(-1); }} disabled={t === 0} aria-label="Previous track">
+          <button className="cs-btn" onClick={() => { setHit((h) => ({ k: 'prev', n: h.n + 1 })); player.prev(); }} aria-label="Previous track (restarts the song after 3 seconds)">
             <span className="cs-ico" key={hit.k === 'prev' ? hit.n : 0}><SkipBack size={18} /></span>
             {hit.k === 'prev' && <i className="cs-ripple" key={hit.n} />}
           </button>
-          <button className="cs-btn big" onClick={() => { setHit((h) => ({ k: 'play', n: h.n + 1 })); toggle(); }} aria-label={playing ? 'Pause' : 'Play'}>
+          <button className="cs-btn big" onClick={() => { setHit((h) => ({ k: 'play', n: h.n + 1 })); player.toggle(); }} aria-label={playing ? 'Pause' : 'Play'}>
             <span className="cs-ico" key={`${playing}${hit.k === 'play' ? hit.n : 0}`} data-pop={hit.k === 'play' ? '1' : undefined}>{playing ? <Pause size={22} /> : <Play size={22} />}</span>
             {hit.k === 'play' && <i className="cs-ripple" key={hit.n} />}
           </button>
-          <button className="cs-btn" onClick={() => { setHit((h) => ({ k: 'next', n: h.n + 1 })); step(1); }} disabled={t >= tracks.length - 1} aria-label="Next track">
+          <button className="cs-btn" onClick={() => { setHit((h) => ({ k: 'next', n: h.n + 1 })); player.next(); }} disabled={!shuffle && t >= tracks.length - 1} aria-label="Next track">
             <span className="cs-ico" key={hit.k === 'next' ? hit.n : 0}><SkipForward size={18} /></span>
             {hit.k === 'next' && <i className="cs-ripple" key={hit.n} />}
           </button>
+          <div className="cs-opts">
+            <button className={`cs-btn sm ${shuffle ? 'on' : ''}`} onClick={() => player.setShuffle(!shuffle)} aria-pressed={shuffle} aria-label="Shuffle" title="Shuffle"><Shuffle size={16} /></button>
+            <button className={`cs-btn sm ${loop ? 'on' : ''}`} onClick={() => player.setLoop(!loop)} aria-pressed={loop} aria-label="Loop this song" title="Loop this song"><Repeat size={16} /></button>
+            <button className="cs-btn sm" onClick={() => player.toggleMute()} aria-label={muted ? 'Unmute' : 'Mute'} title={muted ? 'Unmute' : 'Mute'}>{muted || volume === 0 ? <VolumeX size={16} /> : <Volume2 size={16} />}</button>
+            <input className="cs-vol" type="range" min={0} max={1} step={0.01} value={muted ? 0 : volume} onChange={(e) => player.setVolume(Number(e.target.value))} aria-label="Volume" />
+          </div>
         </div>
         <div className="cs-seek">
           <span>{clock(pos)}</span>
@@ -214,16 +168,17 @@ export default function Cassette() {
             max={dur || 0}
             step={0.1}
             value={Math.min(pos, dur || 0)}
-            onChange={(e) => { if (audio.current) audio.current.currentTime = Number(e.target.value); }}
+            onChange={(e) => player.seek(Number(e.target.value))}
             aria-label="Seek"
           />
           <span>{clock(dur)}</span>
         </div>
+        <p className="cs-keys" aria-hidden="true">Space play · ← → seek · Shift + ← → song · M mute</p>
         {(track?.note || album.note) && <p className="cs-note">{track?.note || album.note}</p>}
         <ol className="cs-tracks">
           {tracks.map((x, i) => (
             <li key={x.src + i}>
-              <button className={i === t ? 'on' : ''} onClick={() => play(a, i)}>
+              <button className={i === t ? 'on' : ''} onClick={() => player.playTrack(a, i)}>
                 <span className="cs-n">{i === t && playing ? '▶' : String(i + 1).padStart(2, '0')}</span>
                 <span className="cs-t">{x.title}{x.fav && <span className="cs-star" aria-label={favLabel || 'Favourite'}> ★</span>}</span>
                 {x.artist && <span className="cs-a">{x.artist}</span>}

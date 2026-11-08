@@ -106,3 +106,12 @@
 /* peak-favourite tag in the player, star in the track list */
 .site .cs-fav { display: inline-block; margin-left: 10px; padding: 2px 8px; border: 2px solid var(--accent); color: var(--accent-text); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; vertical-align: 1px; }
 .site .cs-star { color: var(--accent-text); }
+
+/* extra controls: shuffle, loop, volume, keyboard hint */
+.site .cs-opts { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.site .cs-btn.sm { width: 34px; height: 34px; }
+.site .cs-btn.sm.on { background: var(--accent); color: var(--on-accent, #fff); box-shadow: 3px 3px 0 var(--ink); }
+.site .cs-vol { width: 86px; accent-color: var(--accent); }
+.site .cs-keys { margin: 10px 0 0; font-size: 0.7rem; letter-spacing: 0.04em; color: var(--muted); opacity: 0.8; }
+@media (hover: none) { .site .cs-keys { display: none; } }
+@media (max-width: 560px) { .site .cs-ctrl { flex-wrap: wrap; } .site .cs-opts { margin-left: 0; width: 100%; } .site .cs-vol { flex: 1; } }
