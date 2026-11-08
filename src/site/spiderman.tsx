@@ -107,7 +107,7 @@ export function SpiderSprite({ frame }: { frame: Frame }) {
 /** Spider-Man in profile (facing left), sitting on a ledge and coding on a laptop with a headset. `leg` (0-3) swings his legs, `typing` alternates the hand. */
 const CP_W = 28;
 const CP_H = 28;
-const CODER_FILL: Record<string, string> = { ...SM_FILL, L: '#8d939e', G: '#5f646d', H: '#2c2c36', C: '#5ad1ff', D: '#142a70' };
+const CODER_FILL: Record<string, string> = { ...SM_FILL, r: '#b4141a', L: '#8d939e', G: '#5f646d', H: '#2c2c36', C: '#5ad1ff', D: '#142a70' };
 const NEAR_FOOT = [12, 16, 20, 16];
 const FAR_FOOT = [20, 16, 12, 16];
 
@@ -153,6 +153,8 @@ function buildCoder(leg: number, typing: number, gaze: number): { x: number; y: 
     rect(6, 5, 7, 8, 'H'); rect(15, 5, 16, 8, 'H'); put(6, 6, 'C'); put(6, 7, 'C'); put(16, 6, 'C'); put(16, 7, 'C');
     put(8, 9, 'H'); put(9, 10, 'H'); put(10, 10, 'C');
   }
+  // faint web grid on the red suit (a slightly darker red every 4th row and column)
+  for (const [k, v] of [...cells]) { const [x, y] = k.split(',').map(Number); if (v === 'R' && (x % 4 === 0 || y % 4 === 0)) cells.set(k, 'r'); }
   for (const k of [...cells.keys()]) {
     const [x, y] = k.split(',').map(Number);
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (!cells.has(`${x + dx},${y + dy}`)) put(x + dx, y + dy, 'K');
