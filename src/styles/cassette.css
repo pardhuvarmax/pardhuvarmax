@@ -44,16 +44,13 @@
 .site .cs-cover { flex: none; width: clamp(96px, 20vw, 168px); aspect-ratio: 1; object-fit: cover; border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--accent); }
 .site .cs-head .cs-now { min-width: 0; }
 
-/* sticky-paper notice: fixed paper colours so it reads the same in dark and light themes */
-.site .cs-sticky { position: relative; width: min(340px, 100%); margin: 30px 0 0; padding: 26px 20px 20px; background: #d4a82a; color: #241a02; border: 2px solid #1a1505; box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.55); transform: rotate(2deg); font-size: 0.86rem; line-height: 1.55; }
-.site .cs-sticky::before { content: ''; position: absolute; top: -13px; left: 50%; width: 92px; height: 26px; transform: translateX(-50%) rotate(2deg); background: rgba(255, 255, 255, 0.55); border: 1px solid rgba(0, 0, 0, 0.18); }
-.site .cs-sticky::after { content: ''; position: absolute; right: 0; bottom: 0; width: 22px; height: 22px; background: linear-gradient(135deg, rgba(0, 0, 0, 0.16) 50%, transparent 50%); }
-.site .cs-sticky b { display: block; margin-bottom: 8px; font-family: var(--display); font-weight: 900; font-size: 0.95rem; letter-spacing: 0.14em; text-transform: uppercase; }
-.site .cs-sticky p { margin: 0; color: inherit; }
-@media (prefers-reduced-motion: no-preference) { .site .cs-sticky { transition: transform 0.2s; } .site .cs-sticky:hover { transform: rotate(0deg); } }
+/* outlined notice: "!" icon + bold text, no fill */
+.site .cs-notice { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border: 3px solid var(--ink); background: transparent; color: var(--text); }
+.site .cs-bang { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border: 3px solid var(--ink); font-family: var(--display); font-weight: 900; font-size: 1.3rem; line-height: 1; }
+.site .cs-notice p { margin: 0; font-weight: 800; font-size: 0.84rem; line-height: 1.5; letter-spacing: 0.01em; color: inherit; }
 
-/* player on the left, sticky note on its right side (stacks on narrow screens) */
+/* player on the left, notice on its right side (stacks on narrow screens) */
 .site .cs-stage { display: flex; align-items: flex-start; gap: clamp(24px, 4vw, 56px); margin-top: clamp(34px, 5vw, 56px); }
 .site .cs-stage .cs-deck { flex: 1 1 0; min-width: 0; margin-top: 0; }
-.site .cs-stage .cs-sticky { flex: none; width: 260px; margin: 30px 0 0; }
-@media (max-width: 900px) { .site .cs-stage { flex-direction: column; } .site .cs-stage .cs-sticky { width: min(340px, 100%); margin-top: 8px; } }
+.site .cs-stage .cs-notice { flex: none; width: 290px; }
+@media (max-width: 900px) { .site .cs-stage { flex-direction: column; } .site .cs-stage .cs-notice { width: 100%; } }

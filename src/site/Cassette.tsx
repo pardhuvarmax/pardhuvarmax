@@ -17,7 +17,7 @@ function Reels() {
 }
 
 export default function Cassette() {
-  const disclaimer = cassette.disclaimer ? <aside className="cs-sticky" aria-label="Notice"><b>Notice</b><p>{cassette.disclaimer}</p></aside> : null;
+  const disclaimer = cassette.disclaimer ? <aside className="cs-notice" role="note"><span className="cs-bang" aria-hidden="true">!</span><p>{cassette.disclaimer}</p></aside> : null;
   const albums = cassette.albums.filter((a) => a.tracks?.some((t) => t.src));
   const audio = useRef<HTMLAudioElement>(null);
   const wantPlay = useRef(false);
