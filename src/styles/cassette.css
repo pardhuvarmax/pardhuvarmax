@@ -115,3 +115,4 @@
 .site .cs-keys { margin: 10px 0 0; font-size: 0.7rem; letter-spacing: 0.04em; color: var(--muted); opacity: 0.8; }
 @media (hover: none) { .site .cs-keys { display: none; } }
 @media (max-width: 560px) { .site .cs-ctrl { flex-wrap: wrap; } .site .cs-opts { margin-left: 0; width: 100%; } .site .cs-vol { flex: 1; } }
+@media (max-width: 560px) { .site .cs-a { display: none; } }
