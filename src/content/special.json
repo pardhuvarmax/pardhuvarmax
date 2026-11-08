@@ -5,7 +5,7 @@
   "dotSize": 1.5,
   "dotSpacing": 26,
   "dotOpacity": 16,
-  "cursorEnabled": true,
+  "cursorEnabled": false,
   "cursorRadius": 190,
   "cursorDepth": 15,
   "cursorGrow": 2.6,
