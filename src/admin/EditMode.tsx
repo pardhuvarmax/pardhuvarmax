@@ -5,6 +5,7 @@ import { api } from './api';
 import { COLLECTIONS, type FileCollection } from './schemas';
 import { FileEditor, PostEditor, type Toast } from './Admin';
 import { confirmDiscard } from './unsaved';
+import { SignedOutPage } from '../site/BrokenPages';
 import '../styles/admin.css';
 import '../styles/editmode.css';
 
@@ -41,6 +42,12 @@ export default function EditMode({ request }: { request: number }) {
   const [menu, setMenu] = useState(false);
   const [action, setAction] = useState<(Action & { n: number }) | null>(null);
   const [toast, setToast] = useState<Toast>(null);
+  const [expired, setExpired] = useState(false); // the session ended while editing
+  useEffect(() => {
+    const on = () => setExpired(true);
+    window.addEventListener('admin:expired', on);
+    return () => window.removeEventListener('admin:expired', on);
+  }, []);
 
   const refresh = useCallback(
     () =>
@@ -157,6 +164,7 @@ export default function EditMode({ request }: { request: number }) {
         </>
       )}
       {toast && <div className={`em-toast ${toast.kind}`} role="status">{toast.text}</div>}
+      {expired && <SignedOutPage onSignIn={() => window.location.assign('/login')} />}
     </div>
   );
 }

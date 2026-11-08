@@ -1,10 +1,13 @@
 import { compressImage } from './media';
 
 export class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(public status: number, message: string, public retryAfter?: number) {
     super(message);
   }
 }
+
+// calls that are allowed to fail with 401 on their own (a wrong code, not signed in yet); anything else means the session ended
+const AUTH_ACTIONS = ['login', 'google', 'status', 'oauth-start', 'oauth-callback', 'logout'];
 
 export async function api<T = any>(action: string, opts: { query?: Record<string, string>; body?: unknown } = {}): Promise<T> {
   const qs = new URLSearchParams({ action, ...(opts.query ?? {}) });
@@ -21,7 +24,10 @@ export async function api<T = any>(action: string, opts: { query?: Record<string
   } catch {
     /* non-JSON */
   }
-  if (!res.ok) throw new ApiError(res.status, data?.error ?? `Request failed (${res.status})`);
+  if (!res.ok) {
+    if (res.status === 401 && !AUTH_ACTIONS.includes(action)) window.dispatchEvent(new Event('admin:expired'));
+    throw new ApiError(res.status, data?.error ?? `Request failed (${res.status})`, typeof data?.retryAfter === 'number' ? data.retryAfter : undefined);
+  }
   if (data === null) throw new ApiError(res.status, 'The admin service did not answer. Check that the API is deployed.');
   return data as T;
 }

@@ -8,6 +8,7 @@ import { useTheme } from './useTheme';
 import DotGrid from './DotGrid';
 import MiniPlayer from './MiniPlayer';
 import CommandPalette, { openPalette } from './CommandPalette';
+import { MaintenanceGate } from './NetworkGate';
 import { SpiderSprite, type Frame } from './spiderman';
 import { currentTrack, usePlayer } from '../lib/player';
 import { useDynamicColors } from './useDynamicColors';
@@ -191,6 +192,7 @@ export default function SiteLayout() {
       )}
       <DotGrid />
       <CommandPalette theme={theme} toggleTheme={toggle} />
+      <MaintenanceGate />
       {pathname !== '/cassette' && <MiniPlayer />}
       <div className="site-bg" aria-hidden="true">
         <i className="blob b1" />

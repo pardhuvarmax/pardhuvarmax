@@ -2,7 +2,8 @@ import { useCallback, useEffect, useRef, useState, type ClipboardEvent, type For
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { siGithub, siOrcid } from 'simple-icons';
-import { api } from './api';
+import { api, ApiError } from './api';
+import { ForbiddenPage, SlowDownPage } from '../site/BrokenPages';
 import DotGrid from '../site/DotGrid';
 import { useDynamicColors } from '../site/useDynamicColors';
 import { SpiderSprite, type Frame } from '../site/spiderman';
@@ -38,10 +39,20 @@ export function LoginScreen({ configured, totp = true, google = null, github = f
   const ret = returnTo ?? backTo; // where GitHub / ORCID send you after signing in
   useEffect(() => {
     const e = new URLSearchParams(window.location.search).get('error'); // sent back by a failed GitHub / ORCID sign-in
-    if (e) setErr(e);
+    if (!e) return;
+    if (/not allowed/i.test(e)) setBlocked({ kind: '403', message: e });
+    else if (/too many attempts/i.test(e)) setBlocked({ kind: '429', seconds: 600 });
+    else setErr(e);
   }, []);
   const [digits, setDigits] = useState<string[]>(Array(LEN).fill(''));
   const [err, setErr] = useState('');
+  // a refused account (403) or too many attempts (429) gets a full error page; a wrong code (401) stays inline
+  const [blocked, setBlocked] = useState<{ kind: '403' | '429'; message?: string; seconds?: number } | null>(null);
+  const fail = useCallback((e: unknown) => {
+    if (e instanceof ApiError && e.status === 403) setBlocked({ kind: '403', message: e.message });
+    else if (e instanceof ApiError && e.status === 429) setBlocked({ kind: '429', seconds: e.retryAfter ?? 600 });
+    else fail(e);
+  }, []);
   const [busy, setBusy] = useState(false);
   const [round, setRound] = useState(0); // bumps after a wrong code so the boxes shake again
   const refs = useRef<(HTMLInputElement | null)[]>([]);
@@ -83,14 +94,14 @@ export function LoginScreen({ configured, totp = true, google = null, github = f
               await api('google', { body: { credential } });
               onDone();
             } catch (e) {
-              setErr((e as Error).message);
+              fail(e);
               setRound((r) => r + 1);
             }
           },
         });
         gid.renderButton(googleBtn.current, { theme: 'filled_black', size: 'large', shape: 'rectangular', text: 'signin_with', logo_alignment: 'left', width: 320 });
       })
-      .catch((e) => setErr((e as Error).message));
+      .catch((e) => fail(e));
     return () => { cancelled = true; };
   }, [google, onDone]);
 
@@ -103,7 +114,7 @@ export function LoginScreen({ configured, totp = true, google = null, github = f
         await api('login', { body: { code } });
         onDone();
       } catch (e) {
-        setErr((e as Error).message);
+        fail(e);
         setRound((r) => r + 1);
         setDigits(Array(LEN).fill(''));
         setTimeout(() => refs.current[0]?.focus(), 0);
@@ -222,6 +233,8 @@ export function LoginScreen({ configured, totp = true, google = null, github = f
 
         <Link className="lg-back" to={backTo}><ArrowLeft size={14} /> Back to site</Link>
       </main>
+      {blocked?.kind === '403' && <ForbiddenPage message={blocked.message} onClose={() => setBlocked(null)} />}
+      {blocked?.kind === '429' && <SlowDownPage seconds={blocked.seconds ?? 600} onRetry={() => setBlocked(null)} />}
     </div>
   );
 }

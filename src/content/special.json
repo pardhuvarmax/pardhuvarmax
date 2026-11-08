@@ -11,5 +11,7 @@
   "cursorGrow": 2.6,
   "cursorGlow": 10,
   "showLocalTime": true,
-  "timeZone": "Asia/Kolkata"
+  "timeZone": "Asia/Kolkata",
+  "maintenance": false,
+  "maintenanceText": ""
 }

@@ -67,3 +67,84 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
   .nfb-num, .nfb-s::before, .nfb-s::after, .nfb-noise, .nfb-scan::after, .nfb-h, .nfb-h::before, .nfb-h::after, .nfb-blink { animation: none; }
   .nfb-s::before, .nfb-s::after, .nfb-h::before, .nfb-h::after { display: none; }
 }
+
+/* ---------- buttons, error line ---------- */
+.nfb-primary { background: #f2f2f2; color: #000; }
+.nfb-primary:hover:not(:disabled), .nfb-primary:focus-visible { background: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35); }
+.nfb-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.nfb-err { max-width: 56ch; margin: 18px auto 0; font-size: 0.74rem; color: #7d7d7d; word-break: break-word; }
+
+/* ---------- Spider-Man scenes (everything in greys; he is the only colour) ---------- */
+.nfb .bs { position: relative; width: min(440px, 100%); height: 220px; margin: 22px auto 0; text-align: left; }
+.nfb .bs-sp { position: absolute; width: 100px; height: 108px; bottom: 0; }
+.nfb .bs-sp svg { display: block; }
+.nfb .bs-bubble { position: absolute; z-index: 4; max-width: 230px; padding: 8px 12px; background: #f2f2f2; color: #000; border: 3px solid #f2f2f2; font: 800 0.78rem/1.25 'JetBrains Mono', ui-monospace, monospace; }
+.nfb .bs-bubble::after { content: ''; position: absolute; left: 24px; bottom: -11px; width: 12px; height: 12px; background: #f2f2f2; transform: rotate(45deg); }
+.nfb .bs svg { overflow: visible; }
+.nfb .bs-over { position: absolute; }
+@media (max-width: 480px) { .nfb .bs { transform: scale(0.82); transform-origin: top center; margin-bottom: -38px; } }
+
+/* 500: pulls the plug out and puts it back */
+.nfb .bs500 .bs-mon { position: absolute; left: 16px; top: 34px; width: 100px; height: 70px; display: grid; place-items: center; border: 3px solid #f2f2f2; background: #111; font: 900 1.5rem/1 'JetBrains Mono', monospace; color: #f2f2f2; animation: bsScreen 6s steps(1, end) infinite; }
+.nfb .bs500 .bs-cable { position: absolute; inset: 0; width: 100%; height: 100%; }
+.nfb .bs500 .bs-socket { position: absolute; left: 392px; top: 126px; }
+.nfb .bs500 .bs-pullers { position: absolute; inset: 0; animation: bsPull 6s ease-in-out infinite; }
+.nfb .bs500 .bs-plug { position: absolute; left: 352px; top: 128px; }
+.nfb .bs500 .bs-sp { left: 268px; }
+@keyframes bsPull { 0%, 30% { transform: none; } 38%, 62% { transform: translateX(-44px); } 70%, 100% { transform: none; } }
+@keyframes bsScreen { 0%, 30% { background: #111; color: #f2f2f2; } 32% { background: #000; color: #000; } 34% { background: #111; color: #f2f2f2; } 36% { background: #000; color: #000; } 38%, 62% { background: #000; color: #000; } 64% { background: #111; color: #f2f2f2; } 66% { background: #000; color: #000; } 68%, 100% { background: #111; color: #f2f2f2; } }
+
+/* 403: webs a NO ENTRY sign up and taps it to test it */
+.nfb .bs403 { cursor: pointer; }
+.nfb .bs403 .bs-web { position: absolute; inset: 0; width: 100%; height: 100%; }
+.nfb .bs403 .bs-sign { position: absolute; left: 250px; top: 52px; width: 142px; height: 80px; display: grid; place-items: center; border: 5px solid #f2f2f2; background: #000; font: 900 1.45rem/1.05 'Archivo', 'Arial Black', sans-serif; text-align: center; color: #f2f2f2; transform: rotate(-4deg); animation: bsWobble 2.8s ease-in-out infinite; }
+.nfb .bs403 .bs-sp { left: 96px; }
+.nfb .bs403 .bs-tap { animation: bsTap 2.8s ease-in-out infinite; }
+@keyframes bsTap { 0%, 38%, 100% { transform: none; } 50% { transform: translateX(26px); } 56% { transform: translateX(20px); } 66% { transform: none; } }
+@keyframes bsWobble { 0%, 48%, 100% { transform: rotate(-4deg); } 52% { transform: rotate(-8deg) translateX(4px); } 58% { transform: rotate(-1deg); } 64% { transform: rotate(-5deg); } }
+
+/* 401: disguised guard with a board */
+.nfb .bs401 .bs-guard { left: 64px; animation: bsBob 1.4s ease-in-out infinite; }
+.nfb .bs401 .bs-board { position: absolute; left: 112px; top: 6px; width: 230px; }
+.nfb .bs401 .bs-board-b { padding: 12px 10px; border: 4px solid #f2f2f2; background: #000; font: 900 1.65rem/1.05 'Archivo', 'Arial Black', sans-serif; text-align: center; color: #f2f2f2; transform: rotate(-2deg); animation: bsBoardWave 2.4s ease-in-out infinite; }
+.nfb .bs401 .bs-stick { width: 6px; height: 74px; margin-left: 18px; background: #f2f2f2; }
+@keyframes bsBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes bsBoardWave { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+
+/* 429: treadmill */
+.nfb .bs429 .bs-run { position: absolute; left: 150px; bottom: 26px; width: 100px; height: 108px; }
+.nfb .bs429 .bs-run .bs-sp { left: 0; bottom: 0; }
+.nfb .bs429 .bs-belt { position: absolute; left: 90px; width: 240px; bottom: 14px; height: 12px; background: repeating-linear-gradient(90deg, #f2f2f2 0 14px, #555 14px 28px); animation: bsBelt linear infinite; }
+.nfb .bs429 .bs-belt.stop { animation-play-state: paused; }
+.nfb .bs429 .bs-belt-legs { position: absolute; left: 90px; width: 240px; bottom: 0; height: 14px; background: linear-gradient(#777, #777) left / 10px 100% no-repeat, linear-gradient(#777, #777) right / 10px 100% no-repeat; }
+.nfb .bs429 .bs-sweat { position: absolute; width: 5px; height: 8px; background: #f2f2f2; animation: bsSweat 0.9s linear infinite; }
+.nfb .bs429 .s1 { left: 20px; top: 12px; }
+.nfb .bs429 .s2 { left: 8px; top: 34px; animation-delay: 0.3s; }
+.nfb .bs429 .s3 { left: 34px; top: 4px; animation-delay: 0.6s; }
+@keyframes bsBelt { to { background-position: -28px 0; } }
+@keyframes bsSweat { 0% { transform: translate(0, 0); } 100% { transform: translate(-14px, -18px); opacity: 0 !important; } }
+
+/* offline: tin-can phone */
+.nfb .bsoff .bs-sp { left: 40px; }
+.nfb .bsoff .bs-talk { animation: bsLean 1.6s ease-in-out infinite; }
+.nfb .bsoff .bs-string { position: absolute; inset: 0; width: 100%; height: 100%; }
+.nfb .bsoff .bs-can { position: absolute; }
+.nfb .bsoff .bs-bubble.shout { animation: bsShout 0.7s steps(2, end) infinite; transform-origin: left bottom; }
+@keyframes bsLean { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(2deg); } }
+@keyframes bsShout { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
+
+/* 503: pizza break */
+.nfb .bs503 .bs-beam { position: absolute; left: 40px; top: 150px; width: 300px; height: 10px; background: #f2f2f2; box-shadow: 0 4px 0 #555; }
+.nfb .bs503 .bs-sit { left: 130px; top: 70px; bottom: auto; }
+.nfb .bs503 .bs-pizza { position: absolute; left: 192px; top: 104px; animation: bsMunch 1.1s ease-in-out infinite; }
+.nfb .bs503 .bs-steam { position: absolute; width: 4px; height: 4px; background: #cfcfcf; opacity: 0; top: -6px; animation: bsSteam 1.8s linear infinite; }
+.nfb .bs503 .bs-steam.a { left: 8px; } .nfb .bs503 .bs-steam.b { left: 16px; animation-delay: 0.6s; } .nfb .bs503 .bs-steam.c { left: 24px; animation-delay: 1.2s; }
+.nfb .bs503 .bs-hang { position: absolute; inset: 0; width: 100%; height: 100%; }
+.nfb .bs503 .bs-closed { position: absolute; left: 236px; top: 178px; width: 104px; height: 36px; display: grid; place-items: center; border: 3px solid #f2f2f2; background: #000; font: 900 0.8rem/1 'Archivo', 'Arial Black', sans-serif; letter-spacing: 0.06em; color: #f2f2f2; transform-origin: 50% -18px; animation: bsSwing 3.2s ease-in-out infinite; }
+@keyframes bsMunch { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes bsSteam { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 0.8; } 100% { transform: translateY(-22px); opacity: 0; } }
+@keyframes bsSwing { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .nfb .bs *, .nfb .bs-bubble { animation: none !important; }
+}

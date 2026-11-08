@@ -39,9 +39,11 @@ const ALLOWED = [
 
 class HttpError extends Error {
   status: number;
-  constructor(status: number, message: string) {
+  retryAfter?: number; // seconds, for 429
+  constructor(status: number, message: string, retryAfter?: number) {
     super(message);
     this.status = status;
+    this.retryAfter = retryAfter;
   }
 }
 
@@ -104,7 +106,7 @@ async function verifyGoogle(credential: unknown): Promise<string> {
   const issuerOk = t.iss === 'accounts.google.com' || t.iss === 'https://accounts.google.com';
   const email = String(t.email ?? '').toLowerCase();
   if (t.aud !== clientId || !issuerOk || String(t.email_verified) !== 'true' || Number(t.exp) * 1000 < Date.now() || !allowedEmails().includes(email)) {
-    throw new HttpError(401, 'This Google account is not allowed to sign in.');
+    throw new HttpError(403, 'This Google account is not allowed to sign in.');
   }
   return email;
 }
@@ -200,7 +202,10 @@ function throttle(ip: string) {
   const rec = attempts.get(ip);
   if (rec && now - rec.first > 10 * 60_000) attempts.delete(ip);
   const cur = attempts.get(ip);
-  if (cur && cur.count >= 5) throw new HttpError(429, 'Too many attempts. Try again in 10 minutes.');
+  if (cur && cur.count >= 5) {
+    const wait = Math.max(1, Math.ceil((cur.first + 10 * 60_000 - now) / 1000));
+    throw new HttpError(429, 'Too many attempts. Try again in a few minutes.', wait);
+  }
 }
 function recordFailure(ip: string) {
   const rec = attempts.get(ip);
@@ -392,7 +397,7 @@ export async function handleAdmin(req: AdminRequest, opts: AdminOptions = {}): P
       try {
         await verifyGoogle(req.body?.credential);
       } catch (e) {
-        if (e instanceof HttpError && e.status === 401) recordFailure(ip);
+        if (e instanceof HttpError && (e.status === 401 || e.status === 403)) recordFailure(ip);
         throw e;
       }
       attempts.delete(ip);
@@ -438,7 +443,7 @@ export async function handleAdmin(req: AdminRequest, opts: AdminOptions = {}): P
         const who = await oauthIdentity(p, code, callbackUrl(req, p));
         if (!who || !oauthAllowed(p, who)) {
           recordFailure(ip);
-          throw new HttpError(401, 'This account is not allowed to sign in.');
+          throw new HttpError(403, 'This account is not allowed to sign in.');
         }
         attempts.delete(ip);
         const from = safeFrom(fromB64 ? Buffer.from(fromB64, 'base64url').toString() : '/');
@@ -506,7 +511,11 @@ export async function handleAdmin(req: AdminRequest, opts: AdminOptions = {}): P
 
     throw new HttpError(404, 'Unknown action.');
   } catch (e) {
-    if (e instanceof HttpError) return { status: e.status, json: { error: e.message }, headers: { 'Cache-Control': 'no-store' } };
+    if (e instanceof HttpError) {
+      const headers: Record<string, string> = { 'Cache-Control': 'no-store' };
+      if (e.retryAfter) headers['Retry-After'] = String(e.retryAfter);
+      return { status: e.status, json: e.retryAfter ? { error: e.message, retryAfter: e.retryAfter } : { error: e.message }, headers };
+    }
     return { status: 500, json: { error: 'Server error.' }, headers: { 'Cache-Control': 'no-store' } };
   }
 }

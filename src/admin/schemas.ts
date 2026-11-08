@@ -272,6 +272,8 @@ export const COLLECTIONS: Collection[] = [
       { key: 'bgTextPosition', label: 'Background text position', type: 'select', options: ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'center'] },
       { key: 'showLocalTime', label: 'Footer: show your local time', type: 'boolean', help: 'A line in the footer like "It is 02:41 in Hyderabad. After midnight, probably still awake."' },
       { key: 'timeZone', label: 'Footer: time zone', type: 'text', help: 'An IANA time zone name, e.g. Asia/Kolkata or Europe/London.' },
+      { key: 'maintenance', label: 'Maintenance mode', type: 'boolean', help: 'Turns the whole site into the "Back soon" (503) page for visitors. You still see the site, with a thin banner, while signed in. Remember to switch it off again.' },
+      { key: 'maintenanceText', label: 'Maintenance message (optional)', type: 'textarea', help: 'Shown on the "Back soon" page. Leave empty for the default.' },
       { key: 'dotShape', label: 'Dots: shape', type: 'select', options: ['circle', 'square', 'diamond'] },
       { key: 'dotSize', label: 'Dots: size', type: 'number', min: 0.5, max: 5, step: 0.1, help: 'Resting dot width in px. Default 1.5.' },
       { key: 'dotSpacing', label: 'Dots: spacing', type: 'number', min: 12, max: 60, step: 1, help: 'Gap between dots in px. Default 26.' },

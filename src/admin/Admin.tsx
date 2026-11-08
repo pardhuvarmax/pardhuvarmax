@@ -8,6 +8,7 @@ import { EMPTY_META, parsePost, slugify, stringifyPost, type PostMeta } from '..
 import { renderMarkdown } from '../lib/markdown';
 import { confirmDiscard, useUnsavedGuard } from './unsaved';
 import { HistoryMenu, ReviewDialog } from './History';
+import { SignedOutPage } from '../site/BrokenPages';
 import '../styles/site.css';
 import '../styles/admin.css';
 
@@ -304,6 +305,12 @@ export default function Admin() {
   const [status, setStatus] = useState<Status | null>(null);
   const [active, setActive] = useState(COLLECTIONS[0].id);
   const [toast, setToast] = useState<Toast>(null);
+  const [expired, setExpired] = useState(false); // the session ended while editing
+  useEffect(() => {
+    const on = () => setExpired(true);
+    window.addEventListener('admin:expired', on);
+    return () => window.removeEventListener('admin:expired', on);
+  }, []);
 
   const refresh = useCallback(() => api<Status>('status').then(setStatus).catch(() => setStatus({ authed: false, local: false, configured: false })), []);
   useEffect(() => { refresh(); document.title = 'Admin'; }, [refresh]);
@@ -346,6 +353,7 @@ export default function Admin() {
         )}
       </section>
       {toast && <div className={`toast ${toast.kind}`} role="status">{toast.text}</div>}
+      {expired && <SignedOutPage onSignIn={() => { setExpired(false); setStatus((st) => (st ? { ...st, authed: false } : st)); }} />}
     </div>
   );
 }
