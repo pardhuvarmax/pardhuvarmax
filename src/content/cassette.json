@@ -2,43 +2,41 @@
   "intro": "Tapes I keep on repeat while I code, read papers and break things. Press a tape, hit play.",
   "albums": [
     {
-      "title": "Friends",
-      "artist": "Chase Atlantic",
+      "title": "Chase Atlantic",
+      "artist": "Favourites",
       "cover": "/uploads/friends-cover.jpg",
       "tracks": [
         {
           "title": "Friends (Intro loop)",
-          "src": "/uploads/chase-atlantic-friends.mp3"
+          "src": "/uploads/chase-atlantic-friends.mp3",
+          "artist": "Chase Atlantic"
         },
         {
           "title": "Drugs & Money (Instrumental)",
-          "src": "/uploads/chase-atlantic-drugs-and-money-instrumental.mp3"
+          "src": "/uploads/chase-atlantic-drugs-and-money-instrumental.mp3",
+          "artist": "Chase Atlantic"
         },
         {
           "title": "Slow Down (Instrumental)",
-          "src": "/uploads/chase-atlantic-slow-down-instrumental.mp3"
+          "src": "/uploads/chase-atlantic-slow-down-instrumental.mp3",
+          "artist": "Chase Atlantic"
         }
       ]
     },
     {
-      "title": "After Hours",
-      "artist": "The Weeknd",
+      "title": "The Weeknd",
+      "artist": "Favourites",
       "cover": "/uploads/after-hours-cover.jpg",
       "tracks": [
         {
           "title": "Blinding Lights (Instrumental)",
-          "src": "/uploads/the-weeknd-blinding-lights-instrumental.mp3"
-        }
-      ]
-    },
-    {
-      "title": "Trilogy",
-      "artist": "The Weeknd",
-      "cover": "/uploads/trilogy-cover.jpg",
-      "tracks": [
+          "src": "/uploads/the-weeknd-blinding-lights-instrumental.mp3",
+          "artist": "The Weeknd"
+        },
         {
           "title": "High For This (Instrumental)",
-          "src": "/uploads/the-weeknd-high-for-this-instrumental.mp3"
+          "src": "/uploads/the-weeknd-high-for-this-instrumental.mp3",
+          "artist": "The Weeknd"
         }
       ]
     }
