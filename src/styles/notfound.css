@@ -100,35 +100,26 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 .nfb .bs500 .bs-pullers { position: absolute; inset: 0; animation: bsPull 8s infinite; }
 .nfb .bs500 .bs-plug { position: absolute; left: 352px; top: 128px; }
 .nfb .bs500 .bs-sp { left: 268px; }
-.nfb .bs500 .bs-lean { position: absolute; inset: 0; transform-origin: 50% 100%; animation: bsLean500 8s infinite; }
 .nfb .bs500 .bs-spark { position: absolute; left: 392px; top: 142px; width: 5px; height: 5px; background: #fff; opacity: 0; animation: bsSpark 8s infinite; }
 .nfb .bs500 .bs-spark.b { --x: -14px; --y: -20px; } .nfb .bs500 .bs-spark.a { --x: 8px; --y: -24px; } .nfb .bs500 .bs-spark.c { --x: 18px; --y: -6px; }
 .nfb .bs500 .bs-spark.d { --x: -14px; --y: -20px; animation-name: bsSpark2; } .nfb .bs500 .bs-spark.e { --x: 8px; --y: -24px; animation-name: bsSpark2; } .nfb .bs500 .bs-spark.f { --x: 18px; --y: -6px; animation-name: bsSpark2; }
 @keyframes bsPull {
   0%, 29% { transform: translateX(0); animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1); }
-  36%, 64% { transform: translateX(-44px); animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1); }
-  74%, 100% { transform: translateX(0); }
-}
-@keyframes bsLean500 {
-  0%, 14% { transform: rotate(0); animation-timing-function: ease-in-out; }
-  24% { transform: rotate(3deg); animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1); }
-  31% { transform: rotate(-7deg); animation-timing-function: ease-out; }
-  42%, 60% { transform: rotate(-2deg) scaleY(0.98); animation-timing-function: ease-in-out; }
-  68% { transform: rotate(5deg); animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1.4); }
-  76%, 100% { transform: rotate(0); }
+  36%, 70% { transform: translateX(-44px); animation-timing-function: cubic-bezier(0.5, 0, 0.3, 1); }
+  77%, 100% { transform: translateX(0); }
 }
 @keyframes bsCrt {
   0%, 35% { transform: scale(1, 1); opacity: 1; background: #161616; animation-timing-function: ease-in; }
   38% { transform: scale(1, 0.04); background: #fff; animation-timing-function: ease-in; }
   41% { transform: scale(0, 0.04); opacity: 1; }
-  42%, 74% { transform: scale(0, 0.04); opacity: 0; }
-  75% { transform: scale(0.05, 0.04); opacity: 1; background: #fff; animation-timing-function: ease-out; }
-  78% { transform: scale(1, 0.04); background: #fff; animation-timing-function: ease-out; }
-  84% { transform: scale(1, 1); background: #161616; }
+  42%, 76% { transform: scale(0, 0.04); opacity: 0; }
+  77% { transform: scale(0.05, 0.04); opacity: 1; background: #fff; animation-timing-function: ease-out; }
+  80% { transform: scale(1, 0.04); background: #fff; animation-timing-function: ease-out; }
+  87% { transform: scale(1, 1); background: #161616; }
   100% { transform: scale(1, 1); opacity: 1; background: #161616; }
 }
 @keyframes bsSpark { 0%, 29% { opacity: 0; transform: none; } 30% { opacity: 1; transform: none; } 37%, 100% { opacity: 0; transform: translate(var(--x), var(--y)); } }
-@keyframes bsSpark2 { 0%, 73% { opacity: 0; transform: none; } 74% { opacity: 1; transform: none; } 81%, 100% { opacity: 0; transform: translate(var(--x), var(--y)); } }
+@keyframes bsSpark2 { 0%, 75% { opacity: 0; transform: none; } 76% { opacity: 1; transform: none; } 83%, 100% { opacity: 0; transform: translate(var(--x), var(--y)); } }
 
 /* 403: strands shoot out, the sign drops and bounces, he hops over, taps it, hops back */
 .nfb .bs403 { cursor: pointer; }
@@ -138,53 +129,46 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 .nfb .bs403 .bs-sp { left: 96px; }
 .nfb .bs403 .bs-walk { animation: bsWalk 7s infinite; }
 .nfb .bs403 .bs-hop { position: absolute; inset: 0; animation: bsHop 7s infinite; }
-.nfb .bs403 .vis-a { animation: bsVisA 7s steps(1, end) infinite; }
-.nfb .bs403 .vis-b { animation: bsVisB 7s steps(1, end) infinite; }
 @keyframes bsStrand { 0% { stroke-dashoffset: 1; opacity: 1; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); } 9%, 92% { stroke-dashoffset: 0; opacity: 1; } 98%, 100% { stroke-dashoffset: 0; opacity: 0; } }
 @keyframes bsSign {
   0% { opacity: 0; transform: translateY(-80px) rotate(-4deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.6); }
-  6% { opacity: 1; transform: translateY(-80px) rotate(-4deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.6); }
-  13% { transform: translateY(6px) rotate(-4deg); animation-timing-function: ease-out; }
-  17% { transform: translateY(-3px) rotate(-4deg); animation-timing-function: ease-in-out; }
-  21%, 45% { transform: translateY(0) rotate(-4deg); animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1); }
-  48% { transform: translateY(0) rotate(-11deg) translateX(6px); animation-timing-function: ease-in-out; }
-  54% { transform: rotate(1deg); animation-timing-function: ease-in-out; }
-  60% { transform: rotate(-7deg); animation-timing-function: ease-in-out; }
-  66% { transform: rotate(-2.5deg); animation-timing-function: ease-in-out; }
-  72%, 92% { transform: rotate(-4deg); opacity: 1; }
+  8% { opacity: 1; transform: translateY(-80px) rotate(-4deg); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.6); }
+  15% { transform: translateY(6px) rotate(-4deg); animation-timing-function: ease-out; }
+  19% { transform: translateY(-3px) rotate(-4deg); animation-timing-function: ease-in-out; }
+  23%, 46% { transform: translateY(0) rotate(-4deg); animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1); }
+  48% { transform: translateX(6px) rotate(-11deg); animation-timing-function: ease-in-out; }
+  51% { transform: rotate(-3deg); animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1); }
+  53% { transform: translateX(4px) rotate(-9deg); animation-timing-function: ease-in-out; }
+  58% { transform: rotate(-1deg); animation-timing-function: ease-in-out; }
+  63% { transform: rotate(-6deg); animation-timing-function: ease-in-out; }
+  68% { transform: rotate(-3deg); animation-timing-function: ease-in-out; }
+  74%, 92% { transform: rotate(-4deg); opacity: 1; }
   98%, 100% { transform: rotate(-4deg); opacity: 0; }
 }
 @keyframes bsWalk {
-  0%, 32% { transform: translateX(0); animation-timing-function: ease-in-out; }
-  43%, 55% { transform: translateX(28px); animation-timing-function: ease-in-out; }
-  66%, 100% { transform: translateX(0); }
+  0%, 33% { transform: translateX(0); animation-timing-function: linear; }
+  44%, 57% { transform: translateX(28px); animation-timing-function: linear; }
+  68%, 100% { transform: translateX(0); }
 }
 @keyframes bsHop {
-  0%, 32%, 43%, 55%, 66%, 100% { transform: translateY(0); }
-  37.5% { transform: translateY(-16px); } 60.5% { transform: translateY(-14px); }
+  0%, 33%, 36.5%, 40%, 43.5%, 57%, 60.5%, 64%, 67.5%, 100% { transform: translateY(0); animation-timing-function: ease-out; }
+  35%, 38.5%, 42%, 59%, 62.5%, 66% { transform: translateY(-5px); animation-timing-function: ease-in; }
 }
-@keyframes bsVisA { 0% { opacity: 1; } 44% { opacity: 0; } 55% { opacity: 1; } }
-@keyframes bsVisB { 0% { opacity: 0; } 44% { opacity: 1; } 55% { opacity: 0; } }
 
 /* 403: four taps and he loses it */
 .nfb .bs403.angry .bs-walk, .nfb .bs403.angry .bs-hop { animation: none; transform: none; }
-.nfb .bs403.angry .vis-a { animation: none; opacity: 0; }
-.nfb .bs403.angry .vis-b { animation: none; opacity: 1; }
 .nfb .bs403.angry .bs-strand, .nfb .bs403.angry .bs-sign { animation-play-state: paused; }
 .nfb .bs403 .bs-rage { position: absolute; left: 62px; top: -6px; width: 30px; height: 20px; display: none; }
 .nfb .bs403.angry .bs-rage { display: block; }
 .nfb .bs403 .bs-rage i { position: absolute; left: 0; top: 0; width: 14px; height: 14px; background: linear-gradient(#fff, #fff) 6px 0 / 3px 14px no-repeat, linear-gradient(#fff, #fff) 0 6px / 14px 3px no-repeat; animation: bsVein 0.35s steps(2, end) infinite; }
 .nfb .bs403 .bs-rage i:nth-child(2) { left: 16px; top: 4px; animation-delay: 0.12s; transform: scale(0.8); } .nfb .bs403 .bs-rage i:nth-child(3) { left: 6px; top: -10px; animation-delay: 0.2s; transform: scale(0.65); }
-.nfb .bs403.mad .bs-sp { animation: bsRage 0.12s linear infinite, bsWindup 1.1s ease-in forwards; transform-origin: 50% 100%; }
-.nfb .bs403.throw .bs-sp { animation: bsThrowArm 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards; transform-origin: 50% 100%; }
+.nfb .bs403.mad .bs-sp { animation: bsRage 0.12s linear infinite; }
 .nfb .bs403.mad .bs-bubble { animation: bsRage 0.1s linear infinite; font-size: 0.9rem; }
 .nfb .bs403.throw .bs-sign { animation: bsSignFly 0.85s cubic-bezier(0.5, 0, 0.9, 0.5) forwards; transform-origin: 50% 50%; z-index: 6; }
 .nfb .bs403.hit .bs-sign { animation: none; opacity: 0; }
 .nfb .bs403 .bs-hit { position: fixed; inset: 0; z-index: 7; pointer-events: none; animation: bsHitFlash 1.6s ease-out forwards; background: rgba(255, 255, 255, 0.0); }
 .nfb .bs403 .bs-hit svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 @keyframes bsRage { 0% { translate: -2px 0; } 50% { translate: 2px 1px; } 100% { translate: -2px 0; } }
-@keyframes bsWindup { 0% { rotate: 0deg; } 80%, 100% { rotate: -14deg; } }
-@keyframes bsThrowArm { 0% { rotate: -14deg; } 100% { rotate: 9deg; } }
 @keyframes bsVein { 0% { opacity: 1; } 50% { opacity: 0.35; } }
 @keyframes bsSignFly { 0% { opacity: 1; transform: translate(0, 0) scale(1) rotate(-4deg); } 100% { opacity: 1; transform: translate(-40px, 30px) scale(16) rotate(-24deg); } }
 @keyframes bsHitFlash { 0% { background: rgba(255, 255, 255, 0.9); opacity: 1; } 12% { background: rgba(255, 255, 255, 0.0); } 80% { opacity: 1; } 100% { opacity: 0; } }
@@ -192,12 +176,12 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 
 /* 401: disguised, scanning left and right, pushing his glasses up */
 .nfb .bs401 .bs-guard { left: 64px; }
-.nfb .bs401 .bs-scan { position: absolute; inset: 0; transform-origin: 50% 100%; animation: bsScan 4.4s ease-in-out infinite; }
+.nfb .bs401 .bs-scan { position: absolute; inset: 0; transform-origin: 50% 100%; animation: bsBreath 2.2s steps(1, end) infinite; }
 .nfb .bs401 .bs-glasses { animation: bsGlasses 4.4s ease-in-out infinite; }
 .nfb .bs401 .bs-board { position: absolute; left: 112px; top: 6px; width: 230px; transform-origin: 18px 100%; animation: bsBoard 4.4s ease-in-out infinite; }
 .nfb .bs401 .bs-board-b { padding: 12px 10px; border: 4px solid #f2f2f2; background: #000; font: 900 1.65rem/1.05 'Archivo', 'Arial Black', sans-serif; text-align: center; color: #f2f2f2; }
 .nfb .bs401 .bs-stick { width: 6px; height: 74px; margin-left: 18px; background: #f2f2f2; }
-@keyframes bsScan { 0%, 100% { transform: rotate(-2deg) scaleY(1); } 25% { transform: rotate(0) scaleY(1.012); } 50% { transform: rotate(2deg) scaleY(1); } 75% { transform: rotate(0) scaleY(1.012); } }
+@keyframes bsBreath { 0% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
 @keyframes bsBoard { 0%, 100% { transform: rotate(-2.5deg) translateY(0); } 50% { transform: rotate(2deg) translateY(-4px); } }
 @keyframes bsGlasses { 0%, 55% { transform: translateY(0); } 62%, 70% { transform: translateY(4px); } 78%, 100% { transform: translateY(0); } }
 
@@ -216,7 +200,6 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 
 /* offline: tin-can phone, shouting down the line */
 .nfb .bsoff .bs-sp { left: 40px; }
-.nfb .bsoff .bs-talk { transform-origin: 50% 100%; animation: bsShoutLean 3.2s infinite; }
 .nfb .bsoff .bs-string { position: absolute; inset: 0; width: 100%; height: 100%; }
 .nfb .bsoff .bs-frayed { transform-box: view-box; transform-origin: 162px 146px; animation: bsStringSway 3.2s ease-in-out infinite; }
 .nfb .bsoff .bs-can { position: absolute; }
@@ -226,11 +209,6 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 .nfb .bsoff .bs-bubble.say-once { animation: bsPopBubble 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4) both; }
 .nfb .bsoff .bs-wave { position: absolute; left: 118px; top: 112px; width: 26px; height: 44px; border-right: 4px solid #f2f2f2; border-radius: 50%; opacity: 0; transform-origin: 0 50%; animation: bsWave 3.2s ease-out infinite; }
 .nfb .bsoff .bs-wave.w2 { animation-delay: 0.14s; } .nfb .bsoff .bs-wave.w3 { animation-delay: 0.28s; }
-@keyframes bsShoutLean {
-  0%, 6% { transform: rotate(0) translateX(0); animation-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1.4); }
-  14%, 36% { transform: rotate(4deg) translateX(6px) scale(1.02); animation-timing-function: ease-in-out; }
-  52%, 100% { transform: rotate(0) translateX(0); }
-}
 @keyframes bsSay { 0% { opacity: 0; transform: scale(0.6); } 8% { opacity: 1; transform: scale(1.08); } 14% { transform: scale(1); } 78% { opacity: 1; transform: scale(1); } 92%, 100% { opacity: 0; transform: scale(0.96); } }
 @keyframes bsPopBubble { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
 @keyframes bsPopIn { from { opacity: 0; transform: translateY(-16px) scale(0.6); } to { opacity: 1; transform: none; } }
@@ -241,22 +219,21 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 /* 503: lunch break, one slice at a time */
 .nfb .bs503 .bs-beam { position: absolute; left: 40px; top: 150px; width: 300px; height: 10px; background: #f2f2f2; box-shadow: 0 4px 0 #555; }
 .nfb .bs503 .bs-sit { left: 130px; top: 70px; bottom: auto; }
-.nfb .bs503 .bs-chew { position: absolute; inset: 0; transform-origin: 50% 100%; animation: bsChew 3s ease-in-out infinite; }
+.nfb .bs503 .bs-chew { position: absolute; inset: 0; transform-origin: 50% 100%; animation: bsChew 3s steps(1, end) infinite; }
 .nfb .bs503 .bs-pizza { position: absolute; left: 192px; top: 104px; width: 30px; height: 30px; }
 .nfb .bs503 .bs-bite { position: absolute; inset: 0; animation: bsBite 3s ease-in-out infinite; }
 .nfb .bs503 .bs-steam { position: absolute; width: 4px; height: 4px; background: #cfcfcf; opacity: 0; top: -6px; animation: bsSteam 2.2s ease-out infinite; }
 .nfb .bs503 .bs-steam.a { left: 8px; } .nfb .bs503 .bs-steam.b { left: 16px; animation-delay: 0.7s; } .nfb .bs503 .bs-steam.c { left: 24px; animation-delay: 1.4s; }
 .nfb .bs503 .bs-hang { position: absolute; inset: 0; width: 100%; height: 100%; }
 .nfb .bs503 .bs-closed { position: absolute; left: 236px; top: 178px; width: 104px; height: 36px; display: grid; place-items: center; border: 3px solid #f2f2f2; background: #000; font: 900 0.8rem/1 'Archivo', 'Arial Black', sans-serif; letter-spacing: 0.06em; color: #f2f2f2; transform-origin: 50% -18px; animation: bsSwing 4s ease-in-out infinite; }
-@keyframes bsBite { 0%, 40% { transform: translate(0, 0); } 55%, 70% { transform: translate(-12px, -8px) rotate(-8deg); } 85%, 100% { transform: translate(0, 0); } }
-@keyframes bsChew { 0%, 52% { transform: none; } 58% { transform: translateY(-2px); } 64% { transform: translateY(0); } 70% { transform: translateY(-2px); } 76%, 100% { transform: translateY(0); } }
+@keyframes bsBite { 0%, 52% { transform: translate(0, 0); } 62%, 93% { transform: translate(-10px, -7px); } 100% { transform: translate(0, 0); } }
+@keyframes bsChew { 0%, 2% { transform: none; } 6% { transform: translateY(-2px); } 11% { transform: none; } 16% { transform: translateY(-2px); } 21%, 100% { transform: none; } }
 @keyframes bsSteam { 0% { transform: translateY(0); opacity: 0; } 25% { opacity: 0.7; } 100% { transform: translateY(-24px) translateX(3px); opacity: 0; } }
 @keyframes bsSwing { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
 
 @media (prefers-reduced-motion: reduce) {
   .nfb .bs *, .nfb .bs-bubble { animation: none !important; }
-  .nfb .bs-fl.on2:first-child, .nfb .bs-fl.on4:first-child, .nfb .bs403 .vis-a { opacity: 1; }
-  .nfb .bs403 .bs-strand { stroke-dashoffset: 0; }
+  .nfb .bs-fl.on2:first-child, .nfb .bs-fl.on4:first-child,   .nfb .bs403 .bs-strand { stroke-dashoffset: 0; }
   .nfb .bs403 .bs-sign, .nfb .bs401 .bs-stick { opacity: 1; }
   .nfb .bs500 .bs-spark { display: none; }
 }
@@ -273,7 +250,7 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 .bi li a b { display: inline-block; width: 3.4em; font-weight: 900; }
 .bi li a:hover, .bi li a:focus-visible { text-decoration: underline; text-underline-offset: 4px; outline: none; }
 .bi p a { color: #000; font-size: 0.86rem; }
-@keyframes biThink { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+@keyframes biThink { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @keyframes biQ { 0%, 100% { transform: rotate(-8deg) scale(1); } 50% { transform: rotate(8deg) scale(1.12); } }
 @media (max-width: 520px) { .bi-head { flex-direction: column; align-items: flex-start; padding-top: 40px; } }
 @media (prefers-reduced-motion: reduce) { .bi-who svg, .bi-q { animation: none; } }

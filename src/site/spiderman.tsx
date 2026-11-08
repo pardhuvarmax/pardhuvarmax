@@ -4,7 +4,8 @@ const SM_W = 25;
 const SM_H = 27;
 const SM_CELL = 4;
 
-type Pose = 'hang' | 'stand' | 'run' | 'sit' | 'point';
+type Pose = 'hang' | 'stand' | 'run' | 'sit' | 'point' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold';
+const STANDING: Pose[] = ['stand', 'point', 'reach', 'shrug', 'throwA', 'throwB', 'shout', 'hold'];
 
 function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: number; c: string }[] {
   const cells = new Map<string, string>();
@@ -30,17 +31,20 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   if (pose === 'hang') {
     line(10, 19, 8, 22, 'B'); line(8, 22, 10, 25, 'B');
     line(14, 19, 16, 22, 'B'); line(16, 22, 14, 25, 'B');
-  } else if (pose === 'sit') {
+  } else if (pose === 'sit' || pose === 'eat') {
     line(10, 19, 8, 22, 'B'); line(8, 22, 10, 24, 'B');
     line(14, 19, 16, 22, 'B'); line(16, 22, 14, 24, 'B');
-  } else if (pose === 'stand' || pose === 'point') {
+  } else if (pose === 'brace') {
+    line(10, 19, 7, 25, 'B');
+    line(14, 19, 17, 25, 'B');
+  } else if (STANDING.includes(pose)) {
     line(10, 19, 9, 25, 'B');
     line(14, 19, 15, 25, 'B');
   } else {
     line(10, 19, 7, 21, 'B'); line(7, 21, 9, 24, 'B'); // lifted knee
     line(14, 19, 16, 22, 'B'); line(16, 22, 18, 25, 'B'); // push-off leg
   }
-  const bootRow = pose === 'sit' ? 23 : 24;
+  const bootRow = pose === 'sit' || pose === 'eat' ? 23 : 24;
   for (const k of [...cells.keys()]) { const [x, y] = k.split(',').map(Number); if (y >= bootRow) put(x, y, 'R'); } // red boots
   // torso: blue sides, red chest, blue trunks
   rect(8, 11, 16, 12, 'R');
@@ -55,6 +59,30 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   } else if (pose === 'point') {
     line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
     line(16, 12, 20, 11, 'R'); line(20, 11, 22, 11, 'R'); put(24, 11, 'R'); put(24, 12, 'R'); // arm out, one finger pointing
+  } else if (pose === 'reach') {
+    line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
+    line(16, 12, 22, 12, 'R'); line(15, 15, 21, 15, 'R'); // both arms out, gripping
+  } else if (pose === 'brace') {
+    line(16, 13, 21, 15, 'R'); line(15, 16, 20, 17, 'R'); // arms drawn in, pulling
+    line(8, 12, 6, 15, 'R');
+  } else if (pose === 'shrug') {
+    line(8, 12, 4, 14, 'R'); line(4, 14, 3, 12, 'R');
+    line(16, 12, 20, 14, 'R'); line(20, 14, 21, 12, 'R');
+  } else if (pose === 'throwA') {
+    line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
+    line(16, 12, 20, 8, 'R'); line(20, 8, 22, 4, 'R'); // arm cocked back
+  } else if (pose === 'throwB') {
+    line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
+    line(16, 12, 21, 10, 'R'); line(21, 10, 23, 8, 'R'); // arm thrown forward
+  } else if (pose === 'eat') {
+    line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
+    line(16, 12, 18, 9, 'R'); line(18, 9, 15, 9, 'R'); // hand at the mouth
+  } else if (pose === 'shout') {
+    line(8, 12, 8, 9, 'R'); line(8, 9, 9, 9, 'R');
+    line(16, 12, 16, 9, 'R'); line(16, 9, 15, 9, 'R'); // hands cupped round the mouth
+  } else if (pose === 'hold') {
+    line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
+    line(16, 12, 19, 8, 'R'); line(19, 8, 19, 4, 'R'); // holding a board up
   } else if (pose === 'stand' || pose === 'sit') {
     line(8, 12, 6, 16, 'R'); line(6, 16, 6, 19, 'R');
     line(16, 12, 18, 16, 'R'); line(18, 16, 18, 19, 'R');
@@ -78,7 +106,7 @@ function buildSpiderMan(pose: Pose, look = 0, sense = false): { x: number; y: nu
   });
 }
 
-export type Frame = 'hang' | 'look-left' | 'look-right' | 'alert' | 'runA' | 'runB' | 'sit' | 'sit-left' | 'sit-right' | 'sit-sense' | 'point' | 'point-left';
+export type Frame = 'hang' | 'look-left' | 'look-right' | 'alert' | 'runA' | 'runB' | 'sit' | 'sit-left' | 'sit-right' | 'sit-sense' | 'point' | 'point-left' | 'reach' | 'brace' | 'shrug' | 'throwA' | 'throwB' | 'eat' | 'shout' | 'hold-left' | 'hold' | 'hold-right';
 const SM_FRAMES: Record<Frame, { x: number; y: number; c: string }[]> = (() => {
   const mirror = (cs: { x: number; y: number; c: string }[]) => cs.map((p) => ({ ...p, x: 24 - p.x }));
   const run = buildSpiderMan('run');
@@ -94,6 +122,16 @@ const SM_FRAMES: Record<Frame, { x: number; y: number; c: string }[]> = (() => {
     'sit-right': buildSpiderMan('sit', 1),
     'sit-sense': buildSpiderMan('sit', 0, true), // spider-sense tingling
     point: buildSpiderMan('point', 1),
+    reach: buildSpiderMan('reach', 1),
+    brace: buildSpiderMan('brace', 1),
+    shrug: buildSpiderMan('shrug', 0),
+    throwA: buildSpiderMan('throwA', 0),
+    throwB: buildSpiderMan('throwB', 0),
+    eat: buildSpiderMan('eat', 0),
+    shout: buildSpiderMan('shout', 1),
+    'hold-left': buildSpiderMan('hold', -1),
+    hold: buildSpiderMan('hold', 0),
+    'hold-right': buildSpiderMan('hold', 1),
     'point-left': mirror(buildSpiderMan('point', 1)),
   };
 })();
