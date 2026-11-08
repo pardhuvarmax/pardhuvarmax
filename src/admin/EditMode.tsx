@@ -117,7 +117,7 @@ export default function EditMode({ request }: { request: number }) {
                 <button key={id} role="menuitem" className="em-sub" onClick={() => open({ id, label: id })}>{COLLECTIONS.find((c) => c.id === id)?.label}</button>
               ))}
               <hr />
-              <a role="menuitem" href="/admin" target="_blank" rel="noopener noreferrer"><ExternalLink size={15} /> Full admin</a>
+              <a role="menuitem" href="/admin"><ExternalLink size={15} /> Full admin</a>
               {!status.local && (
                 <button
                   role="menuitem"

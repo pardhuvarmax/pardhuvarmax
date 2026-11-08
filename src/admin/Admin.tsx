@@ -227,7 +227,7 @@ export function PostEditor({ notify, saveNote, dir, startNew, openSlug }: { noti
             <textarea ref={ta} className="inp md" rows={22} spellCheck value={current.body} onChange={(e) => { setCurrent({ ...current, body: e.target.value }); setDirty(true); }} placeholder="## Heading\n\nWrite in Markdown…" />
           )}
         </div>
-        {!isNew && !current.meta.draft && <a className="abtn" href={`/blog/${slug}`} target="_blank" rel="noopener noreferrer"><ExternalLink size={15} /> View live</a>}
+        {!isNew && !current.meta.draft && <a className="abtn" href={`/blog/${slug}`}><ExternalLink size={15} /> View live</a>}
       </div>
     </>
   );
@@ -265,7 +265,7 @@ export default function Admin() {
           ))}
         </nav>
         <div className="side-foot">
-          <a href="/" target="_blank" rel="noopener noreferrer"><ExternalLink size={14} /> View site</a>
+          <a href="/"><ExternalLink size={14} /> View site</a>
           {!status.local && (
             <button onClick={async () => { await api('logout', { body: {} }); refresh(); }}><LogOut size={14} /> Sign out</button>
           )}
