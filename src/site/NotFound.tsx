@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
@@ -10,6 +10,36 @@ import '../styles/notfound.css';
 /** The 404 is the site falling apart: black and white, distorted, glitching. Spider-Man is the only thing still in colour. */
 export default function NotFound() {
   const { pathname } = useLocation();
+  const num = useRef<HTMLDivElement>(null);
+
+  // stretch the 404 so it spans the whole screen, whatever its shape
+  useEffect(() => {
+    const box = num.current;
+    const t = box?.querySelector<HTMLElement>('.nfb-t');
+    if (!box || !t) return;
+    const fit = () => {
+      box.style.setProperty('--sx', '1');
+      box.style.setProperty('--sy', '1');
+      const w = t.offsetWidth || 1;
+      const h = t.offsetHeight || 1;
+      const sx = (window.innerWidth * 1.04) / w;
+      const sy = Math.min((window.innerHeight * 0.96) / h, sx * 1.8); // on tall, narrow screens do not stretch it into unreadable strips
+      box.style.setProperty('--sx', String(sx));
+      box.style.setProperty('--sy', String(sy));
+    };
+    fit();
+    document.fonts?.ready.then(fit);
+    document.fonts?.addEventListener?.('loadingdone', fit);
+    window.addEventListener('resize', fit);
+    // the text changes size when the web font arrives; measure again then (a transform never triggers this observer)
+    const ro = new ResizeObserver(fit);
+    ro.observe(t);
+    return () => {
+      window.removeEventListener('resize', fit);
+      document.fonts?.removeEventListener?.('loadingdone', fit);
+      ro.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     document.title = `404 | ${site.name}`;
@@ -43,7 +73,9 @@ export default function NotFound() {
         </filter>
       </svg>
 
-      <div className="nfb-num" data-text="404" aria-hidden="true">404</div>
+      <div className="nfb-num" ref={num} aria-hidden="true">
+        <div className="nfb-s" data-text="404"><span className="nfb-t">404</span></div>
+      </div>
       <div className="nfb-noise" aria-hidden="true" />
       <div className="nfb-scan" aria-hidden="true" />
 

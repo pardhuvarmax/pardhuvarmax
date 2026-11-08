@@ -1,14 +1,16 @@
 /* 404: the site, broken. Black and white only; the only colour is Spider-Man (drawn by the game). */
 html.nf-lock { overflow: hidden; }
 html.nf-lock .progress { display: none; } /* the coloured scroll bar has no place on a broken page */
-.nfb { position: fixed; inset: 0; z-index: 110; overflow: hidden auto; background: #000; color: #f2f2f2; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+.nfb { position: fixed; inset: 0; z-index: 110; display: flex; overflow: hidden auto; text-align: center; background: #000; color: #f2f2f2; font-family: 'JetBrains Mono', ui-monospace, monospace; }
 .nfb * { box-sizing: border-box; }
 
-/* the giant, bent number behind everything */
-.nfb-num { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; user-select: none; font-family: 'Archivo', 'Arial Black', system-ui, sans-serif; font-weight: 900; font-size: min(58vw, 78vh, 720px); line-height: 0.8; letter-spacing: -0.06em; color: rgba(255, 255, 255, 0.04); filter: url(#nfb-warp); animation: nfbJolt 7s steps(1, end) infinite; }
-.nfb-num::before, .nfb-num::after { content: attr(data-text); position: absolute; inset: 0; display: grid; place-items: center; }
-.nfb-num::before { color: rgba(255, 255, 255, 0.11); animation: nfbSliceA 3.6s steps(1, end) infinite; }
-.nfb-num::after { color: rgba(255, 255, 255, 0.08); animation: nfbSliceB 4.4s steps(1, end) infinite; }
+/* the giant, bent number behind everything, stretched across the whole screen */
+.nfb-num { position: fixed; inset: 0; overflow: hidden; pointer-events: none; user-select: none; filter: url(#nfb-warp); animation: nfbJolt 7s steps(1, end) infinite; }
+.nfb-s { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(var(--sx, 1), var(--sy, 1)); white-space: nowrap; font-family: 'Archivo', 'Arial Black', system-ui, sans-serif; font-weight: 900; font-size: 50vh; line-height: 0.8; letter-spacing: -0.06em; color: rgba(255, 255, 255, 0.05); }
+.nfb-t { display: block; }
+.nfb-s::before, .nfb-s::after { content: attr(data-text); position: absolute; left: 0; top: 0; }
+.nfb-s::before { color: rgba(255, 255, 255, 0.12); animation: nfbSliceA 3.6s steps(1, end) infinite; }
+.nfb-s::after { color: rgba(255, 255, 255, 0.09); animation: nfbSliceB 4.4s steps(1, end) infinite; }
 @keyframes nfbSliceA {
   0%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
   8% { clip-path: inset(14% 0 66% 0); transform: translate(-22px, 0); }
@@ -37,7 +39,7 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 @keyframes nfbBand { to { transform: translateY(140vh); } }
 
 /* content */
-.nfb-in { position: relative; z-index: 2; width: min(720px, 100% - 2 * clamp(20px, 5vw, 48px)); margin: 0 auto; padding: clamp(96px, 16vh, 150px) 0 60px; }
+.nfb-in { position: relative; z-index: 2; width: min(720px, 100% - 2 * clamp(20px, 5vw, 48px)); margin: auto; padding: 40px 0; }
 .nfb-line { margin: 0 0 14px; font-size: 0.78rem; letter-spacing: 0.08em; color: #9a9a9a; text-transform: uppercase; word-break: break-all; }
 .nfb-line b { color: #fff; font-weight: 700; }
 .nfb-blink { animation: nfbBlink 1.1s steps(2, end) infinite; }
@@ -49,19 +51,19 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 @keyframes nfbHA { 0%, 100% { clip-path: inset(0 0 100% 0); } 10% { clip-path: inset(10% 0 55% 0); transform: translate(-6px, 0); } 16% { clip-path: inset(0 0 100% 0); } 58% { clip-path: inset(52% 0 12% 0); transform: translate(7px, 0); } 63% { clip-path: inset(0 0 100% 0); } }
 @keyframes nfbHB { 0%, 100% { clip-path: inset(0 0 100% 0); } 24% { clip-path: inset(60% 0 8% 0); transform: translate(8px, 1px); } 30% { clip-path: inset(0 0 100% 0); } 74% { clip-path: inset(20% 0 50% 0); transform: translate(-7px, 0); } 79% { clip-path: inset(0 0 100% 0); } }
 @keyframes nfbJitter { 0%, 90%, 100% { transform: none; } 91% { transform: translate(3px, 0) skewX(-3deg); } 93% { transform: translate(-4px, 1px); } 95% { transform: none; } }
-.nfb-copy { max-width: 56ch; margin: 0 0 6px; font-size: 0.92rem; line-height: 1.65; color: #bdbdbd; }
+.nfb-copy { max-width: 56ch; margin: 0 auto 6px; font-size: 0.92rem; line-height: 1.65; color: #bdbdbd; }
 
 /* the game, in greys */
-.nfb .rg { margin-top: 26px; max-width: 640px; }
+.nfb .rg { margin: 26px auto 0; max-width: 640px; }
 .nfb .rg-canvas { display: block; width: 100%; height: auto; aspect-ratio: 640 / 220; border: 2px solid #f2f2f2; background: rgba(0, 0, 0, 0.55); box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.18); cursor: pointer; touch-action: manipulation; outline: none; }
 .nfb .rg-canvas:focus-visible { box-shadow: 0 0 0 3px #fff; }
 .nfb .rg-help { margin: 12px 0 0; font-size: 0.76rem; color: #8a8a8a; }
-.nfb-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.nfb-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 28px; }
 .nfb-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border: 2px solid #f2f2f2; background: transparent; color: #f2f2f2; font: 700 0.8rem/1 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
 .nfb-btn:hover, .nfb-btn:focus-visible { background: #f2f2f2; color: #000; outline: none; }
 .nfb-btn kbd { margin-left: 6px; padding: 0 5px; border: 1px solid currentColor; font: 700 0.66rem/1.6 inherit; }
 
 @media (prefers-reduced-motion: reduce) {
-  .nfb-num, .nfb-num::before, .nfb-num::after, .nfb-noise, .nfb-scan::after, .nfb-h, .nfb-h::before, .nfb-h::after, .nfb-blink { animation: none; }
-  .nfb-num::before, .nfb-num::after, .nfb-h::before, .nfb-h::after { display: none; }
+  .nfb-num, .nfb-s::before, .nfb-s::after, .nfb-noise, .nfb-scan::after, .nfb-h, .nfb-h::before, .nfb-h::after, .nfb-blink { animation: none; }
+  .nfb-s::before, .nfb-s::after, .nfb-h::before, .nfb-h::after { display: none; }
 }
