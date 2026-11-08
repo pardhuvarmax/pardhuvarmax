@@ -7,15 +7,15 @@ import '../styles/notfound.css';
 
 const GLITCH = ['#e0242c', '#2f5bff', '#ffd23f', '#22d3ee', '#ff3fa4'];
 /** Faint coloured streaks that flicker and jump sideways, like a signal coming back. Deterministic per page so it does not reshuffle on re-render. */
-function GlitchLines({ seed }: { seed: number }) {
+function GlitchLines({ seed, bad = false }: { seed: number; bad?: boolean }) {
   let r = seed * 9301 + 49297;
   const rnd = () => ((r = (r * 9301 + 49297) % 233280) / 233280);
-  const lines = Array.from({ length: 26 }, (_, i) => {
+  // good news: streaks of colour all over. Real errors: faint red and grey streaks bunched in the bottom left corner.
+  const lines = Array.from({ length: bad ? 18 : 26 }, (_, i) => {
     const thick = rnd() < 0.22;
-    return {
-      top: rnd() * 100, left: rnd() * 70, width: 14 + rnd() * 48, height: thick ? 6 + rnd() * 10 : 1 + Math.floor(rnd() * 3),
-      color: GLITCH[i % GLITCH.length], dx: (rnd() < 0.5 ? -1 : 1) * (14 + rnd() * 60), dur: 2.2 + rnd() * 3.6, delay: rnd() * 4, peak: thick ? 0.12 : 0.34,
-    };
+    return bad
+      ? { top: 68 + rnd() * 32, left: rnd() * 34, width: 8 + rnd() * 30, height: thick ? 5 + rnd() * 8 : 1 + Math.floor(rnd() * 3), color: i % 3 === 0 ? '#8a8a8a' : i % 3 === 1 ? '#c4161c' : '#e0242c', dx: (rnd() < 0.5 ? -1 : 1) * (8 + rnd() * 34), dur: 2.6 + rnd() * 3.6, delay: rnd() * 4, peak: thick ? 0.09 : 0.26 }
+      : { top: rnd() * 100, left: rnd() * 70, width: 14 + rnd() * 48, height: thick ? 6 + rnd() * 10 : 1 + Math.floor(rnd() * 3), color: GLITCH[i % GLITCH.length], dx: (rnd() < 0.5 ? -1 : 1) * (14 + rnd() * 60), dur: 2.2 + rnd() * 3.6, delay: rnd() * 4, peak: thick ? 0.12 : 0.34 };
   });
   return (
     <div className="nfb-glow" aria-hidden="true">
@@ -114,7 +114,7 @@ export default function BrokenPage({
       <div className="nfb-num" ref={num} aria-hidden="true" style={{ filter: `url(#${filter})` }}>
         <div className="nfb-s" data-text={code}><span className="nfb-t">{code}</span></div>
       </div>
-      {tint && <GlitchLines seed={seed} />}
+      <GlitchLines seed={seed} bad={!tint} />
       <div className="nfb-noise" aria-hidden="true" />
       <div className="nfb-scan" aria-hidden="true" />
 
