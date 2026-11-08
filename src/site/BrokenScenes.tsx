@@ -259,10 +259,10 @@ export function SceneOffline({ online = false }: { online?: boolean }) {
     return () => clearInterval(id);
   }, [online]);
 
-  const line = online ? 'Got signal!' : phase === 'mad' ? 'NO SIGNAL?? AGAIN??' : phase === 'throw' ? 'TAKE IT!' : phase === 'hit' ? '...' : phase === 'panic' ? 'I BROKE IT!!' : phase === 'try' ? TRY_LINES[Math.min(taps, 3) - 1] : taps === 0 ? 'Tap to help him find signal.' : 'Hmm.';
+  const line = online ? 'Got signal!' : phase === 'mad' ? 'NO SIGNAL?? AGAIN??' : phase === 'throw' ? 'TAKE IT!' : phase === 'hit' ? '...' : phase === 'panic' ? 'I BROKE IT!!' : phase === 'try' ? TRY_LINES[Math.min(taps, 3) - 1] : taps === 0 ? 'Tap to help him find signal.' : '';
   return (
     <div className={`bs bsoff ${online ? 'on' : `ph-${phase}`}`} onClick={tap} role="presentation">
-      <Bubble className={online ? 'say-once' : ''} style={{ left: 6, top: 2 }}>{line}</Bubble>
+      {line && <Bubble className={online ? 'say-once' : ''} style={{ left: 6, top: 2 }}>{line}</Bubble>}
       {online ? (
         <>
           <PixelArt className="bs-tower" rows={TOWER} palette={GREY} cell={4} />
