@@ -88,3 +88,14 @@
 @media (max-width: 900px) { .site .cs-rig .cs-stage { margin-top: 118px; } }
 @media (prefers-reduced-motion: reduce) { .site .cs-spidey.on .spider-sprite, .site .cs-note, .site .cs-wire.on .w-flow, .site .cs-wire.on .w-led { animation: none; } .site .cs-note { display: none; } }
 @media (max-width: 700px) { .site .cs-spidey { left: -4px; } }
+
+/* click feedback on the transport buttons: press in, ring burst, icon pop */
+.site .cs-btn { position: relative; transition: transform 0.08s, box-shadow 0.08s, background-color 0.15s; }
+.site .cs-btn:active:not(:disabled) { transform: translate(2px, 2px) scale(0.94); }
+.site .cs-btn.big:active:not(:disabled) { transform: translate(4px, 4px) scale(0.96); box-shadow: 0 0 0 var(--ink); }
+.site .cs-ico { display: grid; place-items: center; }
+.site .cs-ico[data-pop] { animation: csPop 0.32s cubic-bezier(0.3, 1.6, 0.5, 1); }
+@keyframes csPop { from { transform: scale(0.3) rotate(-120deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.site .cs-ripple { position: absolute; inset: -3px; border: 3px solid var(--accent); pointer-events: none; animation: csRipple 0.55s ease-out forwards; }
+@keyframes csRipple { from { opacity: 0.95; transform: scale(1); } to { opacity: 0; transform: scale(1.9); } }
+@media (prefers-reduced-motion: reduce) { .site .cs-ico[data-pop], .site .cs-ripple { animation: none; } .site .cs-ripple { display: none; } .site .cs-btn:active:not(:disabled) { transform: none; } }

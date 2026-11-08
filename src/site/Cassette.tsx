@@ -33,6 +33,7 @@ export default function Cassette() {
   const [typing, setTyping] = useState<0 | 1>(0);
   const [leg, setLeg] = useState(0);
   const [gaze, setGaze] = useState(0);
+  const [hit, setHit] = useState({ k: '', n: 0 }); // which control was just clicked, to replay its click animation
   const firstRun = useRef(true);
   const [wire, setWire] = useState<{ d: string; x: number; y: number } | null>(null);
 
@@ -211,9 +212,18 @@ export default function Cassette() {
           </div>
         </div>
         <div className="cs-ctrl">
-          <button className="cs-btn" onClick={() => step(-1)} disabled={t === 0} aria-label="Previous track"><SkipBack size={18} /></button>
-          <button className="cs-btn big" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>{playing ? <Pause size={22} /> : <Play size={22} />}</button>
-          <button className="cs-btn" onClick={() => step(1)} disabled={t >= tracks.length - 1} aria-label="Next track"><SkipForward size={18} /></button>
+          <button className="cs-btn" onClick={() => { setHit((h) => ({ k: 'prev', n: h.n + 1 })); step(-1); }} disabled={t === 0} aria-label="Previous track">
+            <span className="cs-ico" key={hit.k === 'prev' ? hit.n : 0}><SkipBack size={18} /></span>
+            {hit.k === 'prev' && <i className="cs-ripple" key={hit.n} />}
+          </button>
+          <button className="cs-btn big" onClick={() => { setHit((h) => ({ k: 'play', n: h.n + 1 })); toggle(); }} aria-label={playing ? 'Pause' : 'Play'}>
+            <span className="cs-ico" key={`${playing}${hit.k === 'play' ? hit.n : 0}`} data-pop={hit.k === 'play' ? '1' : undefined}>{playing ? <Pause size={22} /> : <Play size={22} />}</span>
+            {hit.k === 'play' && <i className="cs-ripple" key={hit.n} />}
+          </button>
+          <button className="cs-btn" onClick={() => { setHit((h) => ({ k: 'next', n: h.n + 1 })); step(1); }} disabled={t >= tracks.length - 1} aria-label="Next track">
+            <span className="cs-ico" key={hit.k === 'next' ? hit.n : 0}><SkipForward size={18} /></span>
+            {hit.k === 'next' && <i className="cs-ripple" key={hit.n} />}
+          </button>
         </div>
         <div className="cs-seek">
           <span>{clock(pos)}</span>
