@@ -225,9 +225,11 @@ html.nf-lock .progress { display: none; } /* the coloured scroll bar has no plac
 .nfb .bs401 .bs-guard { left: 150px; animation: bsBreath 2.2s steps(1, end) infinite; }
 .nfb .bs401 .bs-car { position: absolute; top: 100px; width: 220px; height: 120px; }
 .nfb .bs401 .bs-car.r { left: 238px; transform: scaleX(-1); } .nfb .bs401 .bs-car.l { left: -18px; }
+.nfb .bs401 .bs-car .bs-graf { position: absolute; left: 76px; top: 46px; transform: scaleX(-1); }
 .nfb .bs401 .bs-car.v-b { top: 90px; height: 130px; }
 .nfb .bs401 .v-b .lb { top: 12px; height: 10px; } .nfb .bs401 .v-b .lb.blue { left: 95px; width: 22px; } .nfb .bs401 .v-b .lb.red { left: 117px; width: 18px; }
-.nfb .bs401 .bs-car svg { position: relative; display: block; }
+.nfb .bs401 .bs-car svg { display: block; }
+.nfb .bs401 .bs-car svg:not(.bs-graf) { position: relative; }
 .nfb .bs401 .bs-car .lb { position: absolute; top: 5px; height: 15px; animation: bsLight 0.7s steps(1, end) infinite; }
 .nfb .bs401 .bs-car .lb.blue { left: 75px; width: 25px; background: #2f5bff; box-shadow: 0 0 12px 4px rgba(47, 91, 255, 0.9); }
 .nfb .bs401 .bs-car .lb.white { left: 100px; width: 15px; background: #f2f2f2; animation: none; }

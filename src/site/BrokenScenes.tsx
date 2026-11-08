@@ -123,6 +123,21 @@ export function Scene403() {
 }
 
 /* ---------- 401: Spider-Man the cop, scanning the crowd outside two parked patrol cars, then asking who you are ---------- */
+const SPRAY = [
+  'prrrr..qbbbb.',
+  'rr..rrpbb..bb',
+  'rr.....bb...q',
+  '.rrr.p.bb....',
+  'p...rr.bb...q',
+  'rr..rr.bb..bb',
+  '.rrrr.pqbbbb.',
+  '.r..rr..b.bb.',
+  '.r.pr...b..b.',
+  '.r......bq...',
+  '..p.....b....',
+  '.............',
+];
+const SPRAYPAL = { r: '#e0242c', b: '#2f5bff', p: 'rgba(224, 36, 44, 0.45)', q: 'rgba(47, 91, 255, 0.45)' };
 const CARPAL = { W: '#e6e6e6', G: '#6a6a6a', D: '#0b0e14', K: '#44444d', T: '#1a1a1a', S: '#a8a8a8', H: '#ffffff', R: '#c4161c', L: '#b9c6d0' };
 const GLASSES = ['KKKKKKK', 'K..K..K', 'K..K..K', 'KKKKKKK'];
 const CAP = ['.DDDDDDD.', 'DDDDWDDDD', 'KKKKKKKKK'];
@@ -189,6 +204,7 @@ const Patrol = ({ side, delay, sedan = false }: { side: 'l' | 'r'; delay: number
   <div className={`bs-car ${side} ${sedan ? 'v-b' : ''}`}>
     <i className="bs-bloom red" style={{ animationDelay: `${delay}s` }} /><i className="bs-bloom blue" style={{ animationDelay: `${delay}s` }} />
     <PixelArt rows={sedan ? CAR_B : CAR} palette={CARPAL} cell={5} />
+    {!sedan && <PixelArt className="bs-graf" rows={SPRAY} palette={SPRAYPAL} cell={5} />}
     <i className="lb blue" style={{ animationDelay: `${delay}s` }} />{!sedan && <i className="lb white" />}<i className="lb red" style={{ animationDelay: `${delay}s` }} />
   </div>
 );
