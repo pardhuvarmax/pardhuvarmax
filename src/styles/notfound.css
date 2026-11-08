@@ -1,0 +1,9 @@
+.site .nf { padding-top: clamp(104px, 14vw, 150px); }
+.site .nf h1 { margin: 10px 0 12px; font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1; letter-spacing: -0.03em; }
+.site .nf h1 em { color: var(--accent-text); }
+.site .rg { margin-top: 28px; max-width: 640px; }
+.site .rg-canvas { display: block; width: 100%; height: auto; aspect-ratio: 640 / 220; border: 3px solid var(--ink); background: var(--surface); box-shadow: 6px 6px 0 var(--accent); cursor: pointer; touch-action: manipulation; outline: none; }
+.site .rg-canvas:focus-visible { box-shadow: 6px 6px 0 var(--accent), 0 0 0 3px var(--ink); }
+.site .rg-help { margin: 12px 0 0; font-size: 0.8rem; color: var(--muted); }
+.site .nf-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.site .nf-links kbd { margin-left: 8px; padding: 0 5px; border: 2px solid currentColor; font: 700 0.68rem/1.5 var(--mono, monospace); }

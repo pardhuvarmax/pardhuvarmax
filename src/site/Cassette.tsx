@@ -4,6 +4,7 @@ import { cassette, safeHref } from '../lib/content';
 import { albums, player, usePlayer } from '../lib/player';
 import { SectionHead } from './Reveal';
 import { CoderSprite } from './spiderman';
+import Visualizer from './Visualizer';
 import '../styles/cassette.css';
 
 const TINTS = ['--accent', '--accent-2', '--accent-3', '--accent-4'];
@@ -160,6 +161,7 @@ export default function Cassette() {
             <input className="cs-vol" type="range" min={0} max={1} step={0.01} value={muted ? 0 : volume} onChange={(e) => player.setVolume(Number(e.target.value))} aria-label="Volume" />
           </div>
         </div>
+        <Visualizer />
         <div className="cs-seek">
           <span>{clock(pos)}</span>
           <input

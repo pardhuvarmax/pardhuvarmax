@@ -1,13 +1,15 @@
 import { lazy, Suspense, useEffect, useState, type CSSProperties } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'motion/react';
-import { ArrowUp, Menu, Moon, Sun, X } from 'lucide-react';
+import { ArrowUp, Menu, Moon, Search, Sun, X } from 'lucide-react';
 import { Analytics } from '@vercel/analytics/react';
 import { site, special } from '../lib/content';
 import { useTheme } from './useTheme';
 import DotGrid from './DotGrid';
 import MiniPlayer from './MiniPlayer';
+import CommandPalette, { openPalette } from './CommandPalette';
 import { SpiderSprite, type Frame } from './spiderman';
+import { currentTrack, usePlayer } from '../lib/player';
 import { useDynamicColors } from './useDynamicColors';
 import '../styles/site.css';
 
@@ -51,6 +53,55 @@ function FooterSpidey() {
     return () => clearInterval(id);
   }, []);
   return <div className="footer-spidey" aria-hidden="true"><SpiderSprite frame={LOOKS[i]} /></div>;
+}
+
+/** "It is 02:41 in Hyderabad. After midnight, probably still awake." Uses the time zone set under Special. */
+function LocalTime() {
+  const cfg = special as Record<string, unknown>;
+  const zone = typeof cfg.timeZone === 'string' && cfg.timeZone ? cfg.timeZone : 'Asia/Kolkata';
+  const city = String(site.location || '').split(',')[0].trim() || 'home';
+  const read = () => {
+    try {
+      const parts = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: zone }).formatToParts(new Date());
+      const h = Number(parts.find((p) => p.type === 'hour')?.value) % 24;
+      const m = parts.find((p) => p.type === 'minute')?.value ?? '00';
+      return { h, text: `${String(h).padStart(2, '0')}:${m}` };
+    } catch {
+      return null;
+    }
+  };
+  const [now, setNow] = useState(read);
+  useEffect(() => {
+    const id = setInterval(() => setNow(read()), 20000);
+    return () => clearInterval(id);
+  }, [zone]);
+  if (cfg.showLocalTime === false || !now) return null;
+  const mood = now.h >= 5 && now.h < 12 ? 'Morning. Coffee first.' : now.h < 17 ? 'Afternoon. Probably reading papers.' : now.h < 22 ? 'Evening. Probably tinkering with Arch.' : 'After midnight. Probably still awake.';
+  return <span className="footer-time">It is {now.text} in {city}. {mood}</span>;
+}
+
+/** While a song plays, the tab title gets a note and the song name. Pages set their own titles, so this watches for them. */
+function useNowPlayingTitle() {
+  const s = usePlayer();
+  const track = currentTrack(s);
+  const label = s.playing && track ? `♪ ${track.title} · ` : '';
+  useEffect(() => {
+    const el = document.querySelector('title');
+    if (!el) return;
+    const strip = (t: string) => t.replace(/^♪ .*? · /, '');
+    const apply = () => {
+      const base = strip(document.title);
+      const want = label + base;
+      if (document.title !== want) document.title = want;
+    };
+    apply();
+    const mo = new MutationObserver(apply);
+    mo.observe(el, { childList: true, characterData: true, subtree: true });
+    return () => {
+      mo.disconnect();
+      document.title = strip(document.title);
+    };
+  }, [label]);
 }
 
 const BG_POSITIONS = ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'center'];
@@ -99,6 +150,7 @@ export default function SiteLayout() {
   const { theme, toggle } = useTheme();
   useDynamicColors();
   const { pathname, hash } = useLocation();
+  useNowPlayingTitle();
   const clockHit = useClockMatch(String((special as Record<string, unknown>).bgText ?? ''));
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -138,6 +190,7 @@ export default function SiteLayout() {
         <div className="bgtime" data-pos={bgPos} data-now={clockHit ? '1' : undefined} aria-hidden="true" style={{ '--bt-len': Math.max(special.bgText.length, 3) } as CSSProperties}>{special.bgText}</div>
       )}
       <DotGrid />
+      <CommandPalette theme={theme} toggleTheme={toggle} />
       {pathname !== '/cassette' && <MiniPlayer />}
       <div className="site-bg" aria-hidden="true">
         <i className="blob b1" />
@@ -162,6 +215,7 @@ export default function SiteLayout() {
           )}
         </nav>
         <div className="nav-actions">
+          <button className="icon-btn" onClick={openPalette} aria-label="Search the site (Ctrl+K)" title="Search (Ctrl+K)"><Search size={18} /></button>
           <button className="icon-btn" onClick={toggle} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}>
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -184,8 +238,9 @@ export default function SiteLayout() {
       <footer className="footer">
         {pathname !== '/' && pathname !== '/cassette' && <FooterSpidey />}
         <div className="wrap footer-in">
-          <span>
-            &copy; {new Date().getFullYear()} {site.name} &middot; {site.location}
+          <span className="footer-left">
+            <span>&copy; {new Date().getFullYear()} {site.name} &middot; {site.location}</span>
+            <LocalTime />
           </span>
           <span className="footer-right">
             <TopCue />

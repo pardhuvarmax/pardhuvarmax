@@ -1,37 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, Check, Copy, GitFork, Star } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, GitFork, Star } from 'lucide-react';
 import { formatDate, safeHref, site } from '../lib/content';
 import { renderMarkdown } from '../lib/markdown';
 import { ago, allProjects, findProject, relatedFor, repoOf, useGithubStats } from '../lib/projects';
 import { LangBar, Sparkline } from './ProjectsView';
+import Terminal from './Terminal';
 import '../styles/projects.css';
-
-function QuickStart({ text }: { text: string }) {
-  const [done, setDone] = useState(false);
-  return (
-    <div className="pj-qs">
-      <div className="pj-qs-bar">
-        <span>Quick start</span>
-        <button
-          onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(text);
-              setDone(true);
-              setTimeout(() => setDone(false), 1600);
-            } catch {
-              /* clipboard not available: the text is still selectable */
-            }
-          }}
-          aria-label="Copy commands"
-        >
-          {done ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy</>}
-        </button>
-      </div>
-      <pre><code>{text}</code></pre>
-    </div>
-  );
-}
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -85,7 +60,9 @@ export default function ProjectDetail() {
 
       <div className="pj-body">
         <div className="pj-main">
-          {p.install?.trim() && <QuickStart text={p.install.trim()} />}
+          {(p.demo?.trim() || p.install?.trim()) && (
+            <Terminal key={p.slug} script={(p.demo?.trim() || p.install!.trim())} fromDemo={!!p.demo?.trim()} title={p.demo?.trim() ? 'Demo' : 'Quick start'} />
+          )}
           {rendered ? (
             <article className="prose" dangerouslySetInnerHTML={{ __html: rendered.html }} />
           ) : (

@@ -45,6 +45,8 @@ const listeners = new Set<() => void>();
 let audio: HTMLAudioElement | null = null;
 let pendingSeek: number | null = null;
 let lastSave = 0;
+let audioCtx: AudioContext | null = null;
+let analyser: AnalyserNode | null = null;
 
 function emit(patch: Partial<PlayerState>) {
   state = { ...state, ...patch };
@@ -65,7 +67,28 @@ function setSrc(a: number, t: number, startAt = 0) {
   updateMediaSession();
 }
 
+/** Hook the audio into an analyser for the visualiser. Only when every song is on this site: routing a cross-origin file
+ *  through Web Audio would silence it, so in that case the visualiser just stays flat. Needs a user gesture, so it runs on play. */
+function ensureAnalyser() {
+  if (analyser || !audio) return;
+  if (!albums.every((al) => al.tracks.every((t) => t.src.startsWith('/')))) return;
+  try {
+    const AC: typeof AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+    audioCtx = new AC();
+    const source = audioCtx.createMediaElementSource(audio);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 128;
+    analyser.smoothingTimeConstant = 0.8;
+    source.connect(analyser);
+    analyser.connect(audioCtx.destination);
+  } catch {
+    analyser = null;
+  }
+}
+
 function play() {
+  ensureAnalyser();
+  void audioCtx?.resume();
   audio?.play().catch(() => emit({ playing: false }));
 }
 
@@ -127,6 +150,8 @@ const randomOther = (cur: number, n: number) => {
 
 /* ---------------- actions ---------------- */
 export const player = {
+  /** The analyser node once playback has started, or null. */
+  getAnalyser: (): AnalyserNode | null => analyser,
   /** Called by the Cassette page: fetch the song's length (not the whole file) so the seek bar is ready. */
   warm() {
     init();

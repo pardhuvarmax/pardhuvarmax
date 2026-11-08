@@ -116,3 +116,7 @@
 @media (hover: none) { .site .cs-keys { display: none; } }
 @media (max-width: 560px) { .site .cs-ctrl { flex-wrap: wrap; } .site .cs-opts { margin-left: 0; width: 100%; } .site .cs-vol { flex: 1; } }
 @media (max-width: 560px) { .site .cs-a { display: none; } }
+
+/* visualiser strip, and the playing tape glows with the bass */
+.site .cs-viz { display: block; width: 100%; height: 56px; margin-top: 18px; }
+.site .cs-rig .cs-tape.on.spin { filter: drop-shadow(0 0 calc(var(--energy, 0) * 20px) var(--tc)); }

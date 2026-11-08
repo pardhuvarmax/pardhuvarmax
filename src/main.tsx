@@ -1,11 +1,12 @@
 import { lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SiteLayout from "./site/SiteLayout.tsx";
 import Home from "./site/Home.tsx";
 import Blog from "./site/Blog.tsx";
 import Post from "./site/Post.tsx";
 import ProjectDetail from "./site/ProjectDetail.tsx";
+import NotFound from "./site/NotFound.tsx";
 import { CassettePage, MePage, ProjectsPage, PublicationsPage, ResearchPage } from "./site/Pages.tsx";
 import { applyTheme, initialTheme } from "./site/useTheme.ts";
 import "./styles/index.css";
@@ -29,10 +30,10 @@ createRoot(document.getElementById("root")!).render(
         <Route path="cassette" element={<CassettePage />} />
         <Route path="blog" element={<Blog />} />
         <Route path="blog/:slug" element={<Post />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="/admin" element={<Suspense fallback={null}><Admin /></Suspense>} />
       <Route path="/login" element={<Suspense fallback={null}><LoginPage /></Suspense>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </BrowserRouter>
 );

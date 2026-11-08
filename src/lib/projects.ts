@@ -14,6 +14,7 @@ export interface ProjectInput {
   tags?: string[];
   cover?: string;
   install?: string;
+  demo?: string;
   body?: string;
   links?: ProjectLink[];
   relatedPosts?: string[];

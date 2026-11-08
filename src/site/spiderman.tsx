@@ -180,3 +180,8 @@ export function CoderSprite({ leg, typing, gaze = 0, link = 'bluetooth' }: { leg
     </svg>
   );
 }
+
+/** Raw sprite data for drawing on a canvas (the 404 game). Cells are on a 25x27 grid. */
+export const SPIDER_GRID = { w: SM_W, h: SM_H } as const;
+export const spiderCells = (frame: Frame) => SM_FRAMES[frame];
+export const spiderFill = (c: string) => SM_FILL[c];

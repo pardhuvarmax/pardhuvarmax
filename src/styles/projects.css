@@ -84,3 +84,16 @@
 
 .site .more-links { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 8px; }
 .site .pj-grid { grid-auto-flow: dense; } /* regular cards fill the space beside the wide featured ones */
+
+/* terminal replay */
+.site .tm-btns { display: inline-flex; gap: 8px; }
+.site .tm-screen { min-height: 150px; margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 0.84rem; line-height: 1.7; white-space: pre; }
+.site .tm-screen > div { min-height: 1.7em; }
+.site .tm-p { color: var(--accent-text); font-weight: 700; user-select: none; }
+.site .tm-cmt { color: var(--muted); }
+.site .tm-out { color: var(--text); opacity: 0.78; }
+.site .tm-cur { display: inline-block; margin-left: 1px; color: var(--accent-text); opacity: 0; }
+.site .tm-cur.on { opacity: 1; animation: tmBlink 1s steps(2, end) infinite; }
+@keyframes tmBlink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .site .tm-cur.on { animation: none; } }
+.site .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

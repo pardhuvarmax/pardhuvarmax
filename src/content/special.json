@@ -9,5 +9,7 @@
   "cursorRadius": 190,
   "cursorDepth": 15,
   "cursorGrow": 2.6,
-  "cursorGlow": 10
+  "cursorGlow": 10,
+  "showLocalTime": true,
+  "timeZone": "Asia/Kolkata"
 }

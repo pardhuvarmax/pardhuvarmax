@@ -61,7 +61,7 @@
 @keyframes drift1 { to { transform: translate(14vw, 12vh) scale(1.15); } }
 @keyframes drift2 { to { transform: translate(-16vw, 10vh) scale(0.9); } }
 @keyframes drift3 { to { transform: translate(-12vw, -14vh) scale(1.2); } }
-.site > *:not(.site-bg):not(.progress):not(.nav):not(.skip):not(.dotgrid):not(.cam):not(.web):not(.polaroid):not(.em):not(.edit-dot):not(.bgtime):not(.mini) { position: relative; z-index: 1; }
+.site > *:not(.site-bg):not(.progress):not(.nav):not(.skip):not(.dotgrid):not(.cam):not(.web):not(.polaroid):not(.em):not(.edit-dot):not(.bgtime):not(.mini):not(.pal-back):not(.pal-toast) { position: relative; z-index: 1; }
 
 .progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 120; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform-origin: 0 50%; }
 
@@ -694,3 +694,6 @@ html[data-cms='on'] .site .edit-dot:hover, html[data-cms='on'] .site .edit-dot:f
 /* Spider-Man sitting on the footer edge */
 .footer-spidey { position: absolute; top: -79px; right: clamp(24px, 8vw, 120px); width: 100px; height: 108px; pointer-events: none; }
 .footer-spidey .spider-sprite { display: block; }
+
+.footer-left { display: grid; gap: 4px; }
+.footer-time { font-size: 0.8rem; opacity: 0.85; }

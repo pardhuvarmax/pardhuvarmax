@@ -127,6 +127,7 @@ export const COLLECTIONS: Collection[] = [
           { key: 'tags', label: 'Tags', type: 'strings', help: 'Used for filtering and for linking related projects and posts.' },
           { key: 'cover', label: 'Cover image (optional)', type: 'image' },
           { key: 'install', label: 'Quick start (optional)', type: 'textarea', rows: 4, help: 'Commands shown in a copyable box on the project page, one per line.' },
+          { key: 'demo', label: 'Terminal replay (optional)', type: 'textarea', rows: 8, help: 'An animated terminal on the project page. Start a line with $ to have it typed as a command; any other line is printed as output; # lines are comments. Leave empty to replay the quick start instead.' },
           { key: 'body', label: 'Write-up (Markdown)', type: 'textarea', rows: 14, help: 'The long description on the project page: the problem, the approach, results. Headings, lists, links and code blocks work.' },
           {
             key: 'links',
@@ -269,6 +270,8 @@ export const COLLECTIONS: Collection[] = [
     fields: [
       { key: 'bgText', label: 'Background text', type: 'text', help: 'Huge, faint text behind the dot grid on every page except the main page. Leave empty to hide it.' },
       { key: 'bgTextPosition', label: 'Background text position', type: 'select', options: ['bottom-right', 'bottom-left', 'top-right', 'top-left', 'center'] },
+      { key: 'showLocalTime', label: 'Footer: show your local time', type: 'boolean', help: 'A line in the footer like "It is 02:41 in Hyderabad. After midnight, probably still awake."' },
+      { key: 'timeZone', label: 'Footer: time zone', type: 'text', help: 'An IANA time zone name, e.g. Asia/Kolkata or Europe/London.' },
       { key: 'dotShape', label: 'Dots: shape', type: 'select', options: ['circle', 'square', 'diamond'] },
       { key: 'dotSize', label: 'Dots: size', type: 'number', min: 0.5, max: 5, step: 0.1, help: 'Resting dot width in px. Default 1.5.' },
       { key: 'dotSpacing', label: 'Dots: spacing', type: 'number', min: 12, max: 60, step: 1, help: 'Gap between dots in px. Default 26.' },
