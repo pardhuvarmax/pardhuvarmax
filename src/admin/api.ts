@@ -1,3 +1,5 @@
+import { compressImage } from './media';
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -34,6 +36,7 @@ export function fileToBase64(file: File): Promise<string> {
 }
 
 export async function uploadFile(file: File): Promise<string> {
+  if (file.type.startsWith('image/')) file = await compressImage(file); // big images are resized and saved as WebP first
   const { url } = await api<{ url: string }>('upload', { body: { name: file.name, data: await fileToBase64(file) } });
   return url;
 }

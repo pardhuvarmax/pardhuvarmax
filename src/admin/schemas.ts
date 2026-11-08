@@ -235,7 +235,7 @@ export const COLLECTIONS: Collection[] = [
               { key: 'year', label: 'Year (optional)', type: 'text' },
               { key: 'note', label: 'Why I like it (optional)', type: 'textarea', help: 'Shown under the player controls while this song is selected.' },
               { key: 'cover', label: 'Song cover (optional)', type: 'image', help: 'Shown in the player while this song is selected.' },
-              { key: 'src', label: 'Audio file', type: 'audio', help: 'MP3, M4A, AAC, OGG or WAV, up to 3.2 MB each (a 128 kbps MP3 is about 1 MB per minute).' },
+              { key: 'src', label: 'Audio file', type: 'audio', help: 'MP3, M4A, AAC, OGG or WAV. Files over 3.2 MB are compressed to a smaller MP3 for you.' },
             ],
           },
         ],

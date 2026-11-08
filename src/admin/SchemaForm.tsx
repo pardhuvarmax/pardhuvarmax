@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { ArrowDown, ArrowUp, ImagePlus, Music, Plus, Trash2 } from 'lucide-react';
 import type { Field } from './schemas';
 import { uploadFile, uploadImage } from './api';
+import { compressAudio } from './media';
 
 type Obj = Record<string, any>;
 
@@ -56,13 +57,14 @@ const MAX_AUDIO = 3_200_000;
 
 export function AudioField({ value, onChange, onError }: { value: string; onChange: (v: string) => void; onError?: (m: string) => void }) {
   const ref = useRef<HTMLInputElement>(null);
-  const [busy, setBusy] = useState(false);
+  const [phase, setPhase] = useState('');
+  const busy = phase !== '';
   return (
     <div className="img-field audio-field">
       {value && <audio controls preload="none" src={value} />}
       <input className="inp" value={value} onChange={(e) => onChange(e.target.value)} placeholder="/uploads/… .mp3" />
       <button type="button" className="abtn" disabled={busy} onClick={() => ref.current?.click()}>
-        <Music size={15} /> {busy ? 'Uploading…' : 'Upload audio'}
+        <Music size={15} /> {busy ? phase : 'Upload audio'}
       </button>
       <input
         ref={ref}
@@ -70,17 +72,21 @@ export function AudioField({ value, onChange, onError }: { value: string; onChan
         accept=".mp3,.m4a,.aac,.ogg,.wav,audio/*"
         hidden
         onChange={async (e) => {
-          const f = e.target.files?.[0];
+          let f = e.target.files?.[0];
           e.target.value = '';
           if (!f) return;
-          if (f.size > MAX_AUDIO) return onError?.('That file is over 3.2 MB. Export it at a lower bitrate (128 kbps MP3 is about 1 MB per minute).');
-          setBusy(true);
           try {
+            if (f.size > MAX_AUDIO) {
+              // too big for one request: re-encode as a smaller MP3 in the browser
+              setPhase('Compressing…');
+              f = await compressAudio(f, MAX_AUDIO, (p) => setPhase(`Compressing ${Math.round(p * 100)}%`));
+            }
+            setPhase('Uploading…');
             onChange(await uploadFile(f));
           } catch (err) {
             onError?.((err as Error).message);
           } finally {
-            setBusy(false);
+            setPhase('');
           }
         }}
       />
