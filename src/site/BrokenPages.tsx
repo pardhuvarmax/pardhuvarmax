@@ -8,6 +8,14 @@ const home = <a className="nfb-btn" href="/"><ArrowLeft size={16} /> Back home</
 export const isChunkError = (e?: Error | null) => !!e && /dynamically imported module|Importing a module script failed|ChunkLoadError|Loading chunk|Failed to fetch dynamically/i.test(`${e.name} ${e.message}`);
 
 /** 500: a page crashed while drawing. Replaces what used to be a blank white screen. */
+const stamp = () => new Date().toTimeString().slice(0, 8);
+const clean = (l: string) => l.trim().replace(/https?:\/\/[^/\s)]+/g, '').replace(/\?[^\s):]*/g, '').slice(0, 96);
+/** What the console would print for a crash: the error, then the first few stack frames. */
+const crashLog = (e?: Error | null): string[] => {
+  const frames = (e?.stack ?? '').split('\n').filter((l) => /\bat\s|@/.test(l)).slice(0, 4).map(clean);
+  return [`[${stamp()}] ERROR ${clean(`${e?.name ?? 'Error'}: ${e?.message ?? 'unknown'}`)}`, ...frames, `[${stamp()}] render aborted, page unmounted`];
+};
+
 export function CrashPage({ error }: { error?: Error | null }) {
   const stale = isChunkError(error);
   return (
@@ -15,6 +23,7 @@ export function CrashPage({ error }: { error?: Error | null }) {
       code="500"
       seed={3}
       tint={stale}
+      log={stale ? undefined : crashLog(error)}
       title={stale ? 'New version out' : 'Something broke'}
       line={<>ERROR <b>500</b> · <span className="nfb-blink">{stale ? 'page files changed' : 'the page crashed'}</span></>}
       copy={stale ? 'The site was updated while this tab was open, so some of its files are gone. Reload to get the new version.' : 'Something went wrong while drawing this page. It is not you, and Spider-Man is on it. Reloading usually helps.'}
@@ -129,6 +138,7 @@ export function MaintenancePage({ text }: { text?: string }) {
     <BrokenPage
       code="503"
       seed={19}
+      log={[`[${stamp()}] WARN  maintenance mode is on`, `[${stamp()}] ERROR 503 service unavailable`, 'upstream: paused by owner', 'retry: automatic, 30s']}
       title="Back soon"
       line={<>ERROR <b>503</b> · <span className="nfb-blink">down for maintenance</span></>}
       copy={text || 'The site is getting a little maintenance. Spider-Man is taking a short nap meanwhile, and both will be back soon.'}

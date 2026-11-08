@@ -7,21 +7,33 @@ import '../styles/notfound.css';
 
 const GLITCH = ['#e0242c', '#2f5bff', '#ffd23f', '#22d3ee', '#ff3fa4'];
 /** Faint coloured streaks that flicker and jump sideways, like a signal coming back. Deterministic per page so it does not reshuffle on re-render. */
-function GlitchLines({ seed, bad = false }: { seed: number; bad?: boolean }) {
+function GlitchLines({ seed }: { seed: number }) {
   let r = seed * 9301 + 49297;
   const rnd = () => ((r = (r * 9301 + 49297) % 233280) / 233280);
-  // good news: streaks of colour all over. Real errors: faint red and grey streaks bunched in the bottom left corner.
-  const lines = Array.from({ length: bad ? 18 : 26 }, (_, i) => {
+  const lines = Array.from({ length: 26 }, (_, i) => {
     const thick = rnd() < 0.22;
-    return bad
-      ? { top: 68 + rnd() * 32, left: rnd() * 34, width: 8 + rnd() * 30, height: thick ? 5 + rnd() * 8 : 1 + Math.floor(rnd() * 3), color: i % 3 === 0 ? '#8a8a8a' : i % 3 === 1 ? '#c4161c' : '#e0242c', dx: (rnd() < 0.5 ? -1 : 1) * (8 + rnd() * 34), dur: 2.6 + rnd() * 3.6, delay: rnd() * 4, peak: thick ? 0.09 : 0.26 }
-      : { top: rnd() * 100, left: rnd() * 70, width: 14 + rnd() * 48, height: thick ? 6 + rnd() * 10 : 1 + Math.floor(rnd() * 3), color: GLITCH[i % GLITCH.length], dx: (rnd() < 0.5 ? -1 : 1) * (14 + rnd() * 60), dur: 2.2 + rnd() * 3.6, delay: rnd() * 4, peak: thick ? 0.12 : 0.34 };
+    return {
+      top: rnd() * 100, left: rnd() * 70, width: 14 + rnd() * 48, height: thick ? 6 + rnd() * 10 : 1 + Math.floor(rnd() * 3),
+      color: GLITCH[i % GLITCH.length], dx: (rnd() < 0.5 ? -1 : 1) * (14 + rnd() * 60), dur: 2.2 + rnd() * 3.6, delay: rnd() * 4, peak: thick ? 0.12 : 0.34,
+    };
   });
   return (
     <div className="nfb-glow" aria-hidden="true">
       {lines.map((l, i) => (
         <i key={i} style={{ top: `${l.top}%`, left: `${l.left}%`, width: `${l.width}%`, height: l.height, background: l.color, '--dx': `${l.dx}px`, '--pk': l.peak, animationDuration: `${l.dur}s`, animationDelay: `${l.delay}s` } as React.CSSProperties} />
       ))}
+    </div>
+  );
+}
+
+/** A faint error log in the bottom left, like a terminal: red for the error, grey for the rest. Lines print one after another. */
+function ErrorLog({ lines }: { lines: string[] }) {
+  return (
+    <div className="nfb-log" aria-hidden="true">
+      {lines.map((l, i) => (
+        <p key={i} className={/error|fail|refused|fatal/i.test(l.split(/\s+/).slice(0, 3).join(' ')) ? 'err' : ''} style={{ animationDelay: `${0.8 + i * 0.45}s` }}>{l}</p>
+      ))}
+      <p className="cur" style={{ animationDelay: `${0.8 + lines.length * 0.45}s` }}>_</p>
     </div>
   );
 }
@@ -37,6 +49,7 @@ export default function BrokenPage({
   seed = 7,
   noindex = false,
   tint = false,
+  log,
 }: {
   code: string;
   title: string;
@@ -49,6 +62,8 @@ export default function BrokenPage({
   noindex?: boolean;
   /** Good news (back online, new version, timer finished): a faint wash of colour fades in behind the black and white. */
   tint?: boolean;
+  /** Lines for the faint error log in the bottom left (real errors only). */
+  log?: string[];
 }) {
   const num = useRef<HTMLDivElement>(null);
 
@@ -114,7 +129,8 @@ export default function BrokenPage({
       <div className="nfb-num" ref={num} aria-hidden="true" style={{ filter: `url(#${filter})` }}>
         <div className="nfb-s" data-text={code}><span className="nfb-t">{code}</span></div>
       </div>
-      <GlitchLines seed={seed} bad={!tint} />
+      {tint && <GlitchLines seed={seed} />}
+      {log && log.length > 0 && <ErrorLog lines={log} />}
       <div className="nfb-noise" aria-hidden="true" />
       <div className="nfb-scan" aria-hidden="true" />
 
