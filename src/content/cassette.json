@@ -9,34 +9,39 @@
         {
           "title": "Friends (Intro loop)",
           "src": "/uploads/chase-atlantic-friends.mp3",
-          "artist": "Chase Atlantic"
+          "artist": "Chase Atlantic",
+          "cover": "/uploads/friends-cover.jpg"
         },
         {
           "title": "Drugs & Money (Instrumental)",
           "src": "/uploads/chase-atlantic-drugs-and-money-instrumental.mp3",
-          "artist": "Chase Atlantic"
+          "artist": "Chase Atlantic",
+          "cover": "/uploads/drugs-and-money-cover.jpg"
         },
         {
           "title": "Slow Down (Instrumental)",
           "src": "/uploads/chase-atlantic-slow-down-instrumental.mp3",
-          "artist": "Chase Atlantic"
+          "artist": "Chase Atlantic",
+          "cover": "/uploads/slow-down-cover.jpg"
         }
       ]
     },
     {
       "title": "The Weeknd",
       "artist": "Favourites",
-      "cover": "/uploads/after-hours-cover.jpg",
+      "cover": "/uploads/blinding-lights-cover.jpg",
       "tracks": [
         {
           "title": "Blinding Lights (Instrumental)",
           "src": "/uploads/the-weeknd-blinding-lights-instrumental.mp3",
-          "artist": "The Weeknd"
+          "artist": "The Weeknd",
+          "cover": "/uploads/blinding-lights-cover.jpg"
         },
         {
           "title": "High For This (Instrumental)",
           "src": "/uploads/the-weeknd-high-for-this-instrumental.mp3",
-          "artist": "The Weeknd"
+          "artist": "The Weeknd",
+          "cover": "/uploads/high-for-this-cover.jpg"
         }
       ]
     }

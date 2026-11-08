@@ -217,7 +217,7 @@ export const COLLECTIONS: Collection[] = [
           { key: 'title', label: 'Album title', type: 'text' },
           { key: 'artist', label: 'Artist', type: 'text' },
           { key: 'year', label: 'Year (optional)', type: 'text' },
-          { key: 'cover', label: 'Cover image (optional)', type: 'image' },
+          { key: 'cover', label: 'Tape cover (optional)', type: 'image', help: 'Shown on the cassette. Leave empty to use the first song\'s cover.' },
           { key: 'note', label: 'Why I like it (optional)', type: 'textarea' },
           {
             key: 'tracks',
@@ -227,6 +227,7 @@ export const COLLECTIONS: Collection[] = [
             fields: [
               { key: 'title', label: 'Track title', type: 'text' },
               { key: 'artist', label: 'Artist (if different)', type: 'text' },
+              { key: 'cover', label: 'Song cover (optional)', type: 'image', help: 'Shown in the player while this song is selected.' },
               { key: 'src', label: 'Audio file', type: 'audio', help: 'MP3, M4A, AAC, OGG or WAV, up to 3.2 MB each (a 128 kbps MP3 is about 1 MB per minute).' },
             ],
           },

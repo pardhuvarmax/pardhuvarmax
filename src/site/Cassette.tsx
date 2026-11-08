@@ -103,7 +103,7 @@ export default function Cassette() {
             aria-pressed={i === a}
           >
             <span className="cs-label">
-              {al.cover && <img src={safeHref(al.cover)} alt="" />}
+              {(al.cover || al.tracks[0]?.cover) && <img src={safeHref(al.cover || al.tracks[0].cover!)} alt="" />}
               <span>
                 <b>{al.title}</b>
                 <i>{al.artist}{al.year ? ` · ${al.year}` : ''}</i>
@@ -136,7 +136,7 @@ export default function Cassette() {
           }}
         />
         <div className="cs-head">
-          {album.cover && <img className="cs-cover" src={safeHref(album.cover)} alt={`${album.title} cover`} />}
+          {(track?.cover || album.cover) && <img className="cs-cover" src={safeHref((track?.cover || album.cover)!)} alt={`${track?.title ?? album.title} cover`} />}
           <div className="cs-now">
             <span className="cs-kick">{playing ? 'Now playing' : 'Loaded'}</span>
             <h3>{track?.title}</h3>
