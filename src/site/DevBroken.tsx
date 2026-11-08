@@ -63,10 +63,10 @@ export default function DevBroken() {
       case '500-stale': return <CrashPage error={new Error('Failed to fetch dynamically imported module: /assets/Admin-xyz.js')} />;
       case 'crash': return <Boom />;
       case '403': return <ForbiddenPage message="This Google account is not allowed to sign in." onClose={() => undefined} />;
-      case '401': return <SignedOutPage onSignIn={() => undefined} />;
-      case '429': return <SlowDownPage key={n} seconds={42} onRetry={() => setN((v) => v + 1)} />;
+      case '401': return <SignedOutPage onSignIn={() => undefined} detail={{ status: 401, message: 'Not signed in.', action: 'save' }} />;
+      case '429': return <SlowDownPage key={n} seconds={42} detail="Too many attempts. Try again in a few minutes." exact onRetry={() => setN((v) => v + 1)} />;
       case '429-done': return <SlowDownPage key={`d${n}`} seconds={1} onRetry={() => setN((v) => v + 1)} />;
-      case 'offline': return <OfflinePage onDismiss={() => undefined} />;
+      case 'offline': return <OfflinePage onDismiss={() => undefined} since={new Date().toTimeString().slice(0, 8)} />;
       case 'online': return <OfflinePage online />;
       case '503': return <MaintenancePage />;
       default: return null;

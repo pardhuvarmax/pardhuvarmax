@@ -305,9 +305,9 @@ export default function Admin() {
   const [status, setStatus] = useState<Status | null>(null);
   const [active, setActive] = useState(COLLECTIONS[0].id);
   const [toast, setToast] = useState<Toast>(null);
-  const [expired, setExpired] = useState(false); // the session ended while editing
+  const [expired, setExpired] = useState<{ status: number; message: string; action: string } | null>(null); // the session ended while editing
   useEffect(() => {
-    const on = () => setExpired(true);
+    const on = (e: Event) => setExpired((e as CustomEvent).detail ?? { status: 401, message: 'Unauthorized', action: 'unknown' });
     window.addEventListener('admin:expired', on);
     return () => window.removeEventListener('admin:expired', on);
   }, []);
@@ -353,7 +353,7 @@ export default function Admin() {
         )}
       </section>
       {toast && <div className={`toast ${toast.kind}`} role="status">{toast.text}</div>}
-      {expired && <SignedOutPage onSignIn={() => { setExpired(false); setStatus((st) => (st ? { ...st, authed: false } : st)); }} />}
+      {expired && <SignedOutPage detail={expired} onSignIn={() => { setExpired(null); setStatus((st) => (st ? { ...st, authed: false } : st)); }} />}
     </div>
   );
 }

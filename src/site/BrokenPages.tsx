@@ -49,7 +49,7 @@ export function ForbiddenPage({ message, onClose, closeLabel = 'Try another way'
     <BrokenPage
       code="403"
       seed={5}
-      log={[`[${t}] WARN  auth: sign-in attempt`, `[${t}] ERROR 403 forbidden`, 'account is not on the allow list', 'session not created']}
+      log={message ? [`[${t}] ERROR 403 ${clean(message)}`] : undefined}
       title="Not allowed"
       line={<>ERROR <b>403</b> · <span className="nfb-blink">access denied</span></>}
       copy={message || 'This account is not on the list, so Spider-Man is not letting it through.'}
@@ -65,13 +65,14 @@ export function ForbiddenPage({ message, onClose, closeLabel = 'Try another way'
 }
 
 /** 401: the session ended, or you are not signed in. */
-export function SignedOutPage({ onSignIn }: { onSignIn: () => void }) {
+/** `detail` is what the server actually said: the status, its message and which request it was. */
+export function SignedOutPage({ onSignIn, detail }: { onSignIn: () => void; detail?: { status: number; message: string; action: string } }) {
   const t = useStamp();
   return (
     <BrokenPage
       code="401"
       seed={11}
-      log={[`[${t}] ERROR 401 unauthorized`, 'session token expired or missing', `[${t}] WARN  redirecting to /login`]}
+      log={detail ? [`[${t}] ERROR ${detail.status} ${clean(detail.message)}`, `request: ${clean(detail.action)}`] : undefined}
       title="Signed out"
       line={<>ERROR <b>401</b> · <span className="nfb-blink">session ended</span></>}
       copy="Your session ended, or you were never signed in. Spider-Man needs to see some ID before you carry on."
@@ -87,7 +88,8 @@ export function SignedOutPage({ onSignIn }: { onSignIn: () => void }) {
 }
 
 /** 429: too many sign-in attempts, with a live countdown. */
-export function SlowDownPage({ seconds, onRetry }: { seconds: number; onRetry: () => void }) {
+/** `detail` is the server's own message; `exact` says the seconds came from its Retry-After rather than a guess. */
+export function SlowDownPage({ seconds, onRetry, detail, exact = false }: { seconds: number; onRetry: () => void; detail?: string; exact?: boolean }) {
   const t = useStamp();
   const total = Math.max(1, Math.round(seconds));
   const [left, setLeft] = useState(total);
@@ -102,7 +104,7 @@ export function SlowDownPage({ seconds, onRetry }: { seconds: number; onRetry: (
       code="429"
       seed={13}
       tint={left === 0}
-      log={left === 0 ? undefined : [`[${t}] ERROR 429 too many requests`, 'rate limit: sign-in attempts', `retry-after: ${left}s`]}
+      log={left === 0 || !detail ? undefined : [`[${t}] ERROR 429 ${clean(detail)}`, ...(exact ? [`retry-after: ${left}s`] : [])]}
       title="Slow down"
       line={<>ERROR <b>429</b> · try again in <b>{mm}:{ss}</b></>}
       copy="Too many sign-in attempts. Spider-Man is out of breath. Wait for the timer to run out, then try again."
@@ -118,14 +120,15 @@ export function SlowDownPage({ seconds, onRetry }: { seconds: number; onRetry: (
 }
 
 /** Offline: the connection dropped. */
-export function OfflinePage({ online = false, onDismiss }: { online?: boolean; onDismiss?: () => void }) {
+/** `since` is when the browser reported the connection lost. */
+export function OfflinePage({ online = false, onDismiss, since }: { online?: boolean; onDismiss?: () => void; since?: string }) {
   const t = useStamp();
   return (
     <BrokenPage
       code="OFF"
       seed={17}
       tint={online}
-      log={online ? undefined : [`[${t}] ERROR network unreachable`, 'fetch failed: ERR_INTERNET_DISCONNECTED', `[${t}] WARN  waiting for connection`]}
+      log={online ? undefined : [`[${since ?? t}] ERROR connection lost`, 'navigator.onLine = false']}
       title={online ? 'Back online' : 'No signal'}
       line={online ? <>CONNECTION <b>restored</b></> : <>NETWORK <b>unreachable</b> · <span className="nfb-blink">waiting for signal</span></>}
       copy={online ? 'Got it. Carry on.' : 'Your connection dropped. What is already on this page still works, but anything new has to wait. Spider-Man is shouting down the line.'}
@@ -149,7 +152,7 @@ export function MaintenancePage({ text }: { text?: string }) {
     <BrokenPage
       code="503"
       seed={19}
-      log={[`[${t}] WARN  maintenance mode is on`, `[${t}] ERROR 503 service unavailable`, 'upstream: paused by owner', 'retry: automatic, 30s']}
+      log={[`[${t}] ERROR 503 maintenance mode is on`, 'special.maintenance = true', ...(text ? [`note: ${clean(text)}`] : [])]}
       title="Back soon"
       line={<>ERROR <b>503</b> · <span className="nfb-blink">down for maintenance</span></>}
       copy={text || 'The site is getting a little maintenance. Spider-Man is taking a short nap meanwhile, and both will be back soon.'}

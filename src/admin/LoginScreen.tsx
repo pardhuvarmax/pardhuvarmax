@@ -41,16 +41,16 @@ export function LoginScreen({ configured, totp = true, google = null, github = f
     const e = new URLSearchParams(window.location.search).get('error'); // sent back by a failed GitHub / ORCID sign-in
     if (!e) return;
     if (/not allowed/i.test(e)) setBlocked({ kind: '403', message: e });
-    else if (/too many attempts/i.test(e)) setBlocked({ kind: '429', seconds: 600 });
+    else if (/too many attempts/i.test(e)) setBlocked({ kind: '429', seconds: 600, message: e });
     else setErr(e);
   }, []);
   const [digits, setDigits] = useState<string[]>(Array(LEN).fill(''));
   const [err, setErr] = useState('');
   // a refused account (403) or too many attempts (429) gets a full error page; a wrong code (401) stays inline
-  const [blocked, setBlocked] = useState<{ kind: '403' | '429'; message?: string; seconds?: number } | null>(null);
+  const [blocked, setBlocked] = useState<{ kind: '403' | '429'; message?: string; seconds?: number; exact?: boolean } | null>(null);
   const fail = useCallback((e: unknown) => {
     if (e instanceof ApiError && e.status === 403) setBlocked({ kind: '403', message: e.message });
-    else if (e instanceof ApiError && e.status === 429) setBlocked({ kind: '429', seconds: e.retryAfter ?? 600 });
+    else if (e instanceof ApiError && e.status === 429) setBlocked({ kind: '429', seconds: e.retryAfter ?? 600, message: e.message, exact: e.retryAfter !== undefined });
     else fail(e);
   }, []);
   const [busy, setBusy] = useState(false);
@@ -234,7 +234,7 @@ export function LoginScreen({ configured, totp = true, google = null, github = f
         <Link className="lg-back" to={backTo}><ArrowLeft size={14} /> Back to site</Link>
       </main>
       {blocked?.kind === '403' && <ForbiddenPage message={blocked.message} onClose={() => setBlocked(null)} />}
-      {blocked?.kind === '429' && <SlowDownPage seconds={blocked.seconds ?? 600} onRetry={() => setBlocked(null)} />}
+      {blocked?.kind === '429' && <SlowDownPage seconds={blocked.seconds ?? 600} detail={blocked.message} exact={blocked.exact} onRetry={() => setBlocked(null)} />}
     </div>
   );
 }

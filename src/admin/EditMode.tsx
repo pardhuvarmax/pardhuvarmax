@@ -42,9 +42,9 @@ export default function EditMode({ request }: { request: number }) {
   const [menu, setMenu] = useState(false);
   const [action, setAction] = useState<(Action & { n: number }) | null>(null);
   const [toast, setToast] = useState<Toast>(null);
-  const [expired, setExpired] = useState(false); // the session ended while editing
+  const [expired, setExpired] = useState<{ status: number; message: string; action: string } | null>(null); // the session ended while editing
   useEffect(() => {
-    const on = () => setExpired(true);
+    const on = (e: Event) => setExpired((e as CustomEvent).detail ?? { status: 401, message: 'Unauthorized', action: 'unknown' });
     window.addEventListener('admin:expired', on);
     return () => window.removeEventListener('admin:expired', on);
   }, []);
@@ -164,7 +164,7 @@ export default function EditMode({ request }: { request: number }) {
         </>
       )}
       {toast && <div className={`em-toast ${toast.kind}`} role="status">{toast.text}</div>}
-      {expired && <SignedOutPage onSignIn={() => window.location.assign('/login')} />}
+      {expired && <SignedOutPage detail={expired} onSignIn={() => window.location.assign('/login')} />}
     </div>
   );
 }

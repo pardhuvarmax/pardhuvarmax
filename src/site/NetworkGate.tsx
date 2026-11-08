@@ -8,9 +8,10 @@ export function OfflineGate() {
   const [dismissed, setDismissed] = useState(false);
   const [back, setBack] = useState(false);
   const was = useRef(offline);
+  const [since, setSince] = useState(() => new Date().toTimeString().slice(0, 8)); // when the browser said the connection was lost
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
-    const off = () => { was.current = true; setOffline(true); setDismissed(false); setBack(false); };
+    const off = () => { was.current = true; setSince(new Date().toTimeString().slice(0, 8)); setOffline(true); setDismissed(false); setBack(false); };
     const on = () => {
       if (!was.current) return;
       was.current = false;
@@ -22,7 +23,7 @@ export function OfflineGate() {
     return () => { window.removeEventListener('offline', off); window.removeEventListener('online', on); clearTimeout(timer); };
   }, []);
   if (!offline || (dismissed && !back)) return null;
-  return <OfflinePage online={back} onDismiss={() => setDismissed(true)} />;
+  return <OfflinePage online={back} since={since} onDismiss={() => setDismissed(true)} />;
 }
 
 /** Maintenance mode (Special > Maintenance mode): visitors see the 503 page. The owner, signed in or running locally, sees the

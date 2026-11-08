@@ -25,7 +25,7 @@ export async function api<T = any>(action: string, opts: { query?: Record<string
     /* non-JSON */
   }
   if (!res.ok) {
-    if (res.status === 401 && !AUTH_ACTIONS.includes(action)) window.dispatchEvent(new Event('admin:expired'));
+    if (res.status === 401 && !AUTH_ACTIONS.includes(action)) window.dispatchEvent(new CustomEvent('admin:expired', { detail: { status: 401, message: data?.error ?? 'Unauthorized', action } }));
     throw new ApiError(res.status, data?.error ?? `Request failed (${res.status})`, typeof data?.retryAfter === 'number' ? data.retryAfter : undefined);
   }
   if (data === null) throw new ApiError(res.status, 'The admin service did not answer. Check that the API is deployed.');
