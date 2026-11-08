@@ -2,9 +2,9 @@
   "intro": "Tapes I keep on repeat while I code, read papers and break things. Press a tape, hit play.",
   "albums": [
     {
-      "title": "Nostalgia",
+      "title": "Friends",
       "artist": "Chase Atlantic",
-      "cover": "/uploads/nostalgia-cover.jpg",
+      "cover": "/uploads/friends-cover.jpg",
       "tracks": [
         { "title": "Friends (Intro loop)", "src": "/uploads/chase-atlantic-friends.mp3" }
       ]
