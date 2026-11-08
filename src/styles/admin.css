@@ -141,3 +141,9 @@ html .adm:has(.login) .login { margin-top: 0; }
 /* number field: slider plus exact value */
 .adm .num-field { display: grid; grid-template-columns: 1fr 96px; gap: 14px; align-items: center; }
 .adm .num-field input[type='range'] { width: 100%; accent-color: var(--accent); }
+
+/* drop-down lists: native option popups ignore the page colours unless told */
+.adm select.inp, .adm .inp option { background-color: var(--bg-2); color: var(--text); }
+.adm select.inp { color-scheme: dark; }
+:root[data-theme='light'] .adm select.inp { color-scheme: light; }
+.adm .inp option:checked { background-color: var(--accent); color: var(--on-accent, #fff); }
