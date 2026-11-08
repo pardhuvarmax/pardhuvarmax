@@ -162,7 +162,7 @@ export function LoginScreen({ configured, totp = true, google = null, github = f
       <DotGrid />
       <main className="lg-card">
         <div className="lg-spidey" aria-hidden="true"><SpiderSprite frame={sense ? 'sit-sense' : LOOK[lookIdx]} /></div>
-        <div className="lg-brand"><span>K</span>{site.shortName}</div>
+        <div className="lg-brand"><span><img src="/assets/avatar.png" alt="" /></span>{site.shortName}</div>
         <p className="lg-kicker" data-text="Content admin">Content admin</p>
         <h1>Sign in</h1>
         <p className="lg-lede">{alt ? (totp ? "Use your authenticator code, or choose another way to sign in." : "Choose how you want to sign in.") : "Enter the 6-digit code from your authenticator app."}</p>

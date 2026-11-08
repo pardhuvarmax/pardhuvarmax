@@ -107,7 +107,7 @@ export default function SiteLayout() {
 
       <header className={`nav ${scrolled ? 'nav--solid' : ''}`}>
         <Link to="/" className="brand" aria-label="Home">
-          <span className="brand-mark">K</span>
+          <span className="brand-mark"><img src="/assets/avatar.png" alt="" /></span>
           <span className="brand-text">{site.shortName}</span>
         </Link>
         <nav className={`nav-links ${open ? 'is-open' : ''}`} aria-label="Primary">
