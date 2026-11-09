@@ -435,6 +435,8 @@
 .prose code { border-radius: 0; background: var(--accent); color: var(--on-accent); font-weight: 500; }
 .prose pre { border-radius: 0; border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); background: var(--bg-2); }
 .prose pre code { background: none; color: var(--text); }
+.prose pre { margin: 1.5em 0 2.1em; }
+.prose pre:first-child { margin-top: 0; }
 .prose img { border-radius: 0; border: 2px solid var(--ink); }
 .prose th, .prose td { border-bottom: 2px solid var(--line); }
 .prose hr { height: 3px; background: var(--ink); }

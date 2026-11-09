@@ -13,7 +13,10 @@
         "linux-kernel",
         "runtime-defense",
         "multi-agent",
-        "security"
+        "security",
+        "operating-systems",
+        "trustworthy-computing",
+        "open-source"
       ],
       "body": "## What it is\n\nKernel Borderlands (KB) is a runtime defense framework that watches a Linux system from inside the kernel. It detects, classifies and contains anomalous process behaviour at **Ring 0**.\n\nInstead of leaning only on signatures or fixed rules, KB observes kernel telemetry through **eBPF instrumentation**, builds behavioural context from it, and uses that to decide how to respond while the system is running. It is built for research and experimentation into host defense.\n\n## How it is put together\n\n- **Sensors** (C, eBPF with CO-RE and libbpf) observe the kernel and collect telemetry.\n- **Control plane** (Go): the `kbd` daemon scores what the sensors report and enforces the response.\n- **Operator tools:** the `kbctl` command line, a web dashboard and an SSH console.\n- **Containment is deliberate.** Isolate is reversible, namespace-level containment. Kill is separate, needs a two-click confirmation, and only goes ahead after `kbd` has passed its own safety checks and the sensor has confirmed it applied the containment. PID 1, kernel threads, protected executables and registered workloads are never killed.\n- **Research components** sit alongside: a Python agent swarm for behavioural reasoning and multi-agent reinforcement learning, and a Rust script checker. Both are installed but kept off by default for now.\n\n## Installing it\n\nVersion 1.0.0 is the first release, packaged for Ubuntu 24.04 and Debian (`.deb`) and for Arch (`.pkg.tar.zst`), with checksums to verify the download and a field manual for each distribution covering installation, operation and the command reference. Nothing starts at install time: run `sudo kbctl up`, then `kbctl dashboard open`.\n\nIt needs a Linux kernel with BTF, `bpf` enabled in the LSM list (the docs explain how), systemd and openssh. The `docs/` folder in the repository covers the architecture, hook points and development setup.",
       "install": "# Ubuntu 24.04 / Debian\nsudo apt install ./kernel-borderlands_1.0.0_amd64.deb\n\n# Arch\nsudo pacman -U kernel-borderlands-1.0.0-1-x86_64.pkg.tar.zst\n\n# nothing starts on install\nsudo kbctl up\nkbctl dashboard open",
@@ -32,7 +35,8 @@
         }
       ],
       "relatedPosts": [],
-      "cover": ""
+      "cover": "",
+      "cards": "high-performance, linux internals, operating systems, trustworthy"
     },
     {
       "name": "kblinuxv-archives",
@@ -57,7 +61,9 @@
           "href": "https://github.com/pardhuvarmax/kblinuxv-archives/tree/main/documentation"
         }
       ],
-      "relatedPosts": []
+      "relatedPosts": [],
+      "logo": "/uploads/pubs/kblva.webp",
+      "cards": "linux internals, trustworthy"
     },
     {
       "name": "emrac",
@@ -71,7 +77,9 @@
         "archlinux",
         "package-management",
         "aur",
-        "pacman"
+        "pacman",
+        "operating-systems",
+        "open-source"
       ],
       "body": "## What it is\n\nEmrac is a hybrid package manager for Arch Linux. It is an orchestration and interface layer over `pacman`, `makepkg`, `libalpm`, PKGBUILD and the AUR, and it puts the official repositories, the AUR and local repositories behind one command line.\n\nIt builds from a PKGBUILD when that is worthwhile, installs a binary when it is not, and tells you why. Every change shows a plan first, and `--dry-run` works on all of them.\n\n## Installing it\n\nOn Arch Linux, or an Arch-based system, the install script downloads the release tarball, checks its SHA-256 against the value pinned inside the script, builds a pacman package from it, and installs that with `sudo pacman -U`. Because pacman tracks every file, `sudo pacman -Rns emrac` removes it cleanly. The script never runs as root, asks for `sudo` only where pacman needs it, and cleans up after itself.\n\nIt is meant to be read before it is run, so the quick start downloads it and opens it first. `sh install.sh --dry-run` shows what it would do, and `sh install.sh --uninstall` removes the package. The AUR package is not published yet.\n\n## Checking your system with doctor\n\n`emrac doctor` runs read-only health checks and suggests a fix for each finding. It looks at dependencies and databases, pending upgrades against freshly synced repositories, the running kernel, disk space, caches, orphaned packages, `.pacnew` files, failed units, pins and the build sandbox. It can also write a sanitized bug report. It changes nothing, so it is a safe first command on a new machine.\n\n## What it adds\n\n- **Plans that match pacman.** Upgrade previews are built from repositories synced just now, including what conflicts and replacements will remove, so what you confirm is what happens.\n- **AUR builds you can trust a little more.** Packages are reviewed, audited for risky code, built in a bubblewrap sandbox, and inspected again before they are installed.\n- **A history you can check.** Each record is linked to the one before by SHA-256, and a second copy is kept in a root-owned ledger, so edits and deletions show up.\n- **Undo.** Transactions can be rolled back or redone, and the installed set can be saved and restored.\n- **Everyday tools:** `.pacnew` handling, cache management, pins, and Arch news that can stop an upgrade.\n\nThe current release is slice r3 (version 0.3.0, 2026-10-15). The core loop works, and a terminal interface and build profiles are still to come.",
       "install": "# install on Arch Linux: read the script first, then run it\ncurl -fsSLO https://pardhuvarmax.github.io/emrac/install.sh\nless install.sh\nsh install.sh            # asks before it does anything (--dry-run shows the steps)\n\n# check your system, then try it\nemrac doctor             # read-only health checks, with a fix for each finding\nemrac search ripgrep\nemrac install ripgrep    # preview, confirm, install\nemrac undo               # reverse the last transaction\n\n# remove it again\nsudo pacman -Rns emrac",
@@ -85,7 +93,9 @@
           "href": "https://github.com/pardhuvarmax/emrac/blob/main/docs/releases/r3.md"
         }
       ],
-      "relatedPosts": []
+      "relatedPosts": [],
+      "logo": "/uploads/pubs/emrac.webp",
+      "cards": "linux internals, operating systems, open source, arch & void"
     },
     {
       "name": "rlae-research",
@@ -118,7 +128,8 @@
           "href": "https://doi.org/10.5281/zenodo.18761938"
         }
       ],
-      "relatedPosts": []
+      "relatedPosts": [],
+      "cards": "machine learning"
     },
     {
       "name": "lbsm-research",
@@ -147,7 +158,8 @@
           "href": "https://github.com/pardhuvarmax/lbsm-research/tree/main/outputs/reports"
         }
       ],
-      "relatedPosts": []
+      "relatedPosts": [],
+      "cards": "machine learning"
     },
     {
       "name": "lease-manager-bpctf2",
@@ -163,10 +175,173 @@
         "provisioning",
         "gcp"
       ],
-      "body": "## What it was\n\nLease Manager was a self-service cloud provisioning and lease system built for BPCTF2, a live capture-the-flag event. Instead of organisers handing out infrastructure by hand, players asked for a challenge instance through a web page. The service handled the request, called the infrastructure control tool, and returned the endpoint it had allocated.\n\nIt was designed for a live event, where requests arrive at the same time and abuse prevention matters.\n\n## How it worked\n\n- **A small Python service** using only the standard library handled the lease API, with Nginx in front for TLS and reverse proxying. It ran as a systemd service that restarted itself.\n- **Two control tools** managed the underlying challenge infrastructure, running on Docker and Docker Compose.\n- **Idempotent leases.** Asking again for a team that already had a lease returned the existing one. That also stopped duplicates when a slow cold start, about 10 to 25 seconds, outlasted the client's timeout.\n- **Rate limits** in the application: at most 5 distinct team names per address per hour and 12 requests per minute.\n\n## A deliberate trade-off\n\nThe deployment did not verify identity at the lease endpoint, because the event was already running and a usable self-service path mattered more. The cost was that someone could, in principle, request a lease under another team's name. It was covered by the rate limits, the existing-lease check, monitoring, and the ability for organisers to quarantine an abused slot.\n\nIt ran on Google Cloud Compute Engine, with SSH through Identity-Aware Proxy and Let's Encrypt certificates. The event is over, so the repository is archived.",
+      "body": "## What it was\n\nLease Manager was a self-service cloud provisioning and lease system built for BPCTF2, a live capture-the-flag event. Instead of organisers handing out infrastructure by hand, players asked for a challenge instance through a web page. The service handled the request, called the infrastructure control tool, and returned the endpoint it had allocated.\n\nIt was designed for a live event, where requests arrive at the same time and abuse prevention matters.\n\n## How it worked\n\n- **A small Python service** using only the standard library handled the lease API, with Nginx in front for TLS and reverse proxying. It ran as a systemd service that restarted itself.\n- **Two control tools** managed the underlying challenge infrastructure, running on Docker and Docker Compose.\n- **Idempotent leases.** Asking again for a team that already had a lease returned the existing one. That also stopped duplicates when a slow cold start, about 10 to 25 seconds, outlasted the client's timeout.\n- **Rate limits** in the application: at most 5 distinct team names per address per hour and 12 requests per minute.\n\n## A deliberate trade-off\n\nThe deployment did not verify identity at the lease endpoint, because the event was already running and a usable self-service path mattered more. The cost was that someone could, in principle, request a lease under another team's name. It was covered by the rate limits, the existing-lease check, monitoring, and the ability for organisers to quarantine an abused slot.\n\nIt ran on Google Cloud Compute Engine, with SSH through Identity-Aware Proxy and Let's Encrypt certificates. The event is over, so the repository is archived.\n\n## The code\n\nThe lease service is one Python file I wrote, `leased.py`, using only the standard library. Two parts matter most, shown here as excerpts with the longer messages shortened.\n\n**Abuse control without logins.** The event had already started, so there were no per-team codes. Instead each address may claim only a few distinct team names per hour, and sends only so many requests per minute. Asking again for the same team is free (`leased.py`).\n\n```python\nMAX_NEW_TEAMS_PER_IP = 5\nWINDOW_SECONDS = 3600\nMAX_REQUESTS_PER_IP_PER_MIN = 12\n\ndef rate_limit_check(ip: str, team: str) -> str | None:\n    \"\"\"Returns an error string if this request should be rejected, else None.\"\"\"\n    with _lock:\n        reqs = _prune(_req_log.get(ip, []), 60)\n        if len(reqs) >= MAX_REQUESTS_PER_IP_PER_MIN:\n            return \"too many requests, slow down\"\n        reqs.append(time.time())\n        _req_log[ip] = reqs\n\n        seen = _known_teams_per_ip.setdefault(ip, set())\n        if team not in seen:\n            claims = _prune(_new_team_log.get(ip, []), WINDOW_SECONDS)\n            if len(claims) >= MAX_NEW_TEAMS_PER_IP:\n                return f\"too many different team names from this address recently (max {MAX_NEW_TEAMS_PER_IP}/hour)\"\n            claims.append(time.time())\n            _new_team_log[ip] = claims\n            seen.add(team)\n    return None\n```\n\n**Idempotent leases.** A repeat request returns the team's existing lease, and every failure the control tool can report is turned into a clear message and the right status code, so players know what to do next.\n\n```python\ndef get_or_create_lease(team: str) -> tuple[int, dict]:\n    show = run_ctl(\"show\", team)\n    if show.returncode == 0:\n        info = PARSERS[MODE](show.stdout)\n        if info:\n            info[\"status\"] = \"existing\"\n            return 200, info\n\n    lease = run_ctl(\"lease\", team)\n    out = lease.stdout + lease.stderr\n    if lease.returncode != 0:\n        if \"already had a lease\" in out:\n            return 409, {\"error\": \"this team already used its lease for this event\"}\n        if \"mid-operation\" in out:\n            return 503, {\"error\": \"your previous request is still being created, try again in a few seconds\"}\n        if \"pool\" in out.lower() and (\"full\" in out.lower() or \"no free\" in out.lower()):\n            return 503, {\"error\": \"the lease pool is full right now, try again in a few minutes\"}\n        return 500, {\"error\": \"could not create a lease; an organizer has been notified\"}\n    ...\n```",
       "install": "",
       "links": [],
-      "relatedPosts": []
+      "relatedPosts": [],
+      "logo": "/uploads/pubs/breachpoint.webp"
+    },
+    {
+      "name": "ndra-pii",
+      "status": "Active",
+      "featured": false,
+      "date": "2025-12",
+      "lang": "Python, HTML, Dockerfile",
+      "description": "A multi-agent system that finds personal data in documents, scores the risk and redacts it. Built with Kandukoori Tejaswini, on top of NDRA.",
+      "url": "https://github.com/Tejaswini4119/NDRA-PII",
+      "tags": [
+        "machine-learning",
+        "privacy",
+        "trustworthy-computing",
+        "multi-agent",
+        "python"
+      ],
+      "links": [
+        {
+          "label": "Earlier version: NDRA",
+          "href": "/projects/ndra"
+        }
+      ],
+      "body": "## What it does\n\nNDRA-PII reads unstructured documents (PDF, DOCX, text and email), finds personally identifiable information, judges how risky each finding is, and writes a redacted copy. It is not a regex filter: a chain of small agents each does one job.\n\n- **Ingestion** reads the file.\n- **Classifier** finds PII using Presidio, spaCy and regular expressions together.\n- **Fusion** merges overlapping findings, for example \"New York\" and \"New York City\".\n- **Policy** applies configurable rules, written in YAML, to give each finding a risk score and an action.\n- **Redaction** carries the actions out and produces the sanitised document.\n\nEvery decision leaves an audit trail, and a frozen mode accepts only the ingestion paths that have been verified end to end, quarantining everything else.\n\n## Where it comes from\n\nIt grew out of [NDRA](/projects/ndra), the document research assistant we built earlier. The repository lives under Kandukoori Tejaswini's account and carries that whole history.\n\n## What I did\n\nI wrote 268 of the commits, from August 2025 to July 2026.\n\n- **Deployment, from the start.** The first work was getting the pipeline running for real: the process file, the requirements and the Chroma vector store hosted on Railway.\n- **The email parser.** In March 2026 I implemented an RFC-compliant email parser that handles MIME boundaries safely and decodes encodings properly, then merged it in.\n- **Cleanup and reproducibility.** I restructured the code for readability and set up a Nix flake for a reproducible environment.\n- **The stable release.** I cut the v1.0 stable release on 30 March 2026.\n- **The paper.** I worked on the accompanying paper in April 2026.\n\n## Who else\n\nKandukoori Tejaswini, who owns the repository, made around 24 commits, including the Docker setup with health checks. Karedla Rupa Yeshvitha made 4. The project is licensed GPL-3.0.\n\n## Code I wrote\n\nThese are excerpts, shortened. The email parser is the file I wrote, `core/v2/parsers/rfc_email_parser.py`. It exists because redacting an email as plain text corrupted the message structure in 29% of cases in a review of the earlier approach: a pattern could match a MIME boundary or a header and break the email. The parser reads the message properly, collects everything that must not be touched, and rebuilds the email after redaction.\n\n**Finding what must never be redacted** (`rfc_email_parser.py`).\n\n```python\ndef _extract_mime_boundaries(self, msg: Message) -> List[str]:\n    \"\"\"MIME boundaries define message structure and MUST NOT be redacted.\"\"\"\n    boundaries = []\n    if msg.is_multipart():\n        boundary = msg.get_boundary()\n        if boundary:\n            boundaries.append(boundary)\n        for part in msg.walk():\n            if part.is_multipart():\n                boundary = part.get_boundary()\n                if boundary:\n                    boundaries.append(boundary)\n    return boundaries\n\ndef get_protected_strings(self, parsed: ParsedEmail) -> List[str]:\n    protected = []\n    for boundary in parsed.mime_boundaries:\n        protected.append(boundary)\n        protected.append(f\"--{boundary}\")\n        protected.append(f\"--{boundary}--\")\n    protected.extend([\"Content-Type:\", \"Content-Transfer-Encoding:\", \"MIME-Version:\"])\n    return protected\n```\n\n**Putting the email back together.** Only the readable body is replaced. Attachments and structure are left alone, and the original encoding is reapplied (`rfc_email_parser.py`).\n\n```python\ndef reconstruct(self, parsed: ParsedEmail, redacted_text: str) -> bytes:\n    msg = parsed.raw_message\n    if msg.is_multipart():\n        for part in msg.walk():\n            content_type = part.get_content_type()\n            content_disposition = str(part.get(\"Content-Disposition\", \"\"))\n            if \"attachment\" in content_disposition:\n                continue\n            if content_type == \"text/plain\":\n                self._set_part_payload(part, redacted_text, parsed)\n                break\n    else:\n        if msg.get_content_type() == \"text/plain\":\n            self._set_part_payload(msg, redacted_text, parsed)\n    return msg.as_bytes(policy=self.policy)\n```\n\nIf strict parsing fails, a best-effort fallback still returns the text, with the error recorded in a header, so one bad email never stops a batch.",
+      "cards": "machine learning, trustworthy"
+    },
+    {
+      "name": "ndra",
+      "status": "Archived",
+      "featured": false,
+      "date": "2025-07",
+      "lang": "Python, Jupyter",
+      "description": "Neuro-Semantic Document Research Assistance: asks a long document a vague question and answers with the clause that decides it. Archived; it became NDRA-PII.",
+      "url": "https://github.com/pardhuvarmax/NDRA",
+      "tags": [
+        "machine-learning",
+        "rag",
+        "nlp",
+        "python"
+      ],
+      "links": [
+        {
+          "label": "Continued as NDRA-PII",
+          "href": "/projects/ndra-pii"
+        }
+      ],
+      "body": "## What it was\n\nNDRA took a vague question about a long policy document, for example \"46-year-old male, knee surgery in Pune, 3-month-old policy\", pulled out the structured facts, found the clauses that apply, and returned a decision as JSON: approved or rejected, the amount, and the clause that justifies it.\n\n## How it worked\n\nA four-stage pipeline: preprocessing and chunking, embeddings stored in a Chroma vector database, query understanding and intent mapping, and a retrieval-augmented generation step with decision logic. Chunking respected meaning rather than size, and every answer traced back to the source chunks. The target was an answer in under 8 seconds, reached with parallel processing, a fast model through OpenRouter and a Gemini fallback.\n\n## What I did\n\nI wrote 115 of the commits, in July and August 2025. My work was the language side and the deployment:\n\n- understanding the natural-language query and restructuring it,\n- mapping the structured query to intent and fields,\n- the retrieval and answer pipeline,\n- fixing the dependency conflicts between the libraries,\n- deploying it, with Chroma hosted on Railway.\n\nIt was built by a team, as Team NDRA. Kandukoori Tejaswini made two commits. The repository is archived, and the work continues in [NDRA-PII](/projects/ndra-pii).\n\n## Code I wrote\n\nExcerpts, trimmed for length (debug output removed, and the Gemini branch simplified).\n\n**Turning a question into fields.** After the language model extracts what it can, plain code decides what the user is asking for, structures it, and scores how complete the question was, so the pipeline knows when to ask for more (`strqgen.py`).\n\n```python\ndef classify_intent(query: str) -> str:\n    intent_keywords = {\n        \"eligibility_check\": [\"eligible\", \"eligibility\", \"can i\", \"still covered\"],\n        \"claim_status\": [\"claim status\", \"track claim\", \"claim update\"],\n        \"coverage_check\": [\"covered\", \"coverage\", \"what is included\"],\n        \"renewal\": [\"renew\", \"extension\", \"renewal\"],\n        \"premium_info\": [\"premium\", \"cost\", \"price\", \"installment\"],\n        \"document_requirement\": [\"documents\", \"papers\", \"required for\"],\n    }\n    query_lower = query.lower()\n    for intent, keywords in intent_keywords.items():\n        if any(kw in query_lower for kw in keywords):\n            return intent\n    return \"general_inquiry\"\n\ndef compute_completeness_score(structured_query: dict) -> float:\n    fields = [\"subject\", \"age\", \"gender\", \"procedure\", \"location\", \"policy_duration\"]\n    filled = sum(1 for field in fields if structured_query.get(field))\n    return round(filled / len(fields), 2)\n```\n\n**Fast model first, Gemini as the fallback.** Search runs against the Chroma store, the chunks are trimmed in parallel, and if the fast model fails the same prompt goes to Gemini. Only if both fail does the request error (`ragqexec.py`).\n\n```python\ndef semantic_search_parallel(query: str, top_k=5):\n    query_vec = embed_func(query)\n    results = collection.query(query_embeddings=[query_vec], n_results=top_k)\n    raw_chunks = results[\"documents\"][0]\n    metadatas = results[\"metadatas\"][0]\n\n    def clean(c): return \" \".join(c.strip().split())[:400]\n    with ThreadPoolExecutor() as executor:\n        trimmed_chunks = list(executor.map(clean, raw_chunks))\n    return trimmed_chunks, metadatas\n\ndef generate_llm_response(prompt: str) -> str:\n    try:\n        return fast_chat(prompt)\n    except Exception as fast_error:\n        print(f\"Fast LLM failed, falling back to Gemini: {fast_error}\")\n        try:\n            model = genai.GenerativeModel(\"gemini-2.5-flash-lite\")\n            response = model.generate_content(prompt)\n            if hasattr(response, \"text\") and response.text:\n                return response.text.strip()\n            raise ValueError(f\"Unexpected Gemini response structure: {response}\")\n        except Exception as gemini_error:\n            raise RuntimeError(f\"Both LLMs failed. Gemini error: {gemini_error}\")\n```\n\n**Showing which clause decided it.** Every answer carries the three source clauses closest to its own justification, so the user can check the reasoning (`ragqexec.py`).\n\n```python\ndef trace_supporting_clauses(justification: str, clauses: list[str], top_k: int = 3):\n    scored = [(i, SequenceMatcher(None, justification.lower(), clause.lower()).ratio())\n              for i, clause in enumerate(clauses)]\n    top_indices = sorted(scored, key=lambda x: x[1], reverse=True)[:top_k]\n    return [clauses[i] for i, _ in top_indices]\n```",
+      "cards": "machine learning"
+    },
+    {
+      "name": "phishvault",
+      "status": "Prototype",
+      "featured": false,
+      "date": "2025-05",
+      "lang": "Go, TypeScript, Rust",
+      "description": "A platform for investigating, managing and analysing suspicious links. A collaboration with Kandukoori Tejaswini; I built the backend.",
+      "url": "https://github.com/Tejaswini4119/PhishVault",
+      "tags": [
+        "security",
+        "trustworthy-computing",
+        "phishing",
+        "go",
+        "docker"
+      ],
+      "body": "## What it is\n\nPhishVault helps someone investigate, manage and analyse potentially malicious URLs, with static and dynamic analysis behind a web interface. The stack is Go, React and TypeScript, MongoDB, Docker and Puppeteer. It is a collaboration and the repository lives under Kandukoori Tejaswini's account. Version 2 is still in development.\n\n## What I did\n\nI wrote 155 of the commits to Tejaswini's 43, and the backend was my side of it from the first day, 28 May 2025.\n\n- **The backend, and the first version.** Backend work from the first day, then error handling, the report on a test site, and a recorded demonstration.\n- **Version 2, in February 2026.** The scan report page with its backend API, a screenshot viewer, and a graph visualiser for the results.\n- **Reliability.** I fixed the race conditions that happened at start-up.\n- **Documentation.** I wrote the Phase 2 implementation report covering the infrastructure, backend and command line.\n\n## What Tejaswini built\n\nThe frontend, the ingestion service with its API for submitting URLs, emails and files, user authentication, and the scan management screens, plus a document on improving the risk scoring.\n\n## Code I wrote\n\nExcerpts from files I wrote or mostly wrote, shortened.\n\n**Grouping scans into campaigns.** Phishing kits are cloned, so scans of the same campaign look alike. I wrote the clustering that groups them with DBSCAN, using a distance that mixes three signals: the visual hash of the page (weighted most, since a cloned page looks the same), whether the servers share a subnet, and how many page-structure tokens overlap (`services/analysis/clustering/dbscan.go`).\n\n```go\n// distance calculates the \"Campaign Similarity\" (0.0 = Identical, 1.0 = Different).\nfunc distance(a, b *FeatureVector) float64 {\n\t// 1. Visual distance: Hamming distance on the 64-bit perceptual hash, scaled to 0..1\n\tvisualDist := float64(hamming(a.VisualHash, b.VisualHash)) / 64.0\n\n\t// 2. Infrastructure: 0.0 if the same /24 subnet, 1.0 otherwise\n\tipDist := 1.0\n\tif isSameSubnet(a.IP, b.IP) {\n\t\tipDist = 0.0\n\t}\n\n\t// 3. Page structure: Jaccard distance over the key DOM tokens\n\tdomDist := jaccardDistance(a.DOMTokens, b.DOMTokens)\n\n\t// Visual is the strongest indicator of a phishing kit (cloned UI).\n\t// Weight: Visual 60%, IP 20%, DOM 20%\n\treturn (visualDist * 0.6) + (ipDist * 0.2) + (domDist * 0.2)\n}\n```\n\n**One path for every artifact.** The orchestrator takes anything submitted, analyses it by type, asks a policy engine for the verdict, adds the result to the campaign graph, and buffers it for clustering. If the graph database is down it falls back to a console adapter instead of failing (`services/analysis/orchestrator.go`).\n\n```go\nswitch input.ArtifactType {\ncase \"URL\":\n\tsimilarity, urgency, intent, hasLoginForm, domainAgeDays, visualHash = o.analyzeURL(ctx, &input)\ncase \"EMAIL\":\n\tsig := AnalyzeEmail(input)\n\tinput.Signals = append(input.Signals, sig)\n\turgency, intent = sig.Weight, \"EmailPotentialPhish\"\ncase \"FILE\":\n\tsig := AnalyzeFile(input)\n\tinput.Signals = append(input.Signals, sig)\n\turgency, intent = sig.Weight, \"FilePotentialPhish\"\n}\n\nverdict, err := decision.EvaluateVerdict(ctx, decision.PolicyInput{\n\tVisualMatchScore: similarity,\n\tUrgencyScore:     urgency,\n\tIntent:           intent,\n\tHasLoginForm:     hasLoginForm,\n\tDomainAgeDays:    domainAgeDays,\n})\ninput.Verdict, input.RiskScore = verdict.Verdict, verdict.RiskScore\n\no.graphProjector.ProjectSAL(input)   // add it to the campaign graph\no.bufferForClustering(input, visualHash)\n```\n\nScoring and verdicts come from an OPA policy engine, so the rules can change without recompiling the service.",
+      "cards": "trustworthy"
+    },
+    {
+      "name": "project-ouroboros",
+      "status": "Archived",
+      "featured": false,
+      "date": "2025-09",
+      "lang": "C++, C, Makefile",
+      "description": "A modular ESP32 platform for wireless defence and monitoring, with a 15-day expo prototype. Archived.",
+      "url": "https://github.com/pardhuvarmax/Project-Ouroboros",
+      "tags": [
+        "embedded",
+        "systems-architecture",
+        "wireless-security",
+        "esp32"
+      ],
+      "body": "## What it is\n\nProject Ouroboros is a modular wireless security platform on ESP32 hardware, built for defence, monitoring and controlled research. It is for education and research only, and the repository says so up front. The repository is archived.\n\nIt has two parts:\n\n- **Blue Pill**, a defensive shield for Wi-Fi, Bluetooth and sub-GHz. It does real-time intrusion detection, TinyML anomaly detection, automated mitigation, and shows spectrum waterfalls on a small display.\n- **OuroMini**, a prototype built in 15 days for an expo. It scans Wi-Fi, Bluetooth and sub-GHz in real time, draws signal-strength bars, waterfalls and ghost traces on an OLED, logs to an SD card, and has a switch between a defensive and a research mode.\n\nThe firmware is modular, so each protocol can be updated on its own, and it ships as prebuilt images with a standard flashing process.\n\n## What I did\n\nI wrote 121 of the commits, from September 2025 to October 2026. A few others sent small commits: Harshitha Reddy, Kandukoori Tejaswini, Karedla Rupa Yeshvitha, Sai8705 and karthikkk.",
+      "cards": "high-performance"
+    },
+    {
+      "name": "phishtrap",
+      "status": "Archived",
+      "featured": false,
+      "date": "2025-04",
+      "lang": "Python, HTML, Shell",
+      "description": "A phishing-simulation event I coordinated and built the environment for, at Malla Reddy University. Archived.",
+      "url": "https://github.com/pardhuvarmax/PhishTrap",
+      "tags": [
+        "cybersecurity",
+        "education",
+        "phishing",
+        "simulation"
+      ],
+      "body": "## What it was\n\nPhishTrap was a phishing-simulation challenge for students, run with the Department of Cyber Security and IoT at Malla Reddy University. Participants played the attacker in a closed, ethical setting: they researched pre-built personas with open-source intelligence, wrote personalised phishing emails, set up look-alike pages, and then documented what their approach would have achieved.\n\n## What I did\n\nI coordinated the event as a student coordinator and built the simulation environment from scratch, using Kali Linux, Python and Flask. It was a sandbox with controlled mail delivery and logging, hosted look-alike pages, and scripts for traffic logging and the target-side behaviour, so each participant faced a realistic multi-target setup without touching anything real. Running it live meant coordinating the team and scoring in real time.\n\n## Who else\n\nPlanned and run with B. Sree Divya, senior advisor and event coordinator, and Kanne Karthik, peer lead and OSINT strategist. The repository is archived.\n\n## Code I wrote\n\nExcerpts from the lab I built: the levels, the script that brought it up, and the mailer. The mailer could only send to a short fixed list of made-up addresses, through a local mail catcher on the same machine, so nothing it sent could leave the lab. The persona addresses are blacked out with █.\n\n**Starting the lab** (`phish.sh`).\n\n```bash\n#!/bin/bash\necho \"Starting MailHog...\"\nMailHog > mailhog.log 2>&1 &\nsleep 2\necho \"MailHog web UI: http://localhost:8025\"\n\necho \"Starting Flask app at http://127.0.0.1:5000 ...\"\npython app.py\n```\n\n**The sandboxed mailer** (`app.py`). It only accepts a target by name from a fixed list, and the mail goes to a local test server on port 1025, so it never reaches a real inbox.\n\n```python\ntargets = {\n    \"████\": \"████████@catchmail.local\",\n    \"█████\": \"█████████████@catchmail.local\",\n    \"███████\": \"████████████@catchmail.local\",\n}\n\nif target_key in targets:\n    to_email = targets[target_key]\n    msg = EmailMessage()\n    msg['Subject'] = subject\n    msg['From'] = f\"{sender} <no-reply@phishlab.io>\"\n    msg['To'] = to_email\n    msg.set_content(body)\n    with smtplib.SMTP('localhost', 1025) as smtp:   # local MailHog only\n        smtp.send_message(msg)\n```\n\n**The levels** (`app.py`). Each level is a short chain of pages in the lab, and finishing the last page of a level shows its flag. The routes only move the player on to the next page. They do not store anything a player types, and the page templates are not shown here.\n\n```python\n# Level 1\n@app.route('/level1', methods=['GET', 'POST'])\ndef level1():\n    if request.method == 'POST':\n        return redirect('/level1_flag')\n    return render_template('level1.html')\n\n# Level 2: two pages, then the flag\n@app.route('/level2_slack', methods=['GET', 'POST'])\ndef level2_slack():\n    if request.method == 'POST':\n        return redirect('/level2_drive')\n    return render_template('level2_slack.html')\n\n@app.route('/level2_drive', methods=['GET', 'POST'])\ndef level2_drive():\n    if request.method == 'POST':\n        return redirect('/level2_flag')\n    return render_template('level2_drive.html')\n\n# Level 3: an invite page, a portal, then the flag\n@app.route('/level3_invite', methods=['GET', 'POST'])\ndef level3_invite():\n    if request.method == 'POST':\n        return redirect('/level3_portal')\n    return render_template('level3.html')\n```"
+    },
+    {
+      "name": "ricebtw",
+      "description": "My Linux setup across Arch and Void: Home Manager on top of Arch, and MangoWC with DankMaterialShell on both.",
+      "status": "Hobby",
+      "featured": false,
+      "date": "2026-07",
+      "lang": "QML, Shell, Python, CSS",
+      "url": "https://github.com/pardhuvarmax/ricebtw",
+      "tags": [
+        "linux",
+        "arch",
+        "void",
+        "nix",
+        "dotfiles",
+        "hobby",
+        "open-source"
+      ],
+      "body": "## What it is\n\nMy whole Linux setup in one repository, across two machines: an Arch Linux daily driver and a Void Linux install I experiment on. It started as `archbtw` and was renamed `ricebtw` on 21 October 2026.\n\n## The two machines\n\n- **Arch Linux** is the daily driver. Arch and pacman still own the kernel, bootloader, drivers, systemd, networking and PipeWire. Nix and Home Manager own the user environment on top: command-line tools, dev toolchains, shell config and dotfiles. It is Home Manager on Arch, not NixOS.\n- **Void Linux** is the experiment. It runs runit and xbps, with no systemd, no Nix and no Home Manager. Everything for it is self-contained in `rice/void-linux/`.\n\nBoth run MangoWC with DankMaterialShell. Hyprland was replaced by MangoWC in August 2026, and its configs are kept only as legacy reference.\n\n## What is in it\n\n- A Nix flake that pins nixpkgs-unstable, Home Manager and agenix, with the config split into modules: CLI tools, git, zsh, aliases, dev toolchains, secrets, Neovim and GUI apps.\n- Plain backup copies of the desktop dotfiles for both distros: MangoWC and DankMaterialShell settings, keybinds, kitty, rofi and notification config, plus the xbps package lists for Void.\n- The full wallpaper pool, about 3.7 GB, committed to GitHub and kept out of the local working tree with a sparse checkout so it does not sit on disk twice.\n\n## Where it stands\n\nThe Home Manager work is done through the repo skeleton, CLI tools, git, shell, dev toolchains and Neovim, with GUI apps partly done. Fonts, themes and icons were looked at and deliberately left alone, because colour theming is driven by matugen templates.\n\n## Upstream\n\nMoving from Hyprland to MangoWC in August 2026 meant fixing the shell I use. My fix to the MangoWC port of the Caelestia shell was merged upstream: [caelestia-shell-mango](/projects/caelestia-shell-mango).\n\n## Code I wrote for it\n\nThe parts that are actual code, not config. Excerpts, with personal paths blacked out with █ and the rest of each file left out.\n\n**One theme change, everything follows.** When the wallpaper changes, the desktop theme changes, and a hook rebuilds my terminal logo in the new colours and redraws it. The hook is two lines (`fastfetch/theme-hook.sh`).\n\n```bash\n# theme postHook: rebuild the themed logo, then redraw the focused kitty window (if it is at a bare shell).\n# Runs in the background, so it never blocks a wallpaper change.\ndir=\"$(dirname \"$(readlink -f \"$0\")\")\"\n\"$dir/make-ultron-logo.sh\" && \"$dir/redraw-focused-kitty.py\"\n```\n\n**Redrawing only where it is safe.** The redraw script types `clear && fastfetch` into a terminal, which would wreck anything running there. So it only touches a window that is focused and whose only foreground processes are a bare shell, and does nothing otherwise (`fastfetch/redraw-focused-kitty.py`).\n\n```python\nSHELLS = {\"zsh\", \"fish\", \"bash\", \"sh\", \"dash\"}\nCMD = \"clear && fastfetch\\r\"\n\nfor sock in sorted(glob.glob(\"/tmp/kitty-socket-*\")):\n    try:\n        oses = json.loads(kitty(sock, \"ls\"))\n    except Exception:\n        continue  # stale socket or kitty not answering\n    for o in oses:\n        if not o.get(\"is_focused\"):\n            continue\n        for tab in o[\"tabs\"]:\n            for w in tab[\"windows\"]:\n                if not w.get(\"is_focused\"):\n                    continue\n                fg = [os.path.basename((p.get(\"cmdline\") or [\"?\"])[0]).lstrip(\"-\")\n                      for p in w.get(\"foreground_processes\", [])]\n                if not fg or any(f not in SHELLS for f in fg):\n                    print(f\"skip window {w['id']}: foreground = {fg}\")\n                    continue\n                kitty(sock, \"send-text\", \"--match\", f\"id:{w['id']}\", CMD)\n```\n\n**Colours from whatever theme is active.** The logo script picks its accent from the theme's primary colour, trying three sources in order and falling back to red if none exist. It then shifts the hue of the red logo to match and uses brightness as transparency, so the black background disappears (`fastfetch/make-ultron-logo.sh`).\n\n```python\ndef load():\n    # 1. DMS/matugen template output\n    try:\n        d = json.load(open(os.path.expanduser(\"~/.cache/matugen/fastfetch-colors.json\")))\n        return {\"primary\": d[\"primary\"], \"onSurface\": d[\"on_surface\"]}\n    except Exception:\n        pass\n    # 2. legacy caelestia hook / scheme file\n    try:\n        return json.loads(os.environ[\"SCHEME_COLOURS\"])\n    except Exception:\n        pass\n    try:\n        return json.load(open(os.path.expanduser(\"~/.local/state/caelestia/scheme.json\")))[\"colours\"]\n    except Exception:\n        return {}\n\nh, l, s = colorsys.rgb_to_hls(*rgb(cols[\"primary\"]))\naccent = hexc(*colorsys.hls_to_rgb(h, 0.62, max(s, 0.7)))\ndim    = hexc(*colorsys.hls_to_rgb(h, 0.42, max(s, 0.55)))\n```\n\n```bash\n# hue-shift the red to the accent hue; brightness -> alpha so the black background disappears\nmagick \"$SRC\" -alpha off -modulate 100,100,\"$HUEARG\" \\\n    \\( \"$SRC\" -alpha off -colorspace Gray -level 4%,45% \\) \\\n    -compose CopyOpacity -composite \"$TMP/logo.png\"\n```\n\n**Tap Super to open the launcher.** A small script that does this without grabbing the keyboard, so combos like Super+D still reach the compositor. A tap is a press and release under 0.35 seconds with nothing else pressed in between (`bin/super-tap`). It is started at login from `/home/████████/.local/bin/super-tap`.\n\n```python\nTAP_MAX = 0.35\n\ndef handle(code, value):\n    global meta_down\n    if value == 2:  # autorepeat\n        return\n    if code in (KEY_LEFTMETA, KEY_RIGHTMETA):\n        if value == 1:\n            meta_down = time.monotonic()\n        elif value == 0 and meta_down is not None:\n            if time.monotonic() - meta_down <= TAP_MAX:\n                subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)\n            meta_down = None\n    elif value == 1:  # any other key / mouse button / touch while Super held\n        meta_down = None\n```\n\n**Cursor follows focus across monitors.** Moving focus to the next monitor also puts the pointer in the middle of it, using the monitor's position, size and scale (`hypr/scripts/focus_next_monitor.sh`, from the Hyprland days).\n\n```bash\nmonitor=$(hyprctl monitors -j | jq '.[] | select(.focused == true)')\nx=$(echo \"$monitor\" | jq '.x + (.width / 2 / .scale)' | bc)\ny=$(echo \"$monitor\" | jq '.y + (.height / 2 / .scale)' | bc)\n```",
+      "cards": "open source, arch & void"
+    },
+    {
+      "name": "caelestia-shell-mango",
+      "description": "The Caelestia desktop shell on MangoWC. My merged fix made every drawer toggle work again.",
+      "status": "Contribution",
+      "featured": false,
+      "date": "2026-08",
+      "lang": "QML",
+      "url": "https://github.com/evoziosk/caelestia-shell-mango",
+      "tags": [
+        "linux",
+        "open source",
+        "wayland",
+        "quickshell",
+        "mangowc",
+        "arch"
+      ],
+      "links": [
+        {
+          "label": "Pull request",
+          "href": "https://github.com/evoziosk/caelestia-shell-mango/pull/3"
+        }
+      ],
+      "body": "## What this is\n\n[caelestia-shell-mango](https://github.com/evoziosk/caelestia-shell-mango) is the Caelestia desktop shell ported from Hyprland to the MangoWC compositor. It is maintained by Evozio, not by me. I use it on my own machines, and this page is about the fix I sent in, which was merged upstream on 19 August 2026.\n\n## The problem\n\nOn MangoWC every drawer toggle (launcher, dashboard, session and the rest) did nothing at all. No crash and nothing on screen. The only trace was in Quickshell's log, where every toggle printed the same errors:\n\n```\n@modules/Shortcuts.qml[125:-1]: TypeError: Value is null and could not be converted to an object\n@services/Hypr.qml[75:-1]: TypeError: Property 'map' of object function values() { [native code] } is not a function\n```\n\n## What I found\n\nTwo separate bugs:\n\n1. `monitorNames()` in `Hypr.qml` called `monitors.values.map(...)`. On MangoWC `monitors` is a plain array, so `.values` without parentheses is the array method itself, and `.map()` on it throws.\n2. The real cause of the silent no-op was in `Mango.qml`. `monitorFor(screen)` built a brand new object on every call, while `focusedMonitor` was a different, cached object. `Visibilities.qml` keeps a `Map` keyed by object identity, so the lookup behind every drawer toggle never matched and came back `undefined`.\n\n## What I changed\n\nThe one-line fix for the first bug:\n\n```diff\n-        return monitors.values.map(e => e.name);\n+        return monitors.map(e => e.name);\n```\n\nFor the second, `monitorFor()` now returns the same cached `focusedMonitor` object instead of a new one each time:\n\n```diff\n     function monitorFor(screen): var {\n-        // MangoWC doesn't have per-screen monitor info easily accessible via Wayland protocols\n-        return {\n-            name: focusedOutput,\n-            id: 0,\n-            focused: true,\n-            lastIpcObject: {\n-                specialWorkspace: { name: \"\" }\n-            },\n-            activeWorkspace: focusedWorkspace\n-        };\n+        // single-monitor-only, so return the same cached object as focusedMonitor\n+        // rather than a fresh literal each call -- Visibilities.qml keys a Map by object\n+        // identity, and a fresh object here would never match on lookup.\n+        return root.focusedMonitor;\n     }\n```\n\nA second commit on 16 August fixed a side effect of that change. A property holding an object literal was creating a binding loop with `focusedWorkspace`, so I turned `focusedMonitor` into a persistent object whose identity stays stable:\n\n```qml\n// Persistent object (not a property-var literal) so its identity stays stable across\n// reads -- Visibilities.qml keys a Map by this object, and a fresh literal here would\n// also form a binding loop with focusedWorkspace, which references this property back.\nreadonly property QtObject focusedMonitor: QtObject {\n    readonly property string name: root.focusedOutput\n    readonly property bool focused: true\n    readonly property var activeWorkspace: root.focusedWorkspace\n    // ...\n}\n```\n\n## How I checked it\n\nI rebuilt and reinstalled the shell, restarted it, and toggled every drawer repeatedly. The log went from throwing both errors on every toggle to completely clean, the process stayed alive and the drawers opened and closed correctly.\n\nThe change touched two files, 19 lines added and 20 removed, in two commits.",
+      "cards": "open source, arch & void"
+    },
+    {
+      "name": "ushell",
+      "description": "A chip-agnostic embedded shell and diagnostic environment for microcontrollers. The repository is private for now.",
+      "status": "Prototype",
+      "featured": false,
+      "date": "2026-09",
+      "lang": "C",
+      "url": "",
+      "private": true,
+      "tags": [
+        "embedded",
+        "shell",
+        "c",
+        "operating-systems",
+        "embedded-systems"
+      ],
+      "body": "ushell is a small shell and diagnostic environment meant to run on microcontrollers regardless of the chip.\n\nThe repository is private at the moment, so there is no link and nothing more to show yet.",
+      "cards": "high-performance, operating systems"
     }
   ]
 }

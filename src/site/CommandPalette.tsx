@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, Copy, FileText, FolderGit2, Home, Moon, Music, Search, Sun, ExternalLink } from 'lucide-react';
 import { posts, safeHref, site } from '../lib/content';
 import { allProjects } from '../lib/projects';
+import { allBibtex, allPubs, bibtex, copyText } from '../lib/publications';
 import { albums, player } from '../lib/player';
 import '../styles/palette.css';
 
@@ -23,7 +24,7 @@ const PAGES: { to: string; label: string; kw: string }[] = [
   { to: '/me', label: 'Me', kw: 'about bio' },
   { to: '/research', label: 'Research', kw: 'interests statement' },
   { to: '/publications', label: 'Publications', kw: 'papers preprints arxiv' },
-  { to: '/projects', label: 'Projects', kw: 'code github repositories' },
+  { to: '/projects', label: 'Projects & Work', kw: 'code github repositories projects' },
   { to: '/blog', label: 'Writing', kw: 'blog posts essays notes' },
   { to: '/cassette', label: 'Cassette', kw: 'music songs tapes' },
   { to: '/#contact', label: 'Contact', kw: 'email reach hire' },
@@ -39,7 +40,7 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
   const input = useRef<HTMLInputElement>(null);
   const list = useRef<HTMLUListElement>(null);
 
-  // Ctrl/Cmd+K anywhere; "/" too, except on Projects where it focuses that page's search box
+  // Ctrl/Cmd+K anywhere; "/" too, except on Projects and Publications where it focuses that page's search box
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement | null;
@@ -47,7 +48,7 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setOpen((o) => !o);
-      } else if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey && pathname !== '/projects') {
+      } else if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey && pathname !== '/projects' && pathname !== '/publications') {
         e.preventDefault();
         setOpen(true);
       }
@@ -79,6 +80,11 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
     const out: Item[] = [];
     for (const p of PAGES) out.push({ id: `page:${p.to}`, group: 'Pages', label: p.label, hint: p.to === '/' ? 'Main page' : p.to.replace('/#', '#'), keywords: `go open ${p.kw}`, icon: p.to === '/' ? <Home size={16} /> : <ArrowRight size={16} />, run: go(p.to) });
     for (const p of allProjects) out.push({ id: `proj:${p.slug}`, group: 'Projects', label: p.name, hint: p.langs.slice(0, 3).join(' · '), keywords: `project open ${p.description} ${p.tagList.join(' ')} ${p.status ?? ''}`, icon: <FolderGit2 size={16} />, run: go(`/projects/${p.slug}`) });
+    for (const p of allPubs) {
+      out.push({ id: `pub:${p.slug}`, group: 'Publications', label: p.title, hint: `${p.status} · ${p.year}`, keywords: `paper publication preprint read ${p.authors} ${p.tagList.join(' ')} ${p.venue}`, icon: <FileText size={16} />, run: go(`/publications/${p.slug}`) });
+      out.push({ id: `bib:${p.slug}`, group: 'Publications', label: `Copy BibTeX: ${p.title}`, hint: 'Citation', keywords: `cite citation bibtex reference copy ${p.authors}`, icon: <Copy size={16} />, run: () => { copyText(bibtex(p)).then((ok) => flash(ok ? 'BibTeX copied' : 'Could not copy')); } });
+    }
+    out.push({ id: 'act:bib', group: 'Actions', label: 'Copy BibTeX for all papers', hint: 'Citations', keywords: 'cite citation bibtex references export publications all copy', icon: <Copy size={16} />, run: () => { copyText(allBibtex()).then((ok) => flash(ok ? 'BibTeX copied' : 'Could not copy')); } });
     for (const p of posts) out.push({ id: `post:${p.slug}`, group: 'Writing', label: p.title, hint: 'Post', keywords: `post blog read ${p.tags.join(' ')} ${p.summary}`, icon: <FileText size={16} />, run: go(`/blog/${p.slug}`) });
     albums.forEach((al, a) =>
       al.tracks.forEach((t, i) =>

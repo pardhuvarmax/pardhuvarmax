@@ -6,6 +6,7 @@ import { About, Experience, Publications, Research } from './Home';
 import { SectionHead } from './Reveal';
 import Cassette from './Cassette';
 import { ProjectsExplorer } from './ProjectsView';
+import { PublicationsExplorer } from './PublicationsView';
 
 // Dedicated views for the nav buttons. They reuse the same sections as the home page.
 function Page({ title, children }: { title: string; children: ReactNode }) {
@@ -25,11 +26,20 @@ function Page({ title, children }: { title: string; children: ReactNode }) {
 }
 
 export const ResearchPage = () => <Page title="Research"><Research /></Page>;
-export const PublicationsPage = () => <Page title="Publications"><Publications /></Page>;
+export const PublicationsPage = () => (
+  <Page title="Publications">
+    <section id="publications" className="wrap sec">
+      <SectionHead kicker="02 · Publications" title={<>Papers &amp; <em>preprints</em></>}>
+        Search, filter, copy a citation, or grab every BibTeX entry at once.
+      </SectionHead>
+      <PublicationsExplorer />
+    </section>
+  </Page>
+);
 export const ProjectsPage = () => (
-  <Page title="Projects">
+  <Page title="Projects & Work">
     <section id="projects" className="wrap sec">
-      <SectionHead kicker="04 · Projects" title={<>Open-source <em>systems</em></>}>
+      <SectionHead kicker="04 · Projects & Work" title={<>Open-source <em>systems</em></>}>
         Research code and systems software, built in the open. Search, filter and sort to find what you need.
       </SectionHead>
       <ProjectsExplorer />

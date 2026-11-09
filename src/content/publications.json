@@ -1,13 +1,36 @@
 {
   "items": [
     {
-      "title": "Kernel Borderlands: An eBPF-Based Behavioral Detection and …",
-      "authors": "P. S. R. V. Konduru",
+      "title": "Kernel Borderlands: An eBPF-Based Behavioral Detection and Multi-Agent Containment Architecture for Linux Server Workloads",
+      "authors": "P. S. R. V. Konduru, T. Kandukoori, K. Kanne and R. Y. Karedla",
       "venue": "Preprints.org, manuscript 202610.2818, 2026",
       "year": "2026",
       "status": "Preprint",
       "url": "https://www.preprints.org/manuscript/202610.2818",
-      "linkLabel": "Preprints.org"
+      "linkLabel": "Preprints.org",
+      "code": "https://github.com/pardhuvarmax/kernel-borderlands",
+      "tags": "eBPF, Security, Linux, Trustworthy computing",
+      "doi": "10.20944/preprints202610.2818.v1",
+      "news": [
+        {
+          "date": "2026-11-09",
+          "text": "Manuscript for a Springer journal is in progress."
+        },
+        {
+          "date": "2026-10-27",
+          "text": "Kernel Borderlands 1.0.0 released, with Ubuntu and Arch packages and the field manuals.",
+          "link": "https://github.com/pardhuvarmax/kernel-borderlands/releases/tag/v1.0.0",
+          "linkLabel": "Release notes"
+        },
+        {
+          "date": "2026-10",
+          "text": "Preprint released on Preprints.org.",
+          "link": "https://www.preprints.org/manuscript/202610.2818",
+          "linkLabel": "Read it"
+        }
+      ],
+      "cover": "/uploads/pubs/kernel-borderlands.webp",
+      "cards": "high-performance, linux internals, trustworthy"
     },
     {
       "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",
@@ -16,7 +39,19 @@
       "year": "2026",
       "status": "Preprint",
       "url": "https://arxiv.org/abs/2603.02934",
-      "linkLabel": "arXiv"
+      "linkLabel": "arXiv",
+      "tags": "Neural adaptation, Behavioral learning",
+      "code": "https://github.com/pardhuvarmax/rlae-research",
+      "news": [
+        {
+          "date": "2026-03",
+          "text": "Preprint posted on arXiv, with the code and experiments in the rlae-research repository.",
+          "link": "https://arxiv.org/abs/2603.02934",
+          "linkLabel": "arXiv"
+        }
+      ],
+      "cover": "/uploads/pubs/structural-limitations.webp",
+      "cards": "machine learning"
     },
     {
       "title": "Temporal and Adaptive Dynamics of Latent Behavioral State Machines",
@@ -25,7 +60,35 @@
       "year": "2026",
       "status": "In preparation",
       "url": "https://github.com/pardhuvarmax/lbsm-research",
-      "linkLabel": "Code"
+      "linkLabel": "Code",
+      "tags": "State machines, Adaptive dynamics",
+      "news": [
+        {
+          "date": "2026-10-07",
+          "text": "LBSM v1.0.1: numerical corrections, with affected experiments, figures and notebooks regenerated.",
+          "link": "https://github.com/pardhuvarmax/lbsm-research/releases/tag/v1.0.1",
+          "linkLabel": "Release notes"
+        },
+        {
+          "date": "2026-08-26",
+          "text": "LBSM v1.0.0 released: the unified experimental research artifact, with notebooks 01 to 07, the report, code and figures.",
+          "link": "https://github.com/pardhuvarmax/lbsm-research/releases/tag/v1.0.0",
+          "linkLabel": "Release notes"
+        },
+        {
+          "date": "2026-08-26",
+          "text": "LBSM archived on Zenodo, with one citable DOI that always points to the latest version.",
+          "link": "https://doi.org/10.5281/zenodo.22108701",
+          "linkLabel": "Zenodo"
+        },
+        {
+          "date": "2026-05",
+          "text": "Research repository opened."
+        }
+      ],
+      "doi": "10.5281/zenodo.22108701",
+      "cover": "/uploads/pubs/lbsm.webp",
+      "cards": "machine learning"
     }
   ]
 }

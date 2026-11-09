@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowUpRight, GitFork, Star } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, GitFork, Lock, Star } from 'lucide-react';
 import { formatDate, safeHref, site } from '../lib/content';
 import { renderMarkdown } from '../lib/markdown';
 import { ago, allProjects, findProject, relatedFor, repoOf, useGithubStats } from '../lib/projects';
 import { LangBar, Sparkline } from './ProjectsView';
 import Terminal from './Terminal';
+import { Holo } from './Holo';
+import { pubForProject } from '../lib/publications';
 import '../styles/projects.css';
 
 export default function ProjectDetail() {
@@ -31,6 +33,7 @@ export default function ProjectDetail() {
 
   const st = stats[repoOf(p.url) ?? ''];
   const rel = relatedFor(p);
+  const logo = p.logo || pubForProject(p)?.cover;
   const idx = allProjects.indexOf(p);
   const prev = allProjects[idx - 1];
   const next = allProjects[idx + 1];
@@ -49,7 +52,7 @@ export default function ProjectDetail() {
         <h1>{p.name}</h1>
         <p className="sec-lede">{p.description}</p>
         <div className="pj-actions">
-          <a className="btn btn-primary" href={safeHref(p.url)} target="_blank" rel="noopener noreferrer">Repository <ArrowUpRight size={16} /></a>
+          {p.private ? <span className="btn pj-private-btn"><Lock size={15} /> Private repository</span> : <a className="btn btn-primary" href={safeHref(p.url)} target="_blank" rel="noopener noreferrer">Repository <ArrowUpRight size={16} /></a>}
           {(p.links ?? []).filter((l) => l.href).map((l) => (
             <a key={l.href} className="btn" href={safeHref(l.href)} target={/^https?:/i.test(l.href) ? '_blank' : undefined} rel="noopener noreferrer">{l.label} <ArrowUpRight size={16} /></a>
           ))}
@@ -70,6 +73,8 @@ export default function ProjectDetail() {
           )}
         </div>
 
+        <div className="pj-rail">
+        {logo && <div className="pj-logo"><Holo image={logo}><img className="pub-cover pub-cover-img" src={safeHref(logo)} alt={`${p.name} logo`} decoding="async" /></Holo></div>}
         <aside className="pj-side" aria-label="Project facts">
           {st ? (
             <>
@@ -91,11 +96,12 @@ export default function ProjectDetail() {
           ) : (
             <>
               <h2>Details</h2>
-              <p className="muted">Live repository numbers appear here once the site has been built with GitHub access.</p>
+              <p className="muted">{p.private ? 'The repository is private for now, so there are no numbers to show.' : 'Live repository numbers appear here once the site has been built with GitHub access.'}</p>
             </>
           )}
           {p.date && <p className="pj-date">Dated {formatDate(p.date)}</p>}
         </aside>
+        </div>
       </div>
 
       {hasRelated && (

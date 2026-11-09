@@ -8,11 +8,14 @@ export interface ProjectInput {
   description: string;
   lang: string;
   url: string;
+  private?: boolean; // the repository is private: no link, no GitHub numbers
   status?: string;
   featured?: boolean;
   date?: string;
   tags?: string[];
   cover?: string;
+  logo?: string; // engraved plate on the project page
+  cards?: string; // research cards it belongs under, by any part of the card title, e.g. "trustworthy, linux internals"
   install?: string;
   demo?: string;
   body?: string;
