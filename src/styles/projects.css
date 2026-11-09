@@ -105,16 +105,16 @@
 .site .pj-private-btn { display: inline-flex; align-items: center; gap: 8px; cursor: default; opacity: 0.75; border-style: dashed; }
 
 /* the filter chips as one scrollable row */
-.site .chip-carousel { position: relative; margin-bottom: 12px; }
+.site .chip-carousel { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
 .site .chip-carousel .pj-chips { margin-bottom: 0; }
-.site .cc-track { display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; overflow-y: hidden; padding: 4px 2px 8px; scrollbar-width: none; scroll-snap-type: x proximity; cursor: grab; -webkit-overflow-scrolling: touch; }
+.site .cc-track { flex: 1; min-width: 0; display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; overflow-y: hidden; padding: 4px 2px 8px; scrollbar-width: none; scroll-snap-type: x proximity; cursor: grab; -webkit-overflow-scrolling: touch; }
 .site .cc-track::-webkit-scrollbar { display: none; }
 .site .cc-track:active { cursor: grabbing; }
 .site .cc-track .chip { flex: none; scroll-snap-align: center; white-space: nowrap; user-select: none; }
 .site .chip-carousel.fade-l .cc-track { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 44px); mask-image: linear-gradient(90deg, transparent 0, #000 44px); }
 .site .chip-carousel.fade-r .cc-track { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent 100%); }
 .site .chip-carousel.fade-l.fade-r .cc-track { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 44px, #000 calc(100% - 44px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 44px, #000 calc(100% - 44px), transparent 100%); }
-.site .cc-btn { position: absolute; top: 2px; z-index: 2; display: grid; place-items: center; width: 32px; height: 34px; border: 2px solid var(--ink); background: var(--bg); color: var(--text); cursor: pointer; }
+.site .cc-btn { flex: none; display: grid; place-items: center; width: 32px; height: 34px; border: 2px solid var(--ink); background: var(--bg); color: var(--text); cursor: pointer; }
 .site .cc-btn:hover { background: var(--ink); color: var(--bg); }
-.site .cc-btn.l { left: 0; } .site .cc-btn.r { right: 0; }
+.site .cc-btn.off { visibility: hidden; pointer-events: none; }
 @media (hover: none) { .site .cc-btn { display: none; } }

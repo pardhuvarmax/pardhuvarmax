@@ -129,7 +129,7 @@ function ChipCarousel({ children, label, active }: { children: ReactNode; label:
 
   return (
     <div className={`chip-carousel ${edge.l ? 'fade-l' : ''} ${edge.r ? 'fade-r' : ''}`}>
-      {edge.l && <button type="button" className="cc-btn l" onClick={() => nudge(-1)} aria-label="Scroll left"><ChevronLeft size={16} /></button>}
+      <button type="button" className={`cc-btn l ${edge.l ? '' : 'off'}`} onClick={() => nudge(-1)} aria-label="Scroll left" tabIndex={edge.l ? 0 : -1}><ChevronLeft size={16} /></button>
       <div
         ref={track}
         className="chips pj-chips cc-track"
@@ -142,7 +142,7 @@ function ChipCarousel({ children, label, active }: { children: ReactNode; label:
       >
         {children}
       </div>
-      {edge.r && <button type="button" className="cc-btn r" onClick={() => nudge(1)} aria-label="Scroll right"><ChevronRight size={16} /></button>}
+      <button type="button" className={`cc-btn r ${edge.r ? '' : 'off'}`} onClick={() => nudge(1)} aria-label="Scroll right" tabIndex={edge.r ? 0 : -1}><ChevronRight size={16} /></button>
     </div>
   );
 }
