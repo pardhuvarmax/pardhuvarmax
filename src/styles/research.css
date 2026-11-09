@@ -1,8 +1,10 @@
 /* Research: regular cards that open into a case file, and the statement as a newspaper briefing */
 .bento-card { cursor: pointer; }
 .bento-card:focus-visible { outline: 3px dashed var(--accent); outline-offset: 3px; }
-.bento-open { margin-top: 14px; font: 700 0.66rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); transition: color 0.15s; }
-.bento-card:hover .bento-open, .bento-card:focus-visible .bento-open { color: #c4161c; }
+.bento-card { position: relative; }
+.bento-arrow { position: absolute; right: 14px; bottom: 14px; display: grid; place-items: center; width: 34px; height: 34px; background: #fff; border: 2px solid #000; color: #000; opacity: 0; transform: translate(-6px, 6px); transition: opacity 0.18s, transform 0.18s; pointer-events: none; }
+.bento-card:hover .bento-arrow, .bento-card:focus-visible .bento-arrow { opacity: 1; transform: none; }
+@media (hover: none) { .bento-arrow { opacity: 1; transform: none; } }
 
 .dossier-scrim { position: fixed; inset: 0; z-index: 140; display: grid; place-items: center; padding: 24px; overflow: auto; background: rgba(0, 0, 0, 0.74); backdrop-filter: blur(3px); animation: dossierFade 0.25s ease-out; }
 @keyframes dossierFade { from { opacity: 0; } }

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, FileText, FolderGit2, Newspaper, Paperclip, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, FileText, FolderGit2, Newspaper, Paperclip, X } from 'lucide-react';
 import { formatDate, posts, site } from '../lib/content';
 import { allPubs } from '../lib/publications';
 import { allProjects } from '../lib/projects';
@@ -140,7 +140,7 @@ export function ResearchBoard({ extra }: { extra?: (title: string) => ReactNode 
             <div className="glow bento-card" onPointerMove={glow} role="button" tabIndex={0} onClick={() => setOpen(i)} onKeyDown={key(i)} aria-haspopup="dialog" aria-label={`Open file: ${f.title}`}>
               <span className="bento-n">{String(i + 1).padStart(2, '0')}</span>
               <h3>{f.title}</h3>
-              <span className="bento-open">{f.ex.length ? `${f.ex.length} ${f.ex.length === 1 ? 'exhibit' : 'exhibits'}` : 'Open inquiry'} · open file</span>
+              <span className="bento-arrow" aria-hidden="true"><ArrowUpRight size={18} strokeWidth={2.6} /></span>
             </div>
             {extra?.(f.title)}
           </Reveal>
