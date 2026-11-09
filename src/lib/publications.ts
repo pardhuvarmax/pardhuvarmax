@@ -171,7 +171,7 @@ export function coins(p: Pub): string {
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ');
 /** Projects and posts that belong with a paper: the repository it links to, or one whose name is in the title. */
 export function relatedFor(p: Pub) {
-  const projs = allProjects.filter((pr) => (p.codeUrl && pr.url === p.codeUrl) || norm(p.title).includes(norm(pr.name)));
+  const projs = allProjects.filter((pr) => pr.url === p.url || (p.codeUrl && pr.url === p.codeUrl) || norm(p.title).includes(norm(pr.name)));
   const relPosts = posts.filter((post) => projs.some((pr) => norm(`${post.title} ${post.summary}`).includes(norm(pr.name))));
   return { projects: projs, posts: relPosts };
 }
