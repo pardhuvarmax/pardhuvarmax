@@ -1,7 +1,7 @@
 {
   "items": [
     {
-      "title": "Kernel Borderlands: An eBPF-Based Behavioral Detection and …",
+      "title": "Kernel Borderlands: An eBPF-Based Behavioral Detection and Multi-Agent Containment Architecture for Linux Server Workloads",
       "authors": "P. S. R. V. Konduru",
       "venue": "Preprints.org, manuscript 202610.2818, 2026",
       "year": "2026",
@@ -9,7 +9,8 @@
       "url": "https://www.preprints.org/manuscript/202610.2818",
       "linkLabel": "Preprints.org",
       "code": "https://github.com/pardhuvarmax/kernel-borderlands",
-      "tags": "eBPF, Security, Linux"
+      "tags": "eBPF, Security, Linux",
+      "doi": "10.20944/preprints202610.2818.v1"
     },
     {
       "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",
