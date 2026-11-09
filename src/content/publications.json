@@ -28,7 +28,8 @@
           "link": "https://www.preprints.org/manuscript/202610.2818",
           "linkLabel": "Read it"
         }
-      ]
+      ],
+      "cover": "/uploads/pubs/kernel-borderlands.webp"
     },
     {
       "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",
@@ -47,7 +48,8 @@
           "link": "https://arxiv.org/abs/2603.02934",
           "linkLabel": "arXiv"
         }
-      ]
+      ],
+      "cover": "/uploads/pubs/structural-limitations.webp"
     },
     {
       "title": "Temporal and Adaptive Dynamics of Latent Behavioral State Machines",
@@ -82,7 +84,8 @@
           "text": "Research repository opened."
         }
       ],
-      "doi": "10.5281/zenodo.22108701"
+      "doi": "10.5281/zenodo.22108701",
+      "cover": "/uploads/pubs/lbsm.webp"
     }
   ]
 }

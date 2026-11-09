@@ -23,6 +23,8 @@ const COLOURS = ['var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--a
 
 /** A book cover drawn from the title, so every paper has its own face: same paper, same cover, every time. */
 export function Cover({ p, mini = false }: { p: Pub; mini?: boolean }) {
+  // a real picture from the project when there is one, otherwise a pattern drawn from the title
+  if (p.cover) return <img className={`pub-cover pub-cover-img ${mini ? 'mini' : ''}`} src={safeHref(p.cover)} alt={`Cover of ${p.title}`} loading="lazy" decoding="async" />;
   const h = hash(p.title);
   const kind = (h >> 4) % 4;
   const bits = (n: number) => (h >> n) & 1;

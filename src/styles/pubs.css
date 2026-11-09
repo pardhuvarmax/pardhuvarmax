@@ -125,3 +125,7 @@
 .holo.live .holo-spark { opacity: 0.9; }
 .holo.live .holo-glare { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .holo-in { transition: none; } }
+
+/* a picture instead of the drawn pattern */
+.pub-cover-img { display: block; object-fit: cover; background: #050505; }
+.pub-cover-img.mini { aspect-ratio: 3 / 4; }
