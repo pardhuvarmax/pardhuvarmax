@@ -1,56 +1,59 @@
-/* Research: an investigation board of case files, and the statement as a newspaper briefing */
-.board { position: relative; margin-top: 8px; }
-.board-strings { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 4; }
-.string { fill: none; stroke: #c4161c; stroke-width: 1.5; stroke-dasharray: 5 6; opacity: 0.3; transition: opacity 0.3s; }
-.string.live { opacity: 1; stroke-width: 2.6; stroke-dasharray: 1; stroke-dashoffset: 1; animation: strDraw 0.7s ease-out forwards; filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.35)); }
-@keyframes strDraw { to { stroke-dashoffset: 0; } }
-.pin { fill: #c4161c; stroke: var(--ink); stroke-width: 2; transition: r 0.2s; }
-.pin.live { r: 7; }
-.board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px 20px; }
+/* Research: regular cards that open into a case file, and the statement as a newspaper briefing */
+.bento-card { cursor: pointer; }
+.bento-card:focus-visible { outline: 3px dashed var(--accent); outline-offset: 3px; }
+.bento-open { margin-top: 14px; font: 700 0.66rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); transition: color 0.15s; }
+.bento-card:hover .bento-open, .bento-card:focus-visible .bento-open { color: #c4161c; }
 
-.case { position: relative; display: flex; flex-direction: column; padding: 28px 22px 16px; border: 2px solid var(--ink); background: var(--surface); box-shadow: 5px 5px 0 var(--ink); transform: rotate(var(--tilt, 0deg)); transition: transform 0.25s cubic-bezier(0.3, 1.4, 0.5, 1), box-shadow 0.25s, opacity 0.3s, filter 0.3s;
+.dossier-scrim { position: fixed; inset: 0; z-index: 140; display: grid; place-items: center; padding: 24px; overflow: auto; background: rgba(0, 0, 0, 0.74); backdrop-filter: blur(3px); animation: dossierFade 0.25s ease-out; }
+@keyframes dossierFade { from { opacity: 0; } }
+.case { position: relative; display: flex; flex-direction: column; padding: 30px 26px 16px; border: 2px solid var(--ink); background: var(--surface); box-shadow: 6px 6px 0 var(--ink);
   background-image: repeating-linear-gradient(transparent 0 27px, color-mix(in srgb, var(--ink) 7%, transparent) 27px 28px); }
-.case.wide { grid-column: span 2; }
-.case.dim { opacity: 0.45; filter: grayscale(0.7); }
-.case.active { transform: rotate(0deg) translateY(-5px); box-shadow: 8px 8px 0 #c4161c; z-index: 5; }
-.case-tape { position: absolute; top: -11px; left: 50%; width: 88px; height: 22px; transform: translateX(-50%) rotate(-2deg); background: rgba(255, 224, 130, 0.6); border: 1px solid rgba(0, 0, 0, 0.18); }
-.case-top { display: flex; align-items: center; justify-content: space-between; font: 700 0.7rem/1 var(--mono); letter-spacing: 0.12em; color: var(--muted); }
-.case-no { display: inline-flex; align-items: center; gap: 6px; }
+.dossier { color: var(--text); width: min(700px, 100%); max-height: calc(100vh - 48px); overflow: auto; outline: 0; transform: rotate(var(--tilt, 0deg)); animation: dossierIn 0.5s cubic-bezier(0.2, 1.15, 0.3, 1); box-shadow: 8px 8px 0 #c4161c; }
+@keyframes dossierIn { from { opacity: 0; transform: translateY(46px) rotate(calc(var(--tilt, 0deg) - 3deg)) scale(0.95); } }
+.case-tape { position: absolute; top: -11px; left: 50%; width: 92px; height: 22px; transform: translateX(-50%) rotate(-2deg); background: rgba(255, 224, 130, 0.6); border: 1px solid rgba(0, 0, 0, 0.18); }
+.case-top { display: flex; align-items: center; gap: 12px; font: 700 0.7rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.12em; color: var(--muted); }
+.case-no { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; }
 .case-status { padding: 3px 8px; border: 2px solid #c4161c; color: #c4161c; font-weight: 800; letter-spacing: 0.16em; }
-.case h3 { margin: 18px 0 6px; font-family: var(--display); font-weight: 800; font-size: clamp(1.3rem, 2.2vw, 1.7rem); line-height: 1.12; letter-spacing: -0.015em; }
-.case .distro-logos { position: static; display: flex; gap: 8px; margin: 4px 0 2px; }
-.case-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 14px; }
-.case-by { margin: 0; font: 500 0.7rem/1.4 var(--mono); letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
-.case-ex { list-style: none; margin: 0; padding: 0; flex: 1; }
-.case-ex li a { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: 9px; padding: 9px 0; border-top: 1px dashed var(--line); color: var(--text); text-decoration: none; font-size: 0.9rem; line-height: 1.3; }
-.case-ex li a b { font: 700 0.64rem/1 var(--mono); letter-spacing: 0.1em; color: #c4161c; white-space: nowrap; }
-.case-ex li a em { font: 500 0.64rem/1 var(--mono); font-style: normal; color: var(--muted); white-space: nowrap; }
+.dossier-x { display: grid; place-items: center; width: 28px; height: 28px; border: 2px solid var(--ink); background: transparent; color: var(--text); cursor: pointer; }
+.dossier-x:hover { background: var(--ink); color: var(--bg); }
+.case h3 { color: var(--text); margin: 20px 0 8px; font-family: var(--display, 'Archivo', 'Arial Black', sans-serif); font-weight: 800; font-size: clamp(1.6rem, 3.4vw, 2.3rem); line-height: 1.08; letter-spacing: -0.02em; }
+.dossier-extra .distro-logos { position: static; display: flex; gap: 8px; margin: 0 0 6px; }
+.case-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0 0 18px; }
+.case-by { margin: 0; font: 500 0.72rem/1.4 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+.case-stamp { flex: none; padding: 3px 10px; border: 3px solid #c4161c; color: #c4161c; font: 900 0.8rem/1.2 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.14em; opacity: 0; transform: rotate(-12deg) scale(2.8); mix-blend-mode: normal; animation: caseStamp 0.55s 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) forwards; }
+@keyframes caseStamp { 0% { opacity: 0; transform: rotate(-12deg) scale(2.8); } 60% { opacity: 1; transform: rotate(-12deg) scale(0.92); } 100% { opacity: 0.85; transform: rotate(-12deg) scale(1); } }
+.case-ex { list-style: none; margin: 0; padding: 0; }
+.case-ex li a { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 12px 0; border-top: 1px dashed var(--line); color: var(--text); text-decoration: none; font-size: 1rem; line-height: 1.3; }
+.case-ex li a b { font: 700 0.66rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.1em; color: #c4161c; white-space: nowrap; }
+.case-ex li a em { font: 500 0.68rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); font-style: normal; color: var(--muted); white-space: nowrap; }
 .case-ex li a:hover .redact span, .case-ex li a:focus-visible .redact span { text-decoration: underline; text-underline-offset: 3px; }
 .case-ex li a:focus-visible { outline: 2px dashed #c4161c; outline-offset: 2px; }
 .redact { position: relative; display: block; overflow: hidden; }
 .redact span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
-.redact::after { content: ''; position: absolute; inset: 1px 0; background: #070708; box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 40%, transparent); transform-origin: left; transition: transform 0.5s cubic-bezier(0.7, 0, 0.2, 1); }
-.case-ex li:nth-child(2) .redact::after { transition-delay: 0.07s; } .case-ex li:nth-child(3) .redact::after { transition-delay: 0.14s; } .case-ex li:nth-child(4) .redact::after { transition-delay: 0.21s; }
-.case:hover .redact::after, .case:focus-within .redact::after, .case.active .redact::after { transform: scaleX(0); transform-origin: right; }
-@media (hover: none) { .redact::after { display: none; } }
-.case-empty { flex: 1; margin: 0; font: 500 0.78rem/1.5 var(--mono); color: var(--muted); }
-.case-foot { display: flex; justify-content: space-between; gap: 10px; margin-top: 14px; padding-top: 10px; border-top: 2px solid var(--ink); font: 600 0.66rem/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.case-ref { white-space: nowrap; }
-.case-stamp { flex: none; padding: 3px 9px; border: 3px solid #c4161c; color: #c4161c; font: 900 0.72rem/1.2 var(--mono); letter-spacing: 0.14em; opacity: 0; transform: rotate(-12deg) scale(2.8); pointer-events: none; mix-blend-mode: multiply; }
-.case.seen .case-stamp { animation: caseStamp 0.55s 0.35s cubic-bezier(0.2, 1.6, 0.4, 1) forwards; }
-@keyframes caseStamp { 0% { opacity: 0; transform: rotate(-12deg) scale(2.8); } 60% { opacity: 1; transform: rotate(-12deg) scale(0.92); } 100% { opacity: 0.8; transform: rotate(-12deg) scale(1); } }
-.case-scan { position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, transparent, #c4161c, transparent); box-shadow: 0 0 14px #c4161c; opacity: 0; pointer-events: none; }
-.case.active .case-scan { animation: caseScan 0.9s linear; }
+.redact::after { content: ''; position: absolute; inset: 1px 0; background: #070708; box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 40%, transparent); transform-origin: right; animation: unredact 0.55s cubic-bezier(0.7, 0, 0.2, 1) both; animation-delay: calc(0.85s + var(--i, 0) * 0.16s); }
+.case-ex li { }
+@keyframes unredact { from { transform: scaleX(1); transform-origin: left; } to { transform: scaleX(0); transform-origin: right; } }
+.case-empty, .case-sealed { margin: 8px 0 0; font: 500 0.8rem/1.5 var(--mono, 'JetBrains Mono', ui-monospace, monospace); color: var(--muted); }
+.case-xref { margin-top: 20px; padding-top: 14px; border-top: 2px solid var(--ink); }
+.case-xref h4 { color: var(--text); margin: 0 0 10px; font: 800 0.7rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.14em; text-transform: uppercase; }
+.case-xref div { display: flex; flex-wrap: wrap; gap: 8px; }
+.case-xref button { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px 7px 14px; border: 1.5px dashed #c4161c; background: transparent; color: var(--text); font: 600 0.82rem/1.2 var(--body, inherit); cursor: pointer; }
+.case-xref button i { position: absolute; left: -5px; top: 50%; width: 9px; height: 9px; margin-top: -4.5px; border-radius: 50%; background: #c4161c; }
+.case-xref button em { font: 700 0.6rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); font-style: normal; letter-spacing: 0.1em; color: #c4161c; }
+.case-xref button:hover { background: color-mix(in srgb, #c4161c 14%, transparent); border-style: solid; }
+.case-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 20px; padding-top: 12px; border-top: 2px solid var(--ink); font: 600 0.64rem/1.3 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.case-foot button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 2px solid var(--ink); background: transparent; color: var(--text); font: 700 0.66rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+.case-foot button:hover { background: var(--ink); color: var(--bg); }
+.case-scan { position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, transparent, #c4161c, transparent); box-shadow: 0 0 14px #c4161c; opacity: 0; pointer-events: none; animation: caseScan 1s 0.3s linear; }
 @keyframes caseScan { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0; } }
+@media (hover: none) { .redact::after { animation-delay: calc(0.6s + var(--i, 0) * 0.12s); } }
 
 .briefing { margin-top: 64px; padding: 24px 28px 30px; border: 2px solid var(--ink); background: var(--surface); box-shadow: 5px 5px 0 var(--ink); }
-.briefing header { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 3px double var(--ink); font: 700 0.7rem/1 var(--mono); letter-spacing: 0.14em; color: var(--muted); }
-.briefing h3 { margin: 18px 0 4px; font-family: var(--display); font-weight: 800; font-size: clamp(1.9rem, 4.4vw, 2.8rem); line-height: 1.05; letter-spacing: -0.025em; }
-.brief-by { margin: 0; font: 500 0.74rem/1.4 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.briefing header { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 3px double var(--ink); font: 700 0.7rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.14em; color: var(--muted); }
+.briefing h3 { margin: 18px 0 4px; font-family: var(--display, 'Archivo', 'Arial Black', sans-serif); font-weight: 800; font-size: clamp(1.9rem, 4.4vw, 2.8rem); line-height: 1.05; letter-spacing: -0.025em; }
+.brief-by { margin: 0; font: 500 0.74rem/1.4 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .brief-body { columns: 2 300px; column-gap: 42px; column-rule: 1px solid var(--line); margin-top: 20px; font-size: 1.02rem; line-height: 1.72; text-align: justify; hyphens: auto; }
 .brief-body p { margin: 0 0 1em; }
-.brief-body p:first-child::first-letter { float: left; padding: 6px 12px 0 0; font: 800 4.4rem/0.8 var(--display); color: #c4161c; }
+.brief-body p:first-child::first-letter { float: left; padding: 6px 12px 0 0; font: 800 4.4rem/0.8 var(--display, 'Archivo', 'Arial Black', sans-serif); color: #c4161c; }
 
-@media (max-width: 860px) { .board-grid { grid-template-columns: 1fr 1fr; } .case.wide { grid-column: span 2; } }
-@media (max-width: 560px) { .board-grid { grid-template-columns: 1fr; } .case.wide { grid-column: auto; } .board-strings { display: none; } .case { transform: none; } }
-@media (prefers-reduced-motion: reduce) { .case, .case.active { transition: none; } .case.seen .case-stamp { animation: none; opacity: 0.8; transform: rotate(-12deg); } .case.active .case-scan { animation: none; } .string.live { animation: none; stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .dossier, .dossier-scrim, .case-scan { animation: none; } .case-stamp { animation: none; opacity: 0.85; transform: rotate(-12deg); } .redact::after { animation: none; transform: scaleX(0); } }

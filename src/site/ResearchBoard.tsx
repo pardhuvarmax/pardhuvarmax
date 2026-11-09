@@ -1,14 +1,15 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { useInView } from 'motion/react';
-import { FileText, FolderGit2, Newspaper, Paperclip } from 'lucide-react';
+import { ArrowLeft, ArrowRight, FileText, FolderGit2, Newspaper, Paperclip, X } from 'lucide-react';
 import { formatDate, posts, site } from '../lib/content';
 import { allPubs } from '../lib/publications';
 import { allProjects } from '../lib/projects';
+import { glow, Reveal } from './Reveal';
 import '../styles/research.css';
 
-/* An investigation board: every research interest is a case file, the work that backs it up is listed as exhibits (blacked out until you
-   look closer), and red string joins the files that share evidence. Everything is worked out from the site's own content. */
+/* Every research interest is a regular card. Open one and it becomes a case file: the work that backs it up is listed as exhibits that
+   are declassified as the file opens, with red string to the files that share evidence. All of it is worked out from the site's own content. */
 
 interface Exhibit { id: string; kind: 'paper' | 'project' | 'post'; label: string; to: string; meta: string }
 const STOP = new Set(['and', 'the', 'with', 'for', 'btw', 'use', 'that', 'from']);
@@ -39,113 +40,114 @@ const ICON = { paper: FileText, project: FolderGit2, post: Newspaper } as const;
 const hash = (s: string) => { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
 const LETTER = 'ABCDEFGH';
 
-function CaseFile({ n, title, ex, active, dim, onHover, cardRef, extra }: { n: number; title: string; ex: Exhibit[]; active: boolean; dim: boolean; onHover: (on: boolean) => void; cardRef: (el: HTMLElement | null) => void; extra?: ReactNode }) {
-  const ref = useRef<HTMLElement | null>(null);
-  const seen = useInView(ref, { once: true, margin: '0px 0px -12% 0px' });
-  const tilt = ((hash(title) % 21) - 10) / 10; // between -1 and 1 degrees, like papers pinned by hand
-  const shown = ex.slice(0, 4);
-  return (
-    <article
-      ref={(el) => { ref.current = el; cardRef(el); }}
-      className={`case ${seen ? 'seen' : ''} ${active ? 'active' : ''} ${dim ? 'dim' : ''} ${n === 1 ? 'wide' : ''}`}
-      style={{ ['--tilt' as string]: `${tilt}deg` }}
-      onMouseEnter={() => onHover(true)}
-      onMouseLeave={() => onHover(false)}
-      onFocus={() => onHover(true)}
-      onBlur={() => onHover(false)}
-    >
-      <i className="case-tape" aria-hidden="true" />
-      <header className="case-top">
-        <span className="case-no"><Paperclip size={13} /> FILE {String(n).padStart(2, '0')}</span>
-        <span className="case-status">{shown.length ? 'OPEN' : 'COLD'}</span>
-      </header>
-      <h3>{title}</h3>
-      {extra}
-      <div className="case-line">
-        <p className="case-by">Filed by {site.name.split(' ').slice(0, 1)} · {String(site.location || '').split(',')[0] || 'Hyderabad'}</p>
-        <span className="case-stamp" aria-hidden="true">{shown.length ? 'DECLASSIFIED' : 'PENDING'}</span>
-      </div>
-      {shown.length > 0 ? (
-        <ol className="case-ex" aria-label="Exhibits">
-          {shown.map((e, i) => {
-            const Icon = ICON[e.kind];
-            return (
-              <li key={e.id}>
-                <Link to={e.to}>
-                  <b>EXH. {LETTER[i]}</b>
-                  <Icon size={14} />
-                  <span className="redact"><span>{e.label}</span></span>
-                  <em>{e.meta}</em>
-                </Link>
-              </li>
-            );
-          })}
-        </ol>
-      ) : (
-        <p className="case-empty">No exhibits filed yet.</p>
-      )}
-      <footer className="case-foot">
-        <span>{ex.length} {ex.length === 1 ? 'exhibit' : 'exhibits'} on file{ex.length > shown.length ? `, ${ex.length - shown.length} sealed` : ''}</span>
-        <span className="case-ref">REF-{(hash(title) % 9000 + 1000)}</span>
-      </footer>
-      <i className="case-scan" aria-hidden="true" />
-    </article>
+interface File { title: string; ex: Exhibit[] }
+
+function Dossier({ files, at, onGo, onClose, extra }: { files: File[]; at: number; onGo: (i: number) => void; onClose: () => void; extra?: (title: string) => ReactNode }) {
+  const f = files[at];
+  const box = useRef<HTMLElement>(null);
+  const shown = f.ex.slice(0, 4);
+  const ids = new Set(shown.map((e) => e.id));
+  const refs = files.map((o, i) => ({ o, i })).filter(({ o, i }) => i !== at && o.ex.slice(0, 4).some((e) => ids.has(e.id)));
+
+  useEffect(() => {
+    const prev = document.activeElement as HTMLElement | null;
+    box.current?.focus();
+    document.documentElement.classList.add('nf-lock');
+    return () => { document.documentElement.classList.remove('nf-lock'); prev?.focus?.(); };
+  }, []);
+  useEffect(() => {
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      else if (e.key === 'ArrowRight') onGo((at + 1) % files.length);
+      else if (e.key === 'ArrowLeft') onGo((at - 1 + files.length) % files.length);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [at, files.length, onClose, onGo]);
+
+  return createPortal(
+    <div className="dossier-scrim" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <article key={at} ref={box} tabIndex={-1} className="case dossier" role="dialog" aria-modal="true" aria-label={`File ${at + 1}: ${f.title}`} style={{ ['--tilt' as string]: `${((hash(f.title) % 21) - 10) / 10}deg` }}>
+        <i className="case-tape" aria-hidden="true" />
+        <header className="case-top">
+          <span className="case-no"><Paperclip size={13} /> FILE {String(at + 1).padStart(2, '0')} / {String(files.length).padStart(2, '0')}</span>
+          <span className="case-status">{shown.length ? 'OPEN' : 'COLD'}</span>
+          <button className="dossier-x" onClick={onClose} aria-label="Close file"><X size={16} /></button>
+        </header>
+        <h3>{f.title}</h3>
+        {extra?.(f.title)}
+        <div className="case-line">
+          <p className="case-by">Filed by {site.name.split(' ').slice(0, 1)} · {String(site.location || '').split(',')[0] || 'Hyderabad'}</p>
+          <span className="case-stamp" aria-hidden="true">{shown.length ? 'DECLASSIFIED' : 'PENDING'}</span>
+        </div>
+
+        {shown.length > 0 ? (
+          <ol className="case-ex" aria-label="Exhibits">
+            {shown.map((e, i) => {
+              const Icon = ICON[e.kind];
+              return (
+                <li key={e.id} style={{ ['--i' as string]: i }}>
+                  <Link to={e.to} onClick={onClose}>
+                    <b>EXH. {LETTER[i]}</b>
+                    <Icon size={14} />
+                    <span className="redact"><span>{e.label}</span></span>
+                    <em>{e.meta}</em>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        ) : (
+          <p className="case-empty">No exhibits filed yet. This line of inquiry is still open.</p>
+        )}
+        {f.ex.length > shown.length && <p className="case-sealed">{f.ex.length - shown.length} more {f.ex.length - shown.length === 1 ? 'exhibit is' : 'exhibits are'} sealed.</p>}
+
+        {refs.length > 0 && (
+          <section className="case-xref" aria-label="Cross-references">
+            <h4>Cross-references</h4>
+            <div>
+              {refs.map(({ o, i }) => (
+                <button key={o.title} onClick={() => onGo(i)}><i aria-hidden="true" />{o.title}<em>FILE {String(i + 1).padStart(2, '0')}</em></button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <footer className="case-foot">
+          <button onClick={() => onGo((at - 1 + files.length) % files.length)} aria-label="Previous file"><ArrowLeft size={14} /> Prev</button>
+          <span>{f.ex.length} {f.ex.length === 1 ? 'exhibit' : 'exhibits'} on file · REF-{hash(f.title) % 9000 + 1000}</span>
+          <button onClick={() => onGo((at + 1) % files.length)} aria-label="Next file">Next <ArrowRight size={14} /></button>
+        </footer>
+        <i className="case-scan" aria-hidden="true" />
+      </article>
+    </div>,
+    document.body,
   );
 }
 
+/** The research cards as they were; opening one pulls out its case file. */
 export function ResearchBoard({ extra }: { extra?: (title: string) => ReactNode }) {
   const interests = site.interests as string[];
-  const files = useMemo(() => interests.map((t) => ({ title: t, ex: exhibitsFor(t) })), [interests]);
-  const boardRef = useRef<HTMLDivElement>(null);
-  const cards = useRef<(HTMLElement | null)[]>([]);
-  const [hover, setHover] = useState<number | null>(null);
-  const [pins, setPins] = useState<{ x: number; y: number }[]>([]);
-
-  // which files share an exhibit: those get a piece of string between them
-  const links = useMemo(() => {
-    const out: [number, number][] = [];
-    for (let a = 0; a < files.length; a++) for (let b = a + 1; b < files.length; b++) {
-      const ids = new Set(files[a].ex.slice(0, 4).map((e) => e.id));
-      if (files[b].ex.slice(0, 4).some((e) => ids.has(e.id))) out.push([a, b]);
-    }
-    return out;
-  }, [files]);
-
-  const measure = () => {
-    const box = boardRef.current?.getBoundingClientRect();
-    if (!box) return;
-    setPins(cards.current.map((el) => {
-      const r = el?.getBoundingClientRect();
-      return r ? { x: r.left - box.left + r.width / 2, y: r.top - box.top + 14 } : { x: 0, y: 0 };
-    }));
-  };
-  useLayoutEffect(measure, [files]);
-  useEffect(() => {
-    const ro = new ResizeObserver(measure);
-    if (boardRef.current) ro.observe(boardRef.current);
-    window.addEventListener('resize', measure);
-    const t = setTimeout(measure, 900); // after the cards have slid into place
-    return () => { ro.disconnect(); window.removeEventListener('resize', measure); clearTimeout(t); };
-  }, []);
-
-  const connected = (i: number) => (hover === null ? false : links.some(([a, b]) => (a === hover && b === i) || (b === hover && a === i)));
+  const files = useMemo<File[]>(() => interests.map((t) => ({ title: t, ex: exhibitsFor(t) })), [interests]);
+  const [open, setOpen] = useState<number | null>(null);
+  const close = useCallback(() => setOpen(null), []);
+  const key = (i: number) => (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(i); } };
   return (
-    <div className="board" ref={boardRef}>
-      <svg className="board-strings" aria-hidden="true">
-        {pins.length === files.length && links.map(([a, b]) => {
-          const p = pins[a], q = pins[b];
-          const sag = Math.max(p.y, q.y) + 46 + Math.abs(p.x - q.x) * 0.08;
-          const live = hover === a || hover === b;
-          return <path key={`${a}-${b}`} className={`string ${live ? 'live' : ''}`} pathLength={1} d={`M${p.x} ${p.y} Q ${(p.x + q.x) / 2} ${sag} ${q.x} ${q.y}`} />;
-        })}
-        {pins.length === files.length && pins.map((p, i) => <circle key={i} className={`pin ${hover === i ? 'live' : ''}`} cx={p.x} cy={p.y} r={5} />)}
-      </svg>
-      <div className="board-grid">
+    <>
+      <div className="bento">
         {files.map((f, i) => (
-          <CaseFile key={f.title} n={i + 1} title={f.title} ex={f.ex} active={hover === i} dim={hover !== null && hover !== i && !connected(i)} onHover={(on) => setHover(on ? i : null)} cardRef={(el) => { cards.current[i] = el; }} extra={extra?.(f.title)} />
+          <Reveal key={f.title} delay={(i % 3) * 0.06} className={`bento-cell ${i === 0 || i === 3 ? 'wide' : ''}`}>
+            <div className="glow bento-card" onPointerMove={glow} role="button" tabIndex={0} onClick={() => setOpen(i)} onKeyDown={key(i)} aria-haspopup="dialog" aria-label={`Open file: ${f.title}`}>
+              <span className="bento-n">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{f.title}</h3>
+              <span className="bento-open">{f.ex.length ? `${f.ex.length} ${f.ex.length === 1 ? 'exhibit' : 'exhibits'}` : 'Open inquiry'} · open file</span>
+            </div>
+            {extra?.(f.title)}
+          </Reveal>
         ))}
       </div>
-    </div>
+      {open !== null && <Dossier files={files} at={open} onGo={setOpen} onClose={close} extra={extra ? (t) => <span className="dossier-extra">{extra(t)}</span> : undefined} />}
+    </>
   );
 }
 
