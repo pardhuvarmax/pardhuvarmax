@@ -16,13 +16,17 @@ const STOP = new Set(['and', 'the', 'with', 'for', 'btw', 'use', 'that', 'from']
 // a word of five letters or more matches by its first five (adaptive finds adaptation); shorter words must match whole, so "arch" never finds "archives"
 const matcher = (w: string) => (w.length >= 5 ? new RegExp(`\\b${w.slice(0, 5)}`) : new RegExp(`\\b${w}\\b`));
 
-const listed = (cards: string | undefined, n: number) => (cards ?? '').split(',').map((x) => Number(x.trim())).includes(n);
+// A card is named by any part of its title ("trustworthy", "linux internals"), so reordering, adding or removing cards never moves an exhibit to the wrong one.
+const listed = (cards: string | undefined, title: string) => {
+  const t = title.toLowerCase();
+  return (cards ?? '').split(',').map((x) => x.trim().toLowerCase()).some((x) => x.length >= 3 && t.includes(x));
+};
 
 /** Papers and projects say which cards they belong under (the "Research cards" field); posts are matched by their words, needing two. */
-function exhibitsFor(interest: string, n: number): Exhibit[] {
+function exhibitsFor(interest: string): Exhibit[] {
   const out: Exhibit[] = [];
-  for (const p of allPubs) if (listed(p.cards, n)) out.push({ id: `pub:${p.slug}`, kind: 'paper', label: p.title, to: `/publications/${p.slug}`, meta: `${p.status} · ${p.year}` });
-  for (const p of allProjects) if (listed(p.cards, n)) out.push({ id: `proj:${p.slug}`, kind: 'project', label: p.name, to: `/projects/${p.slug}`, meta: p.status ?? p.langs.slice(0, 2).join(' · ') });
+  for (const p of allPubs) if (listed(p.cards, interest)) out.push({ id: `pub:${p.slug}`, kind: 'paper', label: p.title, to: `/publications/${p.slug}`, meta: `${p.status} · ${p.year}` });
+  for (const p of allProjects) if (listed(p.cards, interest)) out.push({ id: `proj:${p.slug}`, kind: 'project', label: p.name, to: `/projects/${p.slug}`, meta: p.status ?? p.langs.slice(0, 2).join(' · ') });
   const tokens = [...new Set(interest.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length >= 4 && !STOP.has(w)))].map(matcher);
   for (const p of posts) {
     const hay = `${p.title} ${p.summary} ${p.tags.join(' ')}`.toLowerCase();
@@ -123,7 +127,7 @@ function Dossier({ files, at, onGo, onClose, extra }: { files: File[]; at: numbe
 /** The research cards as they were; opening one pulls out its case file. */
 export function ResearchBoard({ extra }: { extra?: (title: string) => ReactNode }) {
   const interests = site.interests as string[];
-  const files = useMemo<File[]>(() => interests.map((t, i) => ({ title: t, ex: exhibitsFor(t, i + 1) })), [interests]);
+  const files = useMemo<File[]>(() => interests.map((t) => ({ title: t, ex: exhibitsFor(t) })), [interests]);
   const [open, setOpen] = useState<number | null>(null);
   const close = useCallback(() => setOpen(null), []);
   const key = (i: number) => (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(i); } };

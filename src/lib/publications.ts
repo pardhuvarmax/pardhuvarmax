@@ -16,7 +16,7 @@ interface Raw {
   abstract?: string;
   tags?: string;
   cover?: string;
-  cards?: string; // which research cards it belongs under, e.g. "1, 3"
+  cards?: string; // research cards it belongs under, by any part of the card title, e.g. "trustworthy, linux internals"
   news?: { date: string; text: string; link?: string; linkLabel?: string }[];
 }
 

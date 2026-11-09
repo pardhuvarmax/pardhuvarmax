@@ -105,7 +105,7 @@ export const COLLECTIONS: Collection[] = [
           { key: 'doi', label: 'DOI (optional)', type: 'text', help: 'Like 10.5281/zenodo.18761938. Picked up from the details above if it is written there as doi:...' },
           { key: 'code', label: 'Code link (optional)', type: 'url' },
           { key: 'cover', label: 'Cover image (optional)', type: 'image', help: 'A portrait picture, about 3:4, e.g. the project logo on black. Without one, a pattern is drawn from the title.' },
-          { key: 'cards', label: 'Research cards', type: 'text', help: 'Numbers of the Research page cards (1 to 7, in the order they appear) this belongs under, comma separated. Leave blank to keep it off the cards.' },
+          { key: 'cards', label: 'Research cards', type: 'text', help: 'Which Research page cards this belongs under, comma separated. Type any part of a card title, e.g. "trustworthy, linux internals". It follows the titles, so reordering the cards does not matter. Leave blank to keep it off the cards.' },
           { key: 'tags', label: 'Topics (comma separated, optional)', type: 'text', help: 'Shown as small tags and as filter buttons on the Publications page.' },
           { key: 'abstract', label: 'Abstract (optional)', type: 'textarea', help: 'Adds an Abstract button to the paper. Searchable too.' },
           {
@@ -143,7 +143,7 @@ export const COLLECTIONS: Collection[] = [
           { key: 'date', label: 'Date (YYYY-MM, optional)', type: 'text', help: 'Used for the Newest sort.' },
           { key: 'lang', label: 'Languages (2-4, comma separated)', type: 'text' },
           { key: 'url', label: 'Repository URL', type: 'url', help: 'GitHub links also pull in stars, languages and activity at build time. Leave blank for a private repository.' },
-          { key: 'cards', label: 'Research cards', type: 'text', help: 'Numbers of the Research page cards (1 to 7, in the order they appear) this belongs under, comma separated. Leave blank to keep it off the cards.' },
+          { key: 'cards', label: 'Research cards', type: 'text', help: 'Which Research page cards this belongs under, comma separated. Type any part of a card title, e.g. "trustworthy, linux internals". It follows the titles, so reordering the cards does not matter. Leave blank to keep it off the cards.' },
           { key: 'private', label: 'Private repository', type: 'boolean', help: 'Hides the repository link and shows a private tag instead.' },
           { key: 'tags', label: 'Tags', type: 'strings', help: 'Used for filtering and for linking related projects and posts.' },
           { key: 'cover', label: 'Cover image (optional)', type: 'image' },

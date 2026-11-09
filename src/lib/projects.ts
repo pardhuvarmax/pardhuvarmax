@@ -15,7 +15,7 @@ export interface ProjectInput {
   tags?: string[];
   cover?: string;
   logo?: string; // engraved plate on the project page
-  cards?: string; // which research cards it belongs under, e.g. "1, 3"
+  cards?: string; // research cards it belongs under, by any part of the card title, e.g. "trustworthy, linux internals"
   install?: string;
   demo?: string;
   body?: string;
