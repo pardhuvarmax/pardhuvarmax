@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent, type ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, Check, Copy, FileText, Share2 } from 'lucide-react';
 import { formatDate, safeHref, site } from '../lib/content';
@@ -9,7 +9,7 @@ import '../styles/pubs.css';
 const STAGES = ['Draft', 'Preprint', 'Peer review', 'Published'];
 const stageOf = (status: string) => (/preprint/i.test(status) ? 1 : /prep|draft/i.test(status) ? 0 : /review/i.test(status) ? 2 : /publish/i.test(status) ? 3 : 1);
 
-/** The cover as a holographic trading card: it tilts towards the cursor, a rainbow foil slides across it and a glare follows the pointer. */
+/** The cover as an engraved foil plate: it tilts towards the cursor, the artwork turns to bevelled metal with a faint iridescence, and a glint slides across it. */
 function Holo({ children, image }: { children: ReactNode; image?: string }) {
   const box = useRef<HTMLDivElement>(null);
   const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -25,8 +25,8 @@ function Holo({ children, image }: { children: ReactNode; image?: string }) {
     set('--my', `${(y * 100).toFixed(1)}%`);
     set('--rx', `${((0.5 - y) * 20).toFixed(2)}deg`);
     set('--ry', `${((x - 0.5) * 24).toFixed(2)}deg`);
-    set('--cx', `${((x - 0.5) * 11).toFixed(1)}px`);
-    set('--cy', `${((y - 0.5) * 5).toFixed(1)}px`);
+    set('--lx', `${((x - 0.5) * 3).toFixed(2)}px`);
+    set('--ly', `${((y - 0.5) * 3).toFixed(2)}px`);
     set('--sx', `${((0.5 - x) * 26).toFixed(1)}px`);
     set('--sy', `${((y - 0.5) * 26 + 14).toFixed(1)}px`);
     set('--o', '1');
@@ -35,20 +35,14 @@ function Holo({ children, image }: { children: ReactNode; image?: string }) {
     const el = box.current;
     if (!el) return;
     el.classList.remove('live');
-    for (const k of ['--rx', '--ry', '--o', '--cx', '--cy']) el.style.removeProperty(k);
+    for (const k of ['--rx', '--ry', '--o', '--lx', '--ly']) el.style.removeProperty(k);
     el.style.setProperty('--sx', '0px');
     el.style.setProperty('--sy', '14px');
   };
   return (
-    <div className="holo" ref={box} onPointerMove={move} onPointerLeave={leave} onPointerCancel={leave}>
+    <div className={`holo ${image ? 'has-img' : ''}`} style={image ? ({ '--cover': `url("${safeHref(image)}")` } as CSSProperties) : undefined} ref={box} onPointerMove={move} onPointerLeave={leave} onPointerCancel={leave}>
       <div className="holo-in">
         {children}
-        {image && (
-          <>
-            <img className="holo-ghost r" src={safeHref(image)} alt="" aria-hidden="true" />
-            <img className="holo-ghost b" src={safeHref(image)} alt="" aria-hidden="true" />
-          </>
-        )}
         <i className="holo-foil" aria-hidden="true" />
         <i className="holo-spark" aria-hidden="true" />
         <i className="holo-glare" aria-hidden="true" />
@@ -93,10 +87,6 @@ export default function PublicationDetail() {
 
   return (
     <main className="wrap page pubd">
-      <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true" focusable="false">
-        <filter id="holoR" colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values="1 0 0 0 0  0 0.08 0 0 0  0.1 0 0 0 0  0 0 0 1 0" /></filter>
-        <filter id="holoB" colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0  0 0.45 0 0 0  0 0 1 0 0  0 0 0 1 0" /></filter>
-      </svg>
       <Link className="link-arrow back" to="/publications"><ArrowLeft size={15} /> All publications</Link>
 
       <div className="pubd-grid">
