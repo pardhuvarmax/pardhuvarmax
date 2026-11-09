@@ -10,7 +10,19 @@
       "linkLabel": "Preprints.org",
       "code": "https://github.com/pardhuvarmax/kernel-borderlands",
       "tags": "eBPF, Security, Linux",
-      "doi": "10.20944/preprints202610.2818.v1"
+      "doi": "10.20944/preprints202610.2818.v1",
+      "news": [
+        {
+          "date": "2026-11-09",
+          "text": "Manuscript for a Springer journal is in progress."
+        },
+        {
+          "date": "2026-10",
+          "text": "Preprint released on Preprints.org.",
+          "link": "https://www.preprints.org/manuscript/202610.2818",
+          "linkLabel": "Read it"
+        }
+      ]
     },
     {
       "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",

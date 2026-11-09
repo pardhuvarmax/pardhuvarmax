@@ -17,7 +17,8 @@ export default function PublicationDetail() {
 
   useEffect(() => {
     document.title = p ? `${p.title} | ${site.name}` : `Not found | ${site.name}`;
-    window.scrollTo(0, 0);
+    if (location.hash === '#news') setTimeout(() => document.getElementById('news')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+    else window.scrollTo(0, 0);
   }, [p]);
 
   if (!p) {
@@ -75,6 +76,20 @@ export default function PublicationDetail() {
             <span className="pub-spacer" />
             <button className="pub-pill" onClick={share}>{done === 'share' ? <><Check size={14} /> Link copied</> : <><Share2 size={14} /> Share</>}</button>
           </div>
+
+          {p.newsList.length > 0 && (
+            <section className="pubd-sec" id="news">
+              <h2>News</h2>
+              <ol className="pubd-news">
+                {p.newsList.map((n, i) => (
+                  <li key={n.date + n.text} className={i === 0 ? 'latest' : ''}>
+                    <time>{formatDate(n.date)}</time>
+                    <p>{n.text}{n.link && <> <a href={safeHref(n.link)} target="_blank" rel="noopener noreferrer">{n.linkLabel || 'Link'} <ArrowUpRight size={13} /></a></>}</p>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
 
           {p.abstract && (
             <section className="pubd-sec">

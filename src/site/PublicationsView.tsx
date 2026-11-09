@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, Check, ChevronDown, Copy, Download, FileText, Link2, Quote, Rss, Search, X } from 'lucide-react';
-import { safeHref } from '../lib/content';
+import { formatDate, safeHref } from '../lib/content';
 import { CITE_FORMATS, allBibtex, allPubs, allRis, coins, copyText, downloadText, markdownList, plainList, type Pub } from '../lib/publications';
 import { glow, Reveal } from './Reveal';
 import '../styles/pubs.css';
@@ -115,6 +115,9 @@ export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
           </h3>
           <p>{p.authors}. {p.venue}.</p>
           <Lifecycle status={p.status} />
+          {p.newsList[0] && (
+            <p className="pub-latest"><b>News</b> <Link to={`/publications/${p.slug}#news`}>{p.newsList[0].text}</Link> <time>{formatDate(p.newsList[0].date)}</time></p>
+          )}
           {p.tagList.length > 0 && <div className="pub-tags">{p.tagList.map((t) => <span key={t} className="chip">{t}</span>)}</div>}
 
           <div className="pub-actions">

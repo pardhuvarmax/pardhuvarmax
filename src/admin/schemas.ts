@@ -106,6 +106,18 @@ export const COLLECTIONS: Collection[] = [
           { key: 'code', label: 'Code link (optional)', type: 'url' },
           { key: 'tags', label: 'Topics (comma separated, optional)', type: 'text', help: 'Shown as small tags and as filter buttons on the Publications page.' },
           { key: 'abstract', label: 'Abstract (optional)', type: 'textarea', help: 'Adds an Abstract button to the paper. Searchable too.' },
+          {
+            key: 'news',
+            label: 'News (optional)',
+            type: 'list',
+            titleKey: 'text',
+            fields: [
+              { key: 'date', label: 'Date (YYYY-MM-DD or YYYY-MM)', type: 'text', help: 'The newest entry is shown on the paper card; all of them are listed on the paper page.' },
+              { key: 'text', label: 'What happened', type: 'text', help: 'e.g. Accepted at ..., Journal manuscript in progress, New version posted.' },
+              { key: 'link', label: 'Link (optional)', type: 'url' },
+              { key: 'linkLabel', label: 'Link label (optional)', type: 'text' },
+            ],
+          },
         ],
       },
     ],

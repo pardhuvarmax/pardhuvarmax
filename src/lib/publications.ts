@@ -15,10 +15,12 @@ interface Raw {
   code?: string;
   abstract?: string;
   tags?: string;
+  news?: { date: string; text: string; link?: string; linkLabel?: string }[];
 }
 
 export interface Pub extends Raw {
   slug: string;
+  newsList: { date: string; text: string; link?: string; linkLabel?: string }[]; // newest first
   tagList: string[];
   doiUrl?: string;
   pdfUrl?: string;
@@ -34,6 +36,7 @@ function normalise(p: Raw): Pub {
   return {
     ...p,
     slug: pubSlug(p.title),
+    newsList: [...(p.news ?? [])].filter((n) => n.text).sort((a, b) => b.date.localeCompare(a.date)),
     tagList: (p.tags ?? '').split(',').map((t) => t.trim()).filter(Boolean),
     arxiv,
     doi,
