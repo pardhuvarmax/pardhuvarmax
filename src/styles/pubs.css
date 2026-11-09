@@ -127,7 +127,7 @@
 @media (prefers-reduced-motion: reduce) { .holo-in { transition: none; } }
 
 /* a picture instead of the drawn pattern */
-.pub-cover-img { display: block; object-fit: cover; background: #050505; }
+.pub-cover-img { display: block; object-fit: cover; background: #050505; border: 0 !important; }
 .pub-cover-img.mini { aspect-ratio: 3 / 4; }
 
 /* artwork covers: engraved steel. The artwork is brushed metal with hard, crisp edges that follow the light; the black stays black */
