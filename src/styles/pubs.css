@@ -111,7 +111,7 @@
 .pubd-news a { display: inline-flex; align-items: center; gap: 3px; margin-left: 6px; color: var(--text); font-weight: 600; }
 
 /* ---------- holographic cover ---------- */
-.holo { --mx: 50%; --my: 40%; --rx: 0deg; --ry: 0deg; --sx: 0px; --sy: 14px; --o: 0; perspective: 800px; touch-action: pan-y; cursor: crosshair; }
+.holo { --mx: 50%; --my: 40%; --rx: 0deg; --ry: 0deg; --sx: 0px; --sy: 14px; --o: 0; perspective: 800px; touch-action: pan-y; }
 .holo-in { position: relative; transform-style: preserve-3d; transform: rotateX(var(--rx)) rotateY(var(--ry)); transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.2, 1); will-change: transform; box-shadow: var(--sx) var(--sy) 28px -6px rgba(0, 0, 0, 0.55); }
 .holo.live .holo-in { transition: transform 0.07s linear; }
 .holo .pub-cover { transform: translateZ(0); }
@@ -125,4 +125,3 @@
 .holo.live .holo-spark { opacity: 0.9; }
 .holo.live .holo-glare { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .holo-in { transition: none; } }
-@media (hover: none) { .holo { cursor: default; } }
