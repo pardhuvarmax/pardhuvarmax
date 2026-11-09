@@ -63,7 +63,7 @@ function collect(): { pages: Page[]; posts: (Page & { slug: string })[]; project
         '@type': 'ScholarlyArticle',
         headline: p.title,
         name: p.title,
-        author: p.authors.split(/\s+and\s+|;|&/i).map((a) => ({ '@type': 'Person', name: a.trim() })).filter((a) => a.name),
+        author: p.authors.split(/\s+and\s+|;|&|,\s*(?=[A-Z])/i).map((a) => ({ '@type': 'Person', name: a.trim() })).filter((a) => a.name),
         datePublished: p.year,
         url: p.url,
         description: p.venue,

@@ -47,7 +47,8 @@ export const allPubs: Pub[] = (publications.items as Raw[]).map(normalise);
 export const findPub = (slug: string) => allPubs.find((p) => p.slug === slug);
 
 /* ---------- citations ---------- */
-const names = (authors: string) => authors.split(/\s+and\s+|;|&/i).map((a) => a.trim()).filter(Boolean);
+// "A. B. One, C. Two and D. Three": split on commas that start a new name, on "and", "&" and semicolons
+export const names = (authors: string) => authors.split(/\s+and\s+|;|&|,\s*(?=[A-Z])/i).map((a) => a.trim()).filter(Boolean);
 const split = (name: string) => {
   const t = name.split(/\s+/);
   return { family: t[t.length - 1] ?? name, given: t.slice(0, -1).join(' ') };
