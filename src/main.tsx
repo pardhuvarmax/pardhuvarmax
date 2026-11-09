@@ -10,6 +10,7 @@ import NotFound from "./site/NotFound.tsx";
 import ErrorBoundary from "./site/ErrorBoundary.tsx";
 import { OfflineGate } from "./site/NetworkGate.tsx";
 import DevBroken from "./site/DevBroken.tsx";
+import PublicationDetail from "./site/PublicationDetail.tsx";
 import { CassettePage, MePage, ProjectsPage, PublicationsPage, ResearchPage } from "./site/Pages.tsx";
 import { applyTheme, initialTheme } from "./site/useTheme.ts";
 import "./styles/index.css";
@@ -30,6 +31,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="me" element={<MePage />} />
         <Route path="research" element={<ResearchPage />} />
         <Route path="publications" element={<PublicationsPage />} />
+        <Route path="publications/:slug" element={<PublicationDetail />} />
         <Route path="projects" element={<ProjectsPage />} />
         <Route path="projects/:slug" element={<ProjectDetail />} />
         <Route path="cassette" element={<CassettePage />} />

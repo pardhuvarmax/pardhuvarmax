@@ -54,3 +54,44 @@
 .pub-life-track i { width: 26px; height: 5px; background: color-mix(in srgb, var(--text) 18%, transparent); }
 .pub-life-track i.on { background: var(--text); }
 .pub-card:focus-visible { outline: 3px dashed var(--text); outline-offset: 3px; }
+
+/* ---------- export menu ---------- */
+.pub-export { position: relative; }
+.pub-menu { position: absolute; z-index: 30; right: 0; top: calc(100% + 8px); width: max-content; min-width: 320px; max-width: 92vw; padding: 6px; background: var(--bg, #fff); border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); }
+.pub-menu > * { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; width: 100%; padding: 9px 10px; border: 0; background: transparent; color: var(--text); font: 700 0.72rem/1.2 var(--mono, monospace); letter-spacing: 0.05em; text-transform: uppercase; text-align: left; text-decoration: none; cursor: pointer; }
+.pub-menu > *:hover, .pub-menu > *:focus-visible { background: var(--text); color: var(--bg, #fff); outline: none; }
+.pub-menu span { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+.pub-menu em { font-style: normal; font-weight: 500; text-transform: none; letter-spacing: 0; opacity: 0.6; }
+.pub-title-link { color: inherit; text-decoration: none; }
+.pub-title-link:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.Z3988 { display: none; }
+
+/* ---------- a paper on its own page ---------- */
+.pubd-grid { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 44px; margin-top: 18px; align-items: start; }
+.pubd-side { position: sticky; top: 96px; }
+.pubd-side .pub-cover { width: 100%; height: auto; aspect-ratio: 3 / 4; border-width: 2px; }
+.pubd-side dl { margin: 22px 0 0; display: grid; gap: 14px; }
+.pubd-side dt { font: 700 0.64rem/1 var(--mono, monospace); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.pubd-side dd { margin: 5px 0 0; font-size: 0.92rem; line-height: 1.4; word-break: break-word; }
+.pubd-side a { color: var(--text); }
+.pubd-main h1 { margin: 16px 0 12px; font: 800 clamp(1.8rem, 4vw, 2.9rem)/1.08 var(--display, inherit); letter-spacing: -0.025em; }
+.pubd-authors { margin: 0; font-size: 1.05rem; color: var(--muted); }
+.pubd-stages { display: flex; flex-wrap: wrap; gap: 6px 0; margin: 26px 0 22px; padding: 0; list-style: none; font: 700 0.68rem/1 var(--mono, monospace); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.pubd-stages li { position: relative; display: inline-flex; align-items: center; gap: 8px; padding-right: 36px; }
+.pubd-stages li i { width: 12px; height: 12px; border: 2px solid currentColor; }
+.pubd-stages li::after { content: ''; position: absolute; right: 10px; top: 50%; width: 18px; height: 2px; background: currentColor; opacity: 0.35; }
+.pubd-stages li:last-child { padding-right: 0; } .pubd-stages li:last-child::after { display: none; }
+.pubd-stages li.done, .pubd-stages li.now { color: var(--text); }
+.pubd-stages li.done i { background: currentColor; } .pubd-stages li.done::after { opacity: 1; }
+.pubd-stages li.now i { background: var(--accent); border-color: var(--text); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }
+.pubd-sec { margin-top: 40px; }
+.pubd-sec h2 { margin: 0 0 14px; font: 800 0.8rem/1 var(--mono, monospace); letter-spacing: 0.14em; text-transform: uppercase; }
+.pubd-abstract { margin: 0; font-size: 1.05rem; line-height: 1.75; max-width: 68ch; }
+.pubd-quick { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.pubd-quick > span { margin-right: 4px; font: 700 0.66rem/1 var(--mono, monospace); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.pubd-rel { list-style: none; margin: 0; padding: 0; }
+.pubd-rel li { display: flex; align-items: baseline; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line, currentColor); }
+.pubd-rel li span { flex: none; width: 70px; font: 700 0.64rem/1 var(--mono, monospace); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.pubd-rel a { color: var(--text); font-weight: 600; }
+.pubd-rel em { margin-left: auto; font-style: normal; font-size: 0.8rem; color: var(--muted); }
+@media (max-width: 760px) { .pubd-grid { grid-template-columns: 1fr; gap: 26px; } .pubd-side { position: static; display: grid; grid-template-columns: 96px 1fr; gap: 18px; } .pubd-side dl { margin: 0; } }

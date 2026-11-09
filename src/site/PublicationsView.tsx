@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { ArrowUpRight, Check, ChevronDown, Copy, Download, FileText, Link2, Quote, Search, X } from 'lucide-react';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { ArrowUpRight, Check, ChevronDown, Copy, Download, FileText, Link2, Quote, Rss, Search, X } from 'lucide-react';
 import { safeHref } from '../lib/content';
-import { CITE_FORMATS, allBibtex, allPubs, copyText, downloadText, type Pub } from '../lib/publications';
+import { CITE_FORMATS, allBibtex, allPubs, allRis, coins, copyText, downloadText, markdownList, plainList, type Pub } from '../lib/publications';
 import { glow, Reveal } from './Reveal';
 import '../styles/pubs.css';
 
@@ -62,12 +62,31 @@ function Lifecycle({ status }: { status: string }) {
   );
 }
 
-export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
-  const [open, setOpen] = useState<'' | 'cite' | 'abstract'>('');
+/** BibTeX, APA and MLA for one paper, with a copy button. */
+export function CitePanel({ p }: { p: Pub }) {
   const [fmt, setFmt] = useState<(typeof CITE_FORMATS)[number]['id']>('bibtex');
   const [done, mark] = useDone();
   const citation = CITE_FORMATS.find((f) => f.id === fmt)!.make(p);
-  const permalink = () => `${location.origin}/publications#${p.slug}`;
+  return (
+    <div className="pub-cite">
+      <div className="pub-cite-bar" role="tablist" aria-label="Citation format">
+        {CITE_FORMATS.map((f) => (
+          <button key={f.id} role="tab" aria-selected={fmt === f.id} className={fmt === f.id ? 'on' : ''} onClick={() => setFmt(f.id)}>{f.label}</button>
+        ))}
+        <span className="pub-spacer" />
+        <button className="pub-copy" onClick={() => copyText(citation).then((ok) => ok && mark('cite'))}>
+          {done === 'cite' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy</>}
+        </button>
+      </div>
+      <pre className={fmt === 'bibtex' ? 'mono' : ''}>{citation}</pre>
+    </div>
+  );
+}
+
+export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
+  const [open, setOpen] = useState<'' | 'cite' | 'abstract'>('');
+  const [done, mark] = useDone();
+  const permalink = () => `${location.origin}/publications/${p.slug}`;
   const toggle = (k: 'cite' | 'abstract') => setOpen((o) => (o === k ? '' : k));
 
   // the "c" shortcut on the page asks the paper under the cursor to open its citation
@@ -79,6 +98,7 @@ export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
 
   return (
     <li id={p.slug} tabIndex={-1} className={`pub glow pub-card ${flash ? 'pub-flash' : ''} `} onPointerMove={glow}>
+      <span className="Z3988" title={coins(p)} />
       <div className="pub-layout">
         <Cover p={p} />
         <div className="pub-main">
@@ -88,7 +108,7 @@ export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
             <span className="pub-year">{p.year}</span>
           </div>
           <h3>
-            {p.title}
+            <Link className="pub-title-link" to={`/publications/${p.slug}`}>{p.title}</Link>
             <button className="pub-anchor" onClick={() => copyText(permalink()).then((ok) => ok && mark('link'))} aria-label="Copy link to this paper" title="Copy link to this paper">
               {done === 'link' ? <Check size={15} /> : <Link2 size={15} />}
             </button>
@@ -114,23 +134,50 @@ export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
           </div>
 
           {open === 'abstract' && p.abstract && <p className="pub-abstract">{p.abstract}</p>}
-          {open === 'cite' && (
-            <div className="pub-cite">
-              <div className="pub-cite-bar" role="tablist" aria-label="Citation format">
-                {CITE_FORMATS.map((f) => (
-                  <button key={f.id} role="tab" aria-selected={fmt === f.id} className={fmt === f.id ? 'on' : ''} onClick={() => setFmt(f.id)}>{f.label}</button>
-                ))}
-                <span className="pub-spacer" />
-                <button className="pub-copy" onClick={() => copyText(citation).then((ok) => ok && mark('cite'))}>
-                  {done === 'cite' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy</>}
-                </button>
-              </div>
-              <pre className={fmt === 'bibtex' ? 'mono' : ''}>{citation}</pre>
-            </div>
-          )}
+          {open === 'cite' && <CitePanel p={p} />}
         </div>
       </div>
     </li>
+  );
+}
+
+/** One "Export" button instead of a row of them: BibTeX, RIS for Zotero and Mendeley, a Markdown list for a CV or README, plain text, and the feed. */
+function ExportMenu({ list, filtered }: { list: Pub[]; filtered: boolean }) {
+  const [open, setOpen] = useState(false);
+  const [done, mark] = useDone();
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const away = (e: MouseEvent) => { if (!box.current?.contains(e.target as Node)) setOpen(false); };
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    document.addEventListener('mousedown', away);
+    document.addEventListener('keydown', esc);
+    return () => { document.removeEventListener('mousedown', away); document.removeEventListener('keydown', esc); };
+  }, [open]);
+  const copy = (k: string, text: string) => copyText(text).then((ok) => ok && mark(k));
+  const items: { k: string; label: string; hint: string; run: () => void }[] = [
+    { k: 'bib', label: 'Copy BibTeX', hint: 'LaTeX', run: () => copy('bib', allBibtex(list)) },
+    { k: 'dbib', label: 'Download .bib', hint: 'LaTeX', run: () => downloadText('publications.bib', allBibtex(list), 'application/x-bibtex') },
+    { k: 'dris', label: 'Download .ris', hint: 'Zotero, Mendeley, EndNote', run: () => downloadText('publications.ris', allRis(list), 'application/x-research-info-systems') },
+    { k: 'md', label: 'Copy as Markdown', hint: 'CV or README', run: () => copy('md', markdownList(list)) },
+    { k: 'txt', label: 'Copy as plain text', hint: 'APA', run: () => copy('txt', plainList(list)) },
+  ];
+  return (
+    <div className="pub-export" ref={box}>
+      <button className="pub-pill" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-haspopup="menu" disabled={!list.length}>
+        <Download size={14} /> Export{filtered ? ' (shown)' : ''} <ChevronDown size={14} className="pub-chev" />
+      </button>
+      {open && (
+        <div className="pub-menu" role="menu">
+          {items.map((i) => (
+            <button key={i.k} role="menuitem" onClick={i.run}>
+              <span>{done === i.k ? <><Check size={13} /> Copied</> : i.label}</span><em>{i.hint}</em>
+            </button>
+          ))}
+          <a role="menuitem" href="/publications.xml" target="_blank" rel="noopener"><span><Rss size={13} /> Follow by RSS</span><em>New papers</em></a>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -139,7 +186,6 @@ export function PublicationsExplorer() {
   const [params, setParams] = useSearchParams();
   const { hash: urlHash } = useLocation();
   const search = useRef<HTMLInputElement>(null);
-  const [done, mark] = useDone();
   const [cursor, setCursor] = useState(-1);
   const q = params.get('q') ?? '';
   const status = params.get('status');
@@ -210,12 +256,7 @@ export function PublicationsExplorer() {
           {q && <button type="button" onClick={() => set({ q: null })} aria-label="Clear search"><X size={15} /></button>}
         </label>
         <span className="pub-spacer" />
-        <button className="pub-pill" onClick={() => copyText(allBibtex(shown)).then((ok) => ok && mark('all'))} disabled={!shown.length}>
-          {done === 'all' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy BibTeX{filtered ? ' (shown)' : ''}</>}
-        </button>
-        <button className="pub-pill" onClick={() => downloadText('publications.bib', allBibtex(shown), 'application/x-bibtex')} disabled={!shown.length}>
-          <Download size={14} /> .bib
-        </button>
+        <ExportMenu list={shown} filtered={filtered} />
       </div>
 
       {shown.length === 0 ? (

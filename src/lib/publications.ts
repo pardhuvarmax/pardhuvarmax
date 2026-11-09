@@ -1,4 +1,6 @@
-import { publications } from './content';
+import { posts, publications } from './content';
+import { allProjects } from './projects';
+import { pubSlug } from './pubslug';
 
 interface Raw {
   title: string;
@@ -24,8 +26,6 @@ export interface Pub extends Raw {
   arxiv?: string;
 }
 
-const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-
 function normalise(p: Raw): Pub {
   const arxiv = (p.venue.match(/arXiv:\s*(\d{4}\.\d{4,5})/i) ?? p.url.match(/arxiv\.org\/(?:abs|pdf)\/(\d{4}\.\d{4,5})/i))?.[1];
   const doi = (p.doi?.trim() || p.venue.match(/doi:\s*(10\.\S+?)(?:[.,;]?\s|[.,;]?$)/i)?.[1] || '').replace(/^https?:\/\/(dx\.)?doi\.org\//i, '');
@@ -33,7 +33,7 @@ function normalise(p: Raw): Pub {
   const code = p.code?.trim() && p.code.trim() !== p.url ? p.code.trim() : '';
   return {
     ...p,
-    slug: slugify(p.title).split('-').slice(0, 8).join('-'),
+    slug: pubSlug(p.title),
     tagList: (p.tags ?? '').split(',').map((t) => t.trim()).filter(Boolean),
     arxiv,
     doi,
@@ -126,4 +126,47 @@ export function downloadText(name: string, text: string, type = 'text/plain') {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* ---------- more ways out ---------- */
+const typeOf = (p: Pub) => (p.status === 'In preparation' ? 'UNPB' : p.arxiv || /preprint/i.test(p.status) ? 'GEN' : 'JOUR');
+
+/** RIS, the format Zotero, Mendeley and EndNote import. */
+export function ris(p: Pub): string {
+  const lines = [`TY  - ${typeOf(p)}`, ...names(p.authors).map((n) => { const s = split(n); return `AU  - ${s.given ? `${s.family}, ${s.given}` : s.family}`; }), `TI  - ${p.title}`, `PY  - ${p.year}`, `T2  - ${venueOnly(p.venue)}`];
+  if (p.doi) lines.push(`DO  - ${p.doi}`);
+  if (p.status !== 'In preparation') lines.push(`UR  - ${p.url}`);
+  lines.push('ER  - ');
+  return lines.join('\n');
+}
+export const allRis = (list: Pub[] = allPubs) => list.map(ris).join('\n\n') + '\n';
+
+export const markdownList = (list: Pub[] = allPubs) =>
+  list.map((p) => `- ${names(p.authors).join(', ')} (${p.year}). ${p.status === 'In preparation' ? p.title : `[${p.title}](${p.doiUrl ?? p.url})`}. *${venueOnly(p.venue)}*.`).join('\n') + '\n';
+
+export const plainList = (list: Pub[] = allPubs) => list.map((p, i) => `[${i + 1}] ${apa(p)}`).join('\n') + '\n';
+
+/** "(Konduru et al., 2026)" for pasting into a sentence. */
+export function inText(p: Pub): string {
+  const fam = names(p.authors).map((n) => split(n).family);
+  const who = fam.length > 2 ? `${fam[0]} et al.` : fam.length === 2 ? `${fam[0]} & ${fam[1]}` : fam[0] ?? '';
+  return `(${who}, ${p.year})`;
+}
+
+/** COinS: invisible metadata that Zotero's browser button reads off the page, so a paper can be saved in one click. */
+export function coins(p: Pub): string {
+  const e = encodeURIComponent;
+  const parts = ['ctx_ver=Z39.88-2004', `rft_val_fmt=${e('info:ofi/fmt:kev:mtx:journal')}`, `rft.genre=${p.status === 'In preparation' ? 'unknown' : 'preprint'}`, `rft.atitle=${e(p.title)}`, `rft.jtitle=${e(venueOnly(p.venue))}`, `rft.date=${e(p.year)}`];
+  for (const n of names(p.authors)) parts.push(`rft.au=${e(n)}`);
+  if (p.doi) parts.push(`rft_id=${e(`info:doi/${p.doi}`)}`);
+  if (p.status !== 'In preparation') parts.push(`rft_id=${e(p.url)}`);
+  return parts.join('&');
+}
+
+const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ');
+/** Projects and posts that belong with a paper: the repository it links to, or one whose name is in the title. */
+export function relatedFor(p: Pub) {
+  const projs = allProjects.filter((pr) => (p.codeUrl && pr.url === p.codeUrl) || norm(p.title).includes(norm(pr.name)));
+  const relPosts = posts.filter((post) => projs.some((pr) => norm(`${post.title} ${post.summary}`).includes(norm(pr.name))));
+  return { projects: projs, posts: relPosts };
 }
