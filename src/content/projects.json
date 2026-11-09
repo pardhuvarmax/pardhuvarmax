@@ -168,7 +168,8 @@
       "body": "## What it was\n\nLease Manager was a self-service cloud provisioning and lease system built for BPCTF2, a live capture-the-flag event. Instead of organisers handing out infrastructure by hand, players asked for a challenge instance through a web page. The service handled the request, called the infrastructure control tool, and returned the endpoint it had allocated.\n\nIt was designed for a live event, where requests arrive at the same time and abuse prevention matters.\n\n## How it worked\n\n- **A small Python service** using only the standard library handled the lease API, with Nginx in front for TLS and reverse proxying. It ran as a systemd service that restarted itself.\n- **Two control tools** managed the underlying challenge infrastructure, running on Docker and Docker Compose.\n- **Idempotent leases.** Asking again for a team that already had a lease returned the existing one. That also stopped duplicates when a slow cold start, about 10 to 25 seconds, outlasted the client's timeout.\n- **Rate limits** in the application: at most 5 distinct team names per address per hour and 12 requests per minute.\n\n## A deliberate trade-off\n\nThe deployment did not verify identity at the lease endpoint, because the event was already running and a usable self-service path mattered more. The cost was that someone could, in principle, request a lease under another team's name. It was covered by the rate limits, the existing-lease check, monitoring, and the ability for organisers to quarantine an abused slot.\n\nIt ran on Google Cloud Compute Engine, with SSH through Identity-Aware Proxy and Let's Encrypt certificates. The event is over, so the repository is archived.",
       "install": "",
       "links": [],
-      "relatedPosts": []
+      "relatedPosts": [],
+      "logo": "/uploads/pubs/breachpoint.webp"
     }
   ]
 }
