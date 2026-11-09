@@ -148,6 +148,6 @@
 
 /* the engraved logo on a project page: its own card, above the GitHub card */
 .pj-rail { display: grid; gap: 26px; align-content: start; }
-.site .pj-logo { padding: 20px; border: 2px solid var(--ink); background: var(--surface); box-shadow: 5px 5px 0 var(--accent); }
-.pj-logo .holo { max-width: 220px; margin: 0 auto; }
-.pj-logo .pub-cover { width: 100%; height: auto; aspect-ratio: 3 / 4; border-width: 2px; }
+.site .pj-logo { padding: 0; border: 2px solid var(--ink); background: #050505; box-shadow: 5px 5px 0 var(--accent); }
+.pj-logo .holo { max-width: none; margin: 0; }
+.pj-logo .pub-cover { width: 100%; height: auto; aspect-ratio: 3 / 4; border: 0; }
