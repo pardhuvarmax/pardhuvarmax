@@ -144,6 +144,7 @@ export const COLLECTIONS: Collection[] = [
           { key: 'url', label: 'Repository URL', type: 'url', help: 'GitHub links also pull in stars, languages and activity at build time.' },
           { key: 'tags', label: 'Tags', type: 'strings', help: 'Used for filtering and for linking related projects and posts.' },
           { key: 'cover', label: 'Cover image (optional)', type: 'image' },
+          { key: 'logo', label: 'Logo plate (optional)', type: 'image', help: 'A portrait picture, about 3:4, usually the logo on black. Shown on the project page as an engraved metal plate that tilts with the cursor.' },
           { key: 'install', label: 'Quick start (optional)', type: 'textarea', rows: 4, help: 'Commands shown in a copyable box on the project page, one per line.' },
           { key: 'demo', label: 'Terminal replay (optional)', type: 'textarea', rows: 8, help: 'An animated terminal on the project page. Start a line with $ to have it typed as a command; any other line is printed as output; # lines are comments. Leave empty to replay the quick start instead.' },
           { key: 'body', label: 'Write-up (Markdown)', type: 'textarea', rows: 14, help: 'The long description on the project page: the problem, the approach, results. Headings, lists, links and code blocks work.' },

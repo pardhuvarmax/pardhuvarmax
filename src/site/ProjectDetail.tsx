@@ -7,7 +7,6 @@ import { ago, allProjects, findProject, relatedFor, repoOf, useGithubStats } fro
 import { LangBar, Sparkline } from './ProjectsView';
 import Terminal from './Terminal';
 import { Holo } from './Holo';
-import { Cover } from './PublicationsView';
 import { pubForProject } from '../lib/publications';
 import '../styles/projects.css';
 
@@ -34,7 +33,7 @@ export default function ProjectDetail() {
 
   const st = stats[repoOf(p.url) ?? ''];
   const rel = relatedFor(p);
-  const logo = pubForProject(p);
+  const logo = p.logo || pubForProject(p)?.cover;
   const idx = allProjects.indexOf(p);
   const prev = allProjects[idx - 1];
   const next = allProjects[idx + 1];
@@ -75,7 +74,7 @@ export default function ProjectDetail() {
         </div>
 
         <div className="pj-rail">
-        {logo && <div className="pj-logo"><Holo image={logo.cover}><Cover p={logo} /></Holo></div>}
+        {logo && <div className="pj-logo"><Holo image={logo}><img className="pub-cover pub-cover-img" src={safeHref(logo)} alt={`${p.name} logo`} decoding="async" /></Holo></div>}
         <aside className="pj-side" aria-label="Project facts">
           {st ? (
             <>

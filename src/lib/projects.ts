@@ -13,6 +13,7 @@ export interface ProjectInput {
   date?: string;
   tags?: string[];
   cover?: string;
+  logo?: string; // engraved plate on the project page
   install?: string;
   demo?: string;
   body?: string;
