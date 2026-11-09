@@ -73,8 +73,8 @@
         },
         {
           "date": "2026-08-26",
-          "text": "LBSM v1.0.0 archived on Zenodo with a citable DOI (10.5281/zenodo.22108702).",
-          "link": "https://doi.org/10.5281/zenodo.22108702",
+          "text": "LBSM archived on Zenodo, with one citable DOI that always points to the latest version.",
+          "link": "https://doi.org/10.5281/zenodo.22108701",
           "linkLabel": "Zenodo"
         },
         {
@@ -82,7 +82,7 @@
           "text": "Research repository opened."
         }
       ],
-      "doi": "10.5281/zenodo.22108702"
+      "doi": "10.5281/zenodo.22108701"
     }
   ]
 }
