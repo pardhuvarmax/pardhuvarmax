@@ -615,7 +615,7 @@ export function Projects() {
   const stats = useGithubStats();
   return (
     <section id="projects" className="wrap sec">
-      <SectionHead kicker="04 · Projects" title={<>Open-source <em>systems</em></>}>
+      <SectionHead kicker="04 · Projects & Work" title={<>Open-source <em>systems</em></>}>
         Research code and systems software, built in the open.
       </SectionHead>
       <div className="cards">

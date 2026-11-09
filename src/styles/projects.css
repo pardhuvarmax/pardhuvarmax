@@ -12,6 +12,8 @@
 .site .pj-status.s-research { background: var(--accent-2); }
 .site .pj-status.s-prototype { background: var(--accent-3); }
 .site .pj-status.s-archived { background: transparent; color: var(--muted); }
+.site .pj-status.s-hobby { background: var(--accent-4); }
+.site .pj-status.s-contribution { background: transparent; color: var(--text); }
 .site .pj-star { color: var(--accent-text); border-color: var(--accent); }
 .site .pj-cover { display: block; width: calc(100% + 48px); max-width: none; margin: -24px -24px 18px; height: auto; object-fit: cover; border-bottom: 2px solid var(--ink); }
 .site .pj-foot { display: grid; gap: 10px; margin-top: auto; padding-top: 18px; }

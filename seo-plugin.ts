@@ -100,7 +100,7 @@ function collect(): { pages: Page[]; posts: (Page & { slug: string })[]; project
     { url: '/me', title: `Me | ${name}`, description: clip(site.bio?.[0] || site.headline), image: photo, type: 'website' },
     { url: '/research', title: `Research | ${name}`, description: clip(site.researchStatement?.[0] || site.headline), image: photo, type: 'website' },
     { url: '/publications', title: `Publications | ${name}`, description: `Publications and preprints by ${name}.`, image: photo, type: 'website', jsonld: pubLd },
-    { url: '/projects', title: `Projects | ${name}`, description: `Open-source systems and research code by ${name}.`, image: photo, type: 'website' },
+    { url: '/projects', title: `Projects & Work | ${name}`, description: `Open-source systems and research code by ${name}.`, image: photo, type: 'website' },
     { url: '/blog', title: `Writing | ${name}`, description: `Working notes and writing by ${name}.`, image: photo, type: 'website' },
     { url: '/cassette', title: `Cassette | ${name}`, description: clip(cassette.intro || `Music on repeat, ${name}.`), image: firstCover, type: 'website' },
   ]

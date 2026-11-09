@@ -37,9 +37,9 @@ export const PublicationsPage = () => (
   </Page>
 );
 export const ProjectsPage = () => (
-  <Page title="Projects">
+  <Page title="Projects & Work">
     <section id="projects" className="wrap sec">
-      <SectionHead kicker="04 · Projects" title={<>Open-source <em>systems</em></>}>
+      <SectionHead kicker="04 · Projects & Work" title={<>Open-source <em>systems</em></>}>
         Research code and systems software, built in the open. Search, filter and sort to find what you need.
       </SectionHead>
       <ProjectsExplorer />
