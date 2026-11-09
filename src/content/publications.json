@@ -49,8 +49,7 @@
           "linkLabel": "arXiv"
         }
       ],
-      "cover": "/uploads/pubs/structural-limitations.webp",
-      "foil": "Colour"
+      "cover": "/uploads/pubs/structural-limitations.webp"
     },
     {
       "title": "Temporal and Adaptive Dynamics of Latent Behavioral State Machines",
@@ -86,8 +85,7 @@
         }
       ],
       "doi": "10.5281/zenodo.22108701",
-      "cover": "/uploads/pubs/lbsm.webp",
-      "foil": "Colour"
+      "cover": "/uploads/pubs/lbsm.webp"
     }
   ]
 }

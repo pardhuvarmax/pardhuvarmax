@@ -9,8 +9,8 @@ import '../styles/pubs.css';
 const STAGES = ['Draft', 'Preprint', 'Peer review', 'Published'];
 const stageOf = (status: string) => (/preprint/i.test(status) ? 1 : /prep|draft/i.test(status) ? 0 : /review/i.test(status) ? 2 : /publish/i.test(status) ? 3 : 1);
 
-/** The cover as an engraved foil plate: it tilts towards the cursor, the artwork turns to bevelled metal with a faint iridescence, and a glint slides across it. */
-function Holo({ children, image, colour = false }: { children: ReactNode; image?: string; colour?: boolean }) {
+/** The cover as an engraved steel plate: it tilts towards the cursor and the artwork is cut into brushed metal with hard, sharp edges that follow the light. */
+function Holo({ children, image }: { children: ReactNode; image?: string }) {
   const box = useRef<HTMLDivElement>(null);
   const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const move = (e: PointerEvent<HTMLDivElement>) => {
@@ -25,8 +25,10 @@ function Holo({ children, image, colour = false }: { children: ReactNode; image?
     set('--my', `${(y * 100).toFixed(1)}%`);
     set('--rx', `${((0.5 - y) * 20).toFixed(2)}deg`);
     set('--ry', `${((x - 0.5) * 24).toFixed(2)}deg`);
-    set('--lx', `${((x - 0.5) * 3).toFixed(2)}px`);
-    set('--ly', `${((y - 0.5) * 3).toFixed(2)}px`);
+    // the light sits at the cursor: edges facing it catch a hard highlight, the opposite edges fall into a hard shadow (never less than a pixel)
+    const edge = (v: number) => `${(Math.sign(v || 1) * (1 + Math.abs(v) * 2.4)).toFixed(2)}px`;
+    set('--lx', edge(x - 0.5));
+    set('--ly', edge(y - 0.5));
     set('--sx', `${((0.5 - x) * 26).toFixed(1)}px`);
     set('--sy', `${((y - 0.5) * 26 + 14).toFixed(1)}px`);
     set('--o', '1');
@@ -40,7 +42,7 @@ function Holo({ children, image, colour = false }: { children: ReactNode; image?
     el.style.setProperty('--sy', '14px');
   };
   return (
-    <div className={`holo ${image ? 'has-img' : ''} ${colour ? 'foil-colour' : ''}`} style={image ? ({ '--cover': `url("${safeHref(image)}")` } as CSSProperties) : undefined} ref={box} onPointerMove={move} onPointerLeave={leave} onPointerCancel={leave}>
+    <div className={`holo ${image ? 'has-img' : ''}`} style={image ? ({ '--cover': `url("${safeHref(image)}")` } as CSSProperties) : undefined} ref={box} onPointerMove={move} onPointerLeave={leave} onPointerCancel={leave}>
       <div className="holo-in">
         {children}
         <i className="holo-foil" aria-hidden="true" />
@@ -91,7 +93,7 @@ export default function PublicationDetail() {
 
       <div className="pubd-grid">
         <aside className="pubd-side" aria-label="At a glance">
-          <Holo image={p.cover} colour={/^colou?r$/i.test(p.foil ?? '')}><Cover p={p} /></Holo>
+          <Holo image={p.cover}><Cover p={p} /></Holo>
           <dl>
             <div><dt>Status</dt><dd>{p.status}</dd></div>
             <div><dt>Year</dt><dd>{p.year}</dd></div>

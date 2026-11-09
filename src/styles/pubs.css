@@ -130,24 +130,18 @@
 .pub-cover-img { display: block; object-fit: cover; background: #050505; }
 .pub-cover-img.mini { aspect-ratio: 3 / 4; }
 
-/* artwork covers: engraved foil. The metal lives only where the artwork is bright, with a bevel that follows the light, and the black stays black */
-.holo.has-img { --mask: var(--cover); }
+/* artwork covers: engraved steel. The artwork is brushed metal with hard, crisp edges that follow the light; the black stays black */
 .holo.has-img .holo-foil, .holo.has-img .holo-glare {
   -webkit-mask-image: var(--cover); mask-image: var(--cover); -webkit-mask-size: cover; mask-size: cover; -webkit-mask-mode: luminance; mask-mode: luminance;
 }
 .holo.has-img .holo-foil {
-  background: repeating-linear-gradient(115deg, #aeb2bd 0%, #c9ccd5 9%, #9a9ea9 18%, #bfc3cc 27%, #a4a8b3 36%, #aeb2bd 45%);
-  background-size: 260% 260%; background-position: var(--mx) var(--my);
-  mix-blend-mode: normal; transform: translateZ(2px);
-  filter: drop-shadow(var(--lx, 0px) var(--ly, 0px) 0 rgba(255, 255, 255, 0.55)) drop-shadow(calc(var(--lx, 0px) * -1.4) calc(var(--ly, 0px) * -1.4) 1px rgba(0, 0, 0, 0.9));
+  opacity: 0.7; transition: opacity 0.4s; mix-blend-mode: normal; transform: translateZ(2px);
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.16) 0 1px, rgba(0, 0, 0, 0.18) 1px 2px),
+    linear-gradient(115deg, #7d818d 0%, #e6e9f0 10%, #6f737f 21%, #d3d7df 32%, #7a7e8a 43%, #f0f2f7 54%, #6c707c 65%, #cdd1d9 76%, #7d818d 88%, #e6e9f0 100%);
+  background-size: auto, 320% 320%; background-position: 0 0, var(--mx) var(--my);
+  filter: drop-shadow(var(--lx, -1px) var(--ly, -1px) 0 rgba(255, 255, 255, 0.95)) drop-shadow(calc(var(--lx, -1px) * -1) calc(var(--ly, -1px) * -1) 0 rgba(0, 0, 0, 1));
 }
-.holo.has-img .holo-glare { background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.4), transparent 42%); mix-blend-mode: screen; transform: translateZ(6px); }
+.holo.has-img.live .holo-foil { opacity: 1; }
+.holo.has-img .holo-glare { background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.35), transparent 40%); mix-blend-mode: screen; transform: translateZ(6px); }
 .holo.has-img .holo-spark { display: none; }
-.holo.has-img.live .holo-foil { opacity: 0.88; }
-
-/* colour foil: the artwork engraved in full colour, matte, with the same bevelled edges */
-.holo.has-img.foil-colour .holo-foil {
-  background: linear-gradient(115deg, #ff2d95 0%, #ff8a1f 12%, #ffe62e 24%, #2dff9f 36%, #1fb8ff 48%, #7c4dff 60%, #ff2d95 72%, #ff8a1f 84%, #ffe62e 100%);
-  background-size: 300% 300%; background-position: var(--mx) var(--my);
-}
-.holo.has-img.foil-colour.live .holo-foil { opacity: 0.95; }
