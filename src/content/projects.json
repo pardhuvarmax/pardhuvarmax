@@ -172,6 +172,23 @@
       "logo": "/uploads/pubs/breachpoint.webp"
     },
     {
+      "name": "ricebtw",
+      "description": "My Linux setup across Arch and Void: Home Manager on top of Arch, and MangoWC with DankMaterialShell on both.",
+      "status": "Active",
+      "featured": false,
+      "date": "2026-07",
+      "lang": "QML, Shell, Python, CSS",
+      "url": "https://github.com/pardhuvarmax/ricebtw",
+      "tags": [
+        "linux",
+        "arch",
+        "void",
+        "nix",
+        "dotfiles"
+      ],
+      "body": "## What it is\n\nMy whole Linux setup in one repository, across two machines: an Arch Linux daily driver and a Void Linux install I experiment on. It started as `archbtw` and was renamed `ricebtw` on 21 October 2026.\n\n## The two machines\n\n- **Arch Linux** is the daily driver. Arch and pacman still own the kernel, bootloader, drivers, systemd, networking and PipeWire. Nix and Home Manager own the user environment on top: command-line tools, dev toolchains, shell config and dotfiles. It is Home Manager on Arch, not NixOS.\n- **Void Linux** is the experiment. It runs runit and xbps, with no systemd, no Nix and no Home Manager. Everything for it is self-contained in `rice/void-linux/`.\n\nBoth run MangoWC with DankMaterialShell. Hyprland was replaced by MangoWC in August 2026, and its configs are kept only as legacy reference.\n\n## What is in it\n\n- A Nix flake that pins nixpkgs-unstable, Home Manager and agenix, with the config split into modules: CLI tools, git, zsh, aliases, dev toolchains, secrets, Neovim and GUI apps.\n- Plain backup copies of the desktop dotfiles for both distros: MangoWC and DankMaterialShell settings, keybinds, kitty, rofi and notification config, plus the xbps package lists for Void.\n- The full wallpaper pool, about 3.7 GB, committed to GitHub and kept out of the local working tree with a sparse checkout so it does not sit on disk twice.\n\n## Where it stands\n\nThe Home Manager work is done through the repo skeleton, CLI tools, git, shell, dev toolchains and Neovim, with GUI apps partly done. Fonts, themes and icons were looked at and deliberately left alone, because colour theming is driven by matugen templates."
+    },
+    {
       "name": "ushell",
       "description": "A chip-agnostic embedded shell and diagnostic environment for microcontrollers. The repository is private for now.",
       "status": "Prototype",
