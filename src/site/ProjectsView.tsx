@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent as RPointerEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowUpRight, LayoutGrid, List, Lock, Search, Star, X } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight, LayoutGrid, List, Lock, Search, Star, X } from 'lucide-react';
 import { safeHref } from '../lib/content';
 import { ago, allProjects, featuredFirst, repoOf, useGithubStats, type Project, type RepoStats } from '../lib/projects';
 import { glow, Reveal } from './Reveal';
@@ -75,6 +75,75 @@ export function ProjectCard({ p, stats, wide = false }: { p: Project; stats?: Re
         )}
       </div>
     </article>
+  );
+}
+
+/** A single row of filter chips you scroll sideways: swipe, drag, use the wheel or the arrows. The chosen chip slides to the middle. */
+function ChipCarousel({ children, label, active }: { children: ReactNode; label: string; active?: string | null }) {
+  const track = useRef<HTMLDivElement>(null);
+  const [edge, setEdge] = useState({ l: false, r: false });
+  const drag = useRef<{ x: number; left: number; moved: boolean } | null>(null);
+
+  const update = () => {
+    const el = track.current;
+    if (el) setEdge({ l: el.scrollLeft > 4, r: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 });
+  };
+  useEffect(() => {
+    const el = track.current;
+    if (!el) return;
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    el.addEventListener('scroll', update, { passive: true });
+    // the wheel moves the row sideways while it can, and lets the page scroll once it hits an end
+    const wheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const max = el.scrollWidth - el.clientWidth;
+      if ((e.deltaY > 0 && el.scrollLeft < max - 1) || (e.deltaY < 0 && el.scrollLeft > 1)) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+    el.addEventListener('wheel', wheel, { passive: false });
+    return () => { ro.disconnect(); el.removeEventListener('scroll', update); el.removeEventListener('wheel', wheel); };
+  }, []);
+  // bring the chosen chip into the middle of the row
+  useEffect(() => {
+    const el = track.current;
+    const on = el?.querySelector<HTMLElement>('.chip.on');
+    if (el && on) el.scrollTo({ left: on.offsetLeft - el.clientWidth / 2 + on.offsetWidth / 2, behavior: 'smooth' });
+  }, [active]);
+
+  const nudge = (dir: number) => track.current?.scrollBy({ left: dir * Math.max(160, (track.current?.clientWidth ?? 0) * 0.7), behavior: 'smooth' });
+  const down = (e: RPointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse' || !track.current) return;
+    drag.current = { x: e.clientX, left: track.current.scrollLeft, moved: false };
+  };
+  const move = (e: RPointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    if (!d || !track.current) return;
+    if (Math.abs(e.clientX - d.x) > 4) d.moved = true;
+    if (d.moved) track.current.scrollLeft = d.left - (e.clientX - d.x);
+  };
+  const up = () => { window.setTimeout(() => { drag.current = null; }, 0); };
+
+  return (
+    <div className={`chip-carousel ${edge.l ? 'fade-l' : ''} ${edge.r ? 'fade-r' : ''}`}>
+      {edge.l && <button type="button" className="cc-btn l" onClick={() => nudge(-1)} aria-label="Scroll left"><ChevronLeft size={16} /></button>}
+      <div
+        ref={track}
+        className="chips pj-chips cc-track"
+        aria-label={label}
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={up}
+        onPointerLeave={up}
+        onClickCapture={(e) => { if (drag.current?.moved) { e.preventDefault(); e.stopPropagation(); } }}
+      >
+        {children}
+      </div>
+      {edge.r && <button type="button" className="cc-btn r" onClick={() => nudge(1)} aria-label="Scroll right"><ChevronRight size={16} /></button>}
+    </div>
   );
 }
 
@@ -166,14 +235,14 @@ export function ProjectsExplorer() {
         </div>
       </div>
 
-      <div className="chips pj-chips" aria-label="Filter by language">
+      <ChipCarousel label="Filter by language" active={lang}>
         <button className={`chip chip-btn ${!lang ? 'on' : ''}`} onClick={() => set({ lang: null })}>All</button>
         {languages.map((l) => <button key={l} className={`chip chip-btn ${lang === l ? 'on' : ''}`} onClick={() => set({ lang: lang === l ? null : l })}>{l}</button>)}
-      </div>
+      </ChipCarousel>
       {statuses.length > 0 && (
-        <div className="chips pj-chips" aria-label="Filter by status">
+        <ChipCarousel label="Filter by status" active={status}>
           {statuses.map((s) => <button key={s} className={`chip chip-btn ${status === s ? 'on' : ''}`} onClick={() => set({ status: status === s ? null : s })}>{s}</button>)}
-        </div>
+        </ChipCarousel>
       )}
 
       <p className="pj-count" aria-live="polite">{shown.length} of {allProjects.length} projects{filtered && <> · <button className="pj-reset" onClick={() => setParams({}, { replace: true })}>clear filters</button></>}</p>
