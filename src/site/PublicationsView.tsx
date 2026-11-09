@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { ArrowUpRight, Check, ChevronDown, Copy, Download, FileText, LayoutGrid, Library, Link2, ListOrdered, Quote, Search, X } from 'lucide-react';
+import { ArrowUpRight, Check, ChevronDown, Copy, Download, FileText, Link2, Quote, Search, X } from 'lucide-react';
 import { safeHref } from '../lib/content';
-import { CITE_FORMATS, allBibtex, allPubs, apa, bibtex, copyText, downloadText, names, type Pub } from '../lib/publications';
+import { CITE_FORMATS, allBibtex, allPubs, copyText, downloadText, type Pub } from '../lib/publications';
 import { glow, Reveal } from './Reveal';
 import '../styles/pubs.css';
 
@@ -47,16 +47,18 @@ export function Cover({ p, mini = false }: { p: Pub; mini?: boolean }) {
   );
 }
 
-const STAGES = ['Draft', 'Preprint', 'Review', 'Published'];
-const stageOf = (status: string) => (/prep|draft/i.test(status) ? 0 : /review/i.test(status) ? 2 : /publish/i.test(status) ? 3 : 1);
+const STAGES = ['Draft', 'Preprint', 'Peer review', 'Published'];
+// "Preprint" has to be checked before "In preparation": both start with "prep"
+const stageOf = (status: string) => (/preprint/i.test(status) ? 1 : /prep|draft/i.test(status) ? 0 : /review/i.test(status) ? 2 : /publish/i.test(status) ? 3 : 1);
 
-/** Where the paper is on its way: draft, preprint, under review, published. */
+/** A slim four-step track: draft, preprint, peer review, published. */
 function Lifecycle({ status }: { status: string }) {
   const at = stageOf(status);
   return (
-    <ol className="pub-life" aria-label={`Stage: ${STAGES[at]}`}>
-      {STAGES.map((n, k) => <li key={n} className={k < at ? 'done' : k === at ? 'now' : ''}><i />{n}</li>)}
-    </ol>
+    <div className="pub-life" role="img" aria-label={`Stage ${at + 1} of ${STAGES.length}: ${STAGES[at]}`}>
+      <span className="pub-life-track">{STAGES.map((n, k) => <i key={n} className={k <= at ? 'on' : ''} title={n} />)}</span>
+      <span className="pub-life-text">{at + 1} / {STAGES.length}</span>
+    </div>
   );
 }
 
@@ -85,9 +87,7 @@ function useCited(p: Pub) {
   return { n, href: key ? `https://openalex.org/works/doi:${key}` : '' };
 }
 
-interface CardProps { p: Pub; flash?: boolean; picked?: boolean; onPick?: () => void }
-
-export function PubCard({ p, flash = false, picked, onPick }: CardProps) {
+export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
   const [open, setOpen] = useState<'' | 'cite' | 'abstract'>('');
   const [fmt, setFmt] = useState<(typeof CITE_FORMATS)[number]['id']>('bibtex');
   const [done, mark] = useDone();
@@ -104,17 +104,12 @@ export function PubCard({ p, flash = false, picked, onPick }: CardProps) {
   }, [p.slug]);
 
   return (
-    <li id={p.slug} tabIndex={-1} className={`pub glow pub-card ${flash ? 'pub-flash' : ''} ${picked ? 'picked' : ''}`} onPointerMove={glow}>
+    <li id={p.slug} tabIndex={-1} className={`pub glow pub-card ${flash ? 'pub-flash' : ''} `} onPointerMove={glow}>
       <div className="pub-layout">
         <Cover p={p} />
         <div className="pub-main">
           <div className="pub-top">
             <span className={`tag ${p.status === 'Preprint' ? 'tag-ok' : ''}`}>{p.status}</span>
-            {onPick && (
-              <label className="pub-pick" title="Select to cite several at once">
-                <input type="checkbox" checked={!!picked} onChange={onPick} /> <span>{picked ? 'Selected' : 'Select'}</span>
-              </label>
-            )}
             <span className="pub-spacer" />
             <span className="pub-year">{p.year}</span>
           </div>
@@ -166,72 +161,15 @@ export function PubCard({ p, flash = false, picked, onPick }: CardProps) {
   );
 }
 
-/** Papers standing on a shelf like books: tall coloured spines, the open one pulled forward. */
-function Shelf({ list, open, onOpen }: { list: Pub[]; open: string; onOpen: (slug: string) => void }) {
-  const current = list.find((p) => p.slug === open) ?? list[0];
-  return (
-    <>
-      <div className="pub-shelf" role="tablist" aria-label="Papers">
-        <div className="pub-books">
-          {list.map((p) => {
-            const h = hash(p.title);
-            const style = { '--h': `${270 + (h % 70)}px`, '--w': `${88 + ((h >> 5) % 26)}px`, '--c': COLOURS[(h >>> 9) % 4] } as CSSProperties;
-            return (
-              <button key={p.slug} role="tab" aria-selected={current?.slug === p.slug} className={`pub-spine ${current?.slug === p.slug ? 'out' : ''}`} style={style} onClick={() => onOpen(p.slug)} title={p.title}>
-                <Cover p={p} mini />
-                <span className="pub-spine-t">{p.title}</span>
-                <span className="pub-spine-y">{p.year}</span>
-              </button>
-            );
-          })}
-        </div>
-        <div className="pub-plank" />
-      </div>
-      {current && <ol className="pubs pub-pulled"><PubCard key={current.slug} p={current} /></ol>}
-    </>
-  );
-}
-
-/** A plain numbered reference list, the way it would appear at the end of a paper. */
-function References({ list, picked, onPick }: { list: Pub[]; picked: Set<string>; onPick: (slug: string) => void }) {
-  const [done, mark] = useDone();
-  return (
-    <ol className="pub-refs">
-      {list.map((p, i) => (
-        <li key={p.slug} id={p.slug} tabIndex={-1} className={`pub-ref ${picked.has(p.slug) ? 'picked' : ''}`}>
-          <label className="pub-ref-n" title="Select to cite several at once"><input type="checkbox" checked={picked.has(p.slug)} onChange={() => onPick(p.slug)} /><span>[{i + 1}]</span></label>
-          <p>
-            {names(p.authors).join(', ')} ({p.year}). <a href={safeHref(p.url)} target="_blank" rel="noopener noreferrer"><em>{p.title}</em></a>. {p.venue.replace(/,?\s*\d{4}\s*$/, '')}.
-          </p>
-          <span className="pub-ref-act">
-            <button onClick={() => copyText(apa(p)).then((ok) => ok && mark(`a${i}`))}>{done === `a${i}` ? 'Copied' : 'Copy'}</button>
-            <button onClick={() => copyText(bibtex(p)).then((ok) => ok && mark(`b${i}`))}>{done === `b${i}` ? 'Copied' : 'BibTeX'}</button>
-          </span>
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-type View = 'cards' | 'shelf' | 'list';
-const VIEWS: { id: View; label: string; icon: typeof LayoutGrid }[] = [
-  { id: 'cards', label: 'Cards', icon: LayoutGrid },
-  { id: 'shelf', label: 'Shelf', icon: Library },
-  { id: 'list', label: 'List', icon: ListOrdered },
-];
-
-/** The Publications page: counters that filter, one search line, three ways to look at the papers, picking several to cite, and keyboard shortcuts. */
+/** The Publications page: counters that filter, one search line, papers grouped by year, and citation export. */
 export function PublicationsExplorer() {
   const [params, setParams] = useSearchParams();
   const { hash: urlHash } = useLocation();
   const search = useRef<HTMLInputElement>(null);
   const [done, mark] = useDone();
+  const [cursor, setCursor] = useState(-1);
   const q = params.get('q') ?? '';
   const status = params.get('status');
-  const view = (VIEWS.some((v) => v.id === params.get('view')) ? params.get('view') : 'cards') as View;
-  const [picked, setPicked] = useState<Set<string>>(new Set());
-  const [cursor, setCursor] = useState(-1);
-  const [shelfOpen, setShelfOpen] = useState('');
   const set = (patch: Record<string, string | null>) => {
     const next = new URLSearchParams(params);
     for (const [k, v] of Object.entries(patch)) (v ? next.set(k, v) : next.delete(k));
@@ -247,10 +185,8 @@ export function PublicationsExplorer() {
       .sort((a, b) => Number(b.year) - Number(a.year));
   }, [q, status]);
   const years = useMemo(() => [...new Set(shown.map((p) => p.year))].map((year) => ({ year, list: shown.filter((p) => p.year === year) })), [shown]);
-  const pick = (slug: string) => setPicked((s) => { const n = new Set(s); if (n.has(slug)) n.delete(slug); else n.add(slug); return n; });
-  const chosen = allPubs.filter((p) => picked.has(p.slug));
 
-  // keyboard: / search, j and k move, c cites, x selects, v changes view
+  // keyboard: / search, j and k move between papers, c opens the citation of the one you are on
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement | null;
@@ -261,14 +197,11 @@ export function PublicationsExplorer() {
       const move = (to: number) => {
         const i = Math.max(0, Math.min(shown.length - 1, to));
         setCursor(i);
-        if (view === 'shelf') setShelfOpen(shown[i].slug);
-        else document.getElementById(shown[i].slug)?.focus({ preventScroll: false });
+        document.getElementById(shown[i].slug)?.focus();
       };
       if (k === 'j') { e.preventDefault(); move(cursor + 1); }
       else if (k === 'k') { e.preventDefault(); move(cursor < 0 ? 0 : cursor - 1); }
       else if (k === 'c' && cursor >= 0) window.dispatchEvent(new CustomEvent('pub:cite', { detail: shown[cursor].slug }));
-      else if (k === 'x' && cursor >= 0) pick(shown[cursor].slug);
-      else if (k === 'v') set({ view: VIEWS[(VIEWS.findIndex((x) => x.id === view) + 1) % VIEWS.length].id === 'cards' ? null : VIEWS[(VIEWS.findIndex((x) => x.id === view) + 1) % VIEWS.length].id });
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -278,10 +211,9 @@ export function PublicationsExplorer() {
   const target = urlHash.slice(1);
   useEffect(() => {
     if (!target) return;
-    if (view === 'shelf') setShelfOpen(target);
     const el = document.getElementById(target);
     if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 250);
-  }, [target, view]);
+  }, [target]);
 
   const filtered = !!(q || status);
 
@@ -304,13 +236,6 @@ export function PublicationsExplorer() {
           <input ref={search} value={q} onChange={(e) => set({ q: e.target.value || null })} placeholder="Find a paper  ( / )" aria-label="Search papers" />
           {q && <button type="button" onClick={() => set({ q: null })} aria-label="Clear search"><X size={15} /></button>}
         </label>
-        <div className="pub-views" role="group" aria-label="Layout">
-          {VIEWS.map((v) => (
-            <button key={v.id} className={view === v.id ? 'on' : ''} onClick={() => set({ view: v.id === 'cards' ? null : v.id })} aria-pressed={view === v.id} title={`${v.label} view`}>
-              <v.icon size={15} /> <span>{v.label}</span>
-            </button>
-          ))}
-        </div>
         <span className="pub-spacer" />
         <button className="pub-pill" onClick={() => copyText(allBibtex(shown)).then((ok) => ok && mark('all'))} disabled={!shown.length}>
           {done === 'all' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy BibTeX{filtered ? ' (shown)' : ''}</>}
@@ -322,10 +247,6 @@ export function PublicationsExplorer() {
 
       {shown.length === 0 ? (
         <p className="muted" aria-live="polite">Nothing matches. <button className="pub-reset" onClick={() => setParams({}, { replace: true })}>Clear the filters</button>.</p>
-      ) : view === 'shelf' ? (
-        <Shelf list={shown} open={shelfOpen} onOpen={(slug) => { setShelfOpen(slug); setCursor(shown.findIndex((p) => p.slug === slug)); }} />
-      ) : view === 'list' ? (
-        <References list={shown} picked={picked} onPick={pick} />
       ) : (
         years.map(({ year, list }) => (
           <section key={year} className="pub-year-group" aria-label={year}>
@@ -333,23 +254,12 @@ export function PublicationsExplorer() {
             <ol className="pubs">
               {list.map((p, i) => (
                 <Reveal key={p.slug} delay={i * 0.05}>
-                  <PubCard p={p} flash={target === p.slug} picked={picked.has(p.slug)} onPick={() => pick(p.slug)} />
+                  <PubCard p={p} flash={target === p.slug} />
                 </Reveal>
               ))}
             </ol>
           </section>
         ))
-      )}
-
-      <p className="pub-keys" aria-hidden="true"><kbd>/</kbd> search · <kbd>j</kbd> <kbd>k</kbd> move · <kbd>c</kbd> cite · <kbd>x</kbd> select · <kbd>v</kbd> change view</p>
-
-      {chosen.length > 0 && (
-        <div className="pub-picked" role="region" aria-label="Selected papers">
-          <b>{chosen.length}</b> selected
-          <button onClick={() => copyText(allBibtex(chosen)).then((ok) => ok && mark('sel'))}>{done === 'sel' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> BibTeX</>}</button>
-          <button onClick={() => downloadText('selected.bib', allBibtex(chosen), 'application/x-bibtex')}><Download size={14} /> .bib</button>
-          <button onClick={() => setPicked(new Set())} aria-label="Clear selection"><X size={14} /></button>
-        </div>
       )}
     </>
   );
