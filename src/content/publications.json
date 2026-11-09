@@ -17,6 +17,12 @@
           "text": "Manuscript for a Springer journal is in progress."
         },
         {
+          "date": "2026-10-27",
+          "text": "Kernel Borderlands 1.0.0 released, with Ubuntu and Arch packages and the field manuals.",
+          "link": "https://github.com/pardhuvarmax/kernel-borderlands/releases/tag/v1.0.0",
+          "linkLabel": "Release notes"
+        },
+        {
           "date": "2026-10",
           "text": "Preprint released on Preprints.org.",
           "link": "https://www.preprints.org/manuscript/202610.2818",
@@ -32,7 +38,20 @@
       "status": "Preprint",
       "url": "https://arxiv.org/abs/2603.02934",
       "linkLabel": "arXiv",
-      "tags": "Neural adaptation, Behavioral learning"
+      "tags": "Neural adaptation, Behavioral learning",
+      "code": "https://github.com/pardhuvarmax/rlae-research",
+      "news": [
+        {
+          "date": "2026-04-26",
+          "text": "Work started on a second paper."
+        },
+        {
+          "date": "2026-03",
+          "text": "Preprint posted on arXiv, with the code and experiments in the rlae-research repository.",
+          "link": "https://arxiv.org/abs/2603.02934",
+          "linkLabel": "arXiv"
+        }
+      ]
     },
     {
       "title": "Temporal and Adaptive Dynamics of Latent Behavioral State Machines",
@@ -42,7 +61,25 @@
       "status": "In preparation",
       "url": "https://github.com/pardhuvarmax/lbsm-research",
       "linkLabel": "Code",
-      "tags": "State machines, Adaptive dynamics"
+      "tags": "State machines, Adaptive dynamics",
+      "news": [
+        {
+          "date": "2026-10-07",
+          "text": "LBSM v1.0.1: numerical corrections, with affected experiments, figures and notebooks regenerated.",
+          "link": "https://github.com/pardhuvarmax/lbsm-research/releases/tag/v1.0.1",
+          "linkLabel": "Release notes"
+        },
+        {
+          "date": "2026-08-26",
+          "text": "LBSM v1.0.0 released: the unified experimental research artifact, with notebooks 01 to 07, the report, code and figures.",
+          "link": "https://github.com/pardhuvarmax/lbsm-research/releases/tag/v1.0.0",
+          "linkLabel": "Release notes"
+        },
+        {
+          "date": "2026-05",
+          "text": "Research repository opened."
+        }
+      ]
     }
   ]
 }
