@@ -9,7 +9,7 @@
       "url": "https://www.preprints.org/manuscript/202610.2818",
       "linkLabel": "Preprints.org",
       "code": "https://github.com/pardhuvarmax/kernel-borderlands",
-      "tags": "eBPF, Security, Linux",
+      "tags": "eBPF, Security, Linux, Trustworthy computing",
       "doi": "10.20944/preprints202610.2818.v1",
       "news": [
         {
@@ -29,7 +29,8 @@
           "linkLabel": "Read it"
         }
       ],
-      "cover": "/uploads/pubs/kernel-borderlands.webp"
+      "cover": "/uploads/pubs/kernel-borderlands.webp",
+      "cards": "1, 3, 5"
     },
     {
       "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",
@@ -49,7 +50,8 @@
           "linkLabel": "arXiv"
         }
       ],
-      "cover": "/uploads/pubs/structural-limitations.webp"
+      "cover": "/uploads/pubs/structural-limitations.webp",
+      "cards": "2"
     },
     {
       "title": "Temporal and Adaptive Dynamics of Latent Behavioral State Machines",
@@ -85,7 +87,8 @@
         }
       ],
       "doi": "10.5281/zenodo.22108701",
-      "cover": "/uploads/pubs/lbsm.webp"
+      "cover": "/uploads/pubs/lbsm.webp",
+      "cards": "2"
     }
   ]
 }

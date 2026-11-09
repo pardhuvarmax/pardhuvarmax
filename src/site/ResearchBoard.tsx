@@ -16,24 +16,19 @@ const STOP = new Set(['and', 'the', 'with', 'for', 'btw', 'use', 'that', 'from']
 // a word of five letters or more matches by its first five (adaptive finds adaptation); shorter words must match whole, so "arch" never finds "archives"
 const matcher = (w: string) => (w.length >= 5 ? new RegExp(`\\b${w.slice(0, 5)}`) : new RegExp(`\\b${w}\\b`));
 
-function exhibitsFor(interest: string): Exhibit[] {
+const listed = (cards: string | undefined, n: number) => (cards ?? '').split(',').map((x) => Number(x.trim())).includes(n);
+
+/** Papers and projects say which cards they belong under (the "Research cards" field); posts are matched by their words, needing two. */
+function exhibitsFor(interest: string, n: number): Exhibit[] {
+  const out: Exhibit[] = [];
+  for (const p of allPubs) if (listed(p.cards, n)) out.push({ id: `pub:${p.slug}`, kind: 'paper', label: p.title, to: `/publications/${p.slug}`, meta: `${p.status} · ${p.year}` });
+  for (const p of allProjects) if (listed(p.cards, n)) out.push({ id: `proj:${p.slug}`, kind: 'project', label: p.name, to: `/projects/${p.slug}`, meta: p.status ?? p.langs.slice(0, 2).join(' · ') });
   const tokens = [...new Set(interest.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length >= 4 && !STOP.has(w)))].map(matcher);
-  if (!tokens.length) return [];
-  const score = (hay: string) => tokens.filter((t) => t.test(hay)).length;
-  const out: (Exhibit & { s: number })[] = [];
-  for (const p of allPubs) {
-    const s = score(`${p.title} ${p.tagList.join(' ')} ${p.abstract ?? ''}`.toLowerCase());
-    if (s) out.push({ id: `pub:${p.slug}`, kind: 'paper', label: p.title, to: `/publications/${p.slug}`, meta: `${p.status} · ${p.year}`, s: s + 0.3 });
-  }
-  for (const p of allProjects) {
-    const s = score(`${p.name} ${p.description} ${p.tagList.join(' ')}`.toLowerCase());
-    if (s) out.push({ id: `proj:${p.slug}`, kind: 'project', label: p.name, to: `/projects/${p.slug}`, meta: p.status ?? p.langs.slice(0, 2).join(' · '), s });
-  }
   for (const p of posts) {
-    const s = score(`${p.title} ${p.summary} ${p.tags.join(' ')}`.toLowerCase());
-    if (s) out.push({ id: `post:${p.slug}`, kind: 'post', label: p.title, to: `/blog/${p.slug}`, meta: formatDate(p.date), s: s - 0.2 });
+    const hay = `${p.title} ${p.summary} ${p.tags.join(' ')}`.toLowerCase();
+    if (tokens.filter((t) => t.test(hay)).length >= 2) out.push({ id: `post:${p.slug}`, kind: 'post', label: p.title, to: `/blog/${p.slug}`, meta: formatDate(p.date) });
   }
-  return out.sort((a, b) => b.s - a.s).map(({ s: _s, ...e }) => e);
+  return out;
 }
 
 const ICON = { paper: FileText, project: FolderGit2, post: Newspaper } as const;
@@ -128,7 +123,7 @@ function Dossier({ files, at, onGo, onClose, extra }: { files: File[]; at: numbe
 /** The research cards as they were; opening one pulls out its case file. */
 export function ResearchBoard({ extra }: { extra?: (title: string) => ReactNode }) {
   const interests = site.interests as string[];
-  const files = useMemo<File[]>(() => interests.map((t) => ({ title: t, ex: exhibitsFor(t) })), [interests]);
+  const files = useMemo<File[]>(() => interests.map((t, i) => ({ title: t, ex: exhibitsFor(t, i + 1) })), [interests]);
   const [open, setOpen] = useState<number | null>(null);
   const close = useCallback(() => setOpen(null), []);
   const key = (i: number) => (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpen(i); } };
