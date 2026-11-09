@@ -144,3 +144,12 @@
 .holo.has-img .holo-glare { background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.25) 24%, transparent 46%); mix-blend-mode: screen; transform: translateZ(6px); }
 .holo.has-img .holo-spark { display: none; }
 .holo.has-img.live .holo-foil { opacity: 0.88; }
+
+/* colour foil: the artwork engraved in full colour, still bevelled and glossy like metal */
+.holo.has-img.foil-colour .holo-foil {
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 16%, rgba(0, 0, 0, 0.28) 34%, rgba(255, 255, 255, 0.38) 52%, rgba(0, 0, 0, 0.3) 70%, rgba(255, 255, 255, 0.35) 88%),
+    linear-gradient(115deg, #ff2d95 0%, #ff8a1f 12%, #ffe62e 24%, #2dff9f 36%, #1fb8ff 48%, #7c4dff 60%, #ff2d95 72%, #ff8a1f 84%, #ffe62e 100%);
+  background-size: 300% 300%, 300% 300%; background-position: var(--mx) var(--my), var(--mx) var(--my);
+}
+.holo.has-img.foil-colour.live .holo-foil { opacity: 1; }

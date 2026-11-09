@@ -105,6 +105,7 @@ export const COLLECTIONS: Collection[] = [
           { key: 'doi', label: 'DOI (optional)', type: 'text', help: 'Like 10.5281/zenodo.18761938. Picked up from the details above if it is written there as doi:...' },
           { key: 'code', label: 'Code link (optional)', type: 'url' },
           { key: 'cover', label: 'Cover image (optional)', type: 'image', help: 'A portrait picture, about 3:4, e.g. the project logo on black. Without one, a pattern is drawn from the title.' },
+          { key: 'foil', label: 'Cover foil', type: 'select', options: ['', 'Colour'], help: 'Leave blank for engraved silver. Colour engraves the artwork in full rainbow colours.' },
           { key: 'tags', label: 'Topics (comma separated, optional)', type: 'text', help: 'Shown as small tags and as filter buttons on the Publications page.' },
           { key: 'abstract', label: 'Abstract (optional)', type: 'textarea', help: 'Adds an Abstract button to the paper. Searchable too.' },
           {

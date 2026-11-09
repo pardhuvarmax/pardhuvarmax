@@ -29,7 +29,8 @@
           "linkLabel": "Read it"
         }
       ],
-      "cover": "/uploads/pubs/kernel-borderlands.webp"
+      "cover": "/uploads/pubs/kernel-borderlands.webp",
+      "foil": "Colour"
     },
     {
       "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",

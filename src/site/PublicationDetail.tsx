@@ -10,7 +10,7 @@ const STAGES = ['Draft', 'Preprint', 'Peer review', 'Published'];
 const stageOf = (status: string) => (/preprint/i.test(status) ? 1 : /prep|draft/i.test(status) ? 0 : /review/i.test(status) ? 2 : /publish/i.test(status) ? 3 : 1);
 
 /** The cover as an engraved foil plate: it tilts towards the cursor, the artwork turns to bevelled metal with a faint iridescence, and a glint slides across it. */
-function Holo({ children, image }: { children: ReactNode; image?: string }) {
+function Holo({ children, image, colour = false }: { children: ReactNode; image?: string; colour?: boolean }) {
   const box = useRef<HTMLDivElement>(null);
   const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const move = (e: PointerEvent<HTMLDivElement>) => {
@@ -40,7 +40,7 @@ function Holo({ children, image }: { children: ReactNode; image?: string }) {
     el.style.setProperty('--sy', '14px');
   };
   return (
-    <div className={`holo ${image ? 'has-img' : ''}`} style={image ? ({ '--cover': `url("${safeHref(image)}")` } as CSSProperties) : undefined} ref={box} onPointerMove={move} onPointerLeave={leave} onPointerCancel={leave}>
+    <div className={`holo ${image ? 'has-img' : ''} ${colour ? 'foil-colour' : ''}`} style={image ? ({ '--cover': `url("${safeHref(image)}")` } as CSSProperties) : undefined} ref={box} onPointerMove={move} onPointerLeave={leave} onPointerCancel={leave}>
       <div className="holo-in">
         {children}
         <i className="holo-foil" aria-hidden="true" />
@@ -91,7 +91,7 @@ export default function PublicationDetail() {
 
       <div className="pubd-grid">
         <aside className="pubd-side" aria-label="At a glance">
-          <Holo image={p.cover}><Cover p={p} /></Holo>
+          <Holo image={p.cover} colour={/^colou?r$/i.test(p.foil ?? '')}><Cover p={p} /></Holo>
           <dl>
             <div><dt>Status</dt><dd>{p.status}</dd></div>
             <div><dt>Year</dt><dd>{p.year}</dd></div>

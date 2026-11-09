@@ -16,6 +16,7 @@ interface Raw {
   abstract?: string;
   tags?: string;
   cover?: string;
+  foil?: string;
   news?: { date: string; text: string; link?: string; linkLabel?: string }[];
 }
 
