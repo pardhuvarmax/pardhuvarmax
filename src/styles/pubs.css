@@ -136,20 +136,18 @@
   -webkit-mask-image: var(--cover); mask-image: var(--cover); -webkit-mask-size: cover; mask-size: cover; -webkit-mask-mode: luminance; mask-mode: luminance;
 }
 .holo.has-img .holo-foil {
-  background: repeating-linear-gradient(115deg, #c9ccd6 0%, #ffffff 5%, #a7b2ff 9%, #ffbfee 13%, #b3fff0 17%, #ffffff 21%, #868c9a 28%, #c9ccd6 34%);
+  background: repeating-linear-gradient(115deg, #aeb2bd 0%, #c9ccd5 9%, #9a9ea9 18%, #bfc3cc 27%, #a4a8b3 36%, #aeb2bd 45%);
   background-size: 260% 260%; background-position: var(--mx) var(--my);
   mix-blend-mode: normal; transform: translateZ(2px);
   filter: drop-shadow(var(--lx, 0px) var(--ly, 0px) 0 rgba(255, 255, 255, 0.55)) drop-shadow(calc(var(--lx, 0px) * -1.4) calc(var(--ly, 0px) * -1.4) 1px rgba(0, 0, 0, 0.9));
 }
-.holo.has-img .holo-glare { background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.25) 24%, transparent 46%); mix-blend-mode: screen; transform: translateZ(6px); }
+.holo.has-img .holo-glare { background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.4), transparent 42%); mix-blend-mode: screen; transform: translateZ(6px); }
 .holo.has-img .holo-spark { display: none; }
 .holo.has-img.live .holo-foil { opacity: 0.88; }
 
-/* colour foil: the artwork engraved in full colour, still bevelled and glossy like metal */
+/* colour foil: the artwork engraved in full colour, matte, with the same bevelled edges */
 .holo.has-img.foil-colour .holo-foil {
-  background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 16%, rgba(0, 0, 0, 0.28) 34%, rgba(255, 255, 255, 0.38) 52%, rgba(0, 0, 0, 0.3) 70%, rgba(255, 255, 255, 0.35) 88%),
-    linear-gradient(115deg, #ff2d95 0%, #ff8a1f 12%, #ffe62e 24%, #2dff9f 36%, #1fb8ff 48%, #7c4dff 60%, #ff2d95 72%, #ff8a1f 84%, #ffe62e 100%);
-  background-size: 300% 300%, 300% 300%; background-position: var(--mx) var(--my), var(--mx) var(--my);
+  background: linear-gradient(115deg, #ff2d95 0%, #ff8a1f 12%, #ffe62e 24%, #2dff9f 36%, #1fb8ff 48%, #7c4dff 60%, #ff2d95 72%, #ff8a1f 84%, #ffe62e 100%);
+  background-size: 300% 300%; background-position: var(--mx) var(--my);
 }
-.holo.has-img.foil-colour.live .holo-foil { opacity: 1; }
+.holo.has-img.foil-colour.live .holo-foil { opacity: 0.95; }
