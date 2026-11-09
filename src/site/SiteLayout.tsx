@@ -113,7 +113,7 @@ const NAV = [
   { to: '/me', label: 'Me' },
   { to: '/research', label: 'Research' },
   { to: '/publications', label: 'Publications' },
-  { to: '/projects', label: 'Projects' },
+  { to: '/projects', label: 'Projects & Work' },
   { to: '/blog', label: 'Writing' },
   { to: '/cassette', label: 'Cassette' },
   { to: '/#contact', label: 'Contact' },

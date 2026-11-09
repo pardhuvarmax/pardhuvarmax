@@ -24,7 +24,7 @@ const PAGES: { to: string; label: string; kw: string }[] = [
   { to: '/me', label: 'Me', kw: 'about bio' },
   { to: '/research', label: 'Research', kw: 'interests statement' },
   { to: '/publications', label: 'Publications', kw: 'papers preprints arxiv' },
-  { to: '/projects', label: 'Projects', kw: 'code github repositories' },
+  { to: '/projects', label: 'Projects & Work', kw: 'code github repositories projects' },
   { to: '/blog', label: 'Writing', kw: 'blog posts essays notes' },
   { to: '/cassette', label: 'Cassette', kw: 'music songs tapes' },
   { to: '/#contact', label: 'Contact', kw: 'email reach hire' },
