@@ -54,7 +54,7 @@ export default function PublicationDetail() {
             <div><dt>Status</dt><dd>{p.status}</dd></div>
             <div><dt>Year</dt><dd>{p.year}</dd></div>
             <div><dt>Where</dt><dd>{p.venue.replace(/,?\s*\d{4}\s*$/, '')}</dd></div>
-            {p.doi && <div><dt>DOI</dt><dd><a href={safeHref(p.doiUrl!)} target="_blank" rel="noopener noreferrer">{p.doi}</a></dd></div>}
+            {p.doi && <div><dt>{p.doiLabel}</dt><dd><a href={safeHref(p.doiUrl!)} target="_blank" rel="noopener noreferrer">{p.doi}</a></dd></div>}
             {p.arxiv && <div><dt>arXiv</dt><dd>{p.arxiv}</dd></div>}
             <div><dt>Cite key</dt><dd className="mono">{bibKey(p)}</dd></div>
           </dl>
@@ -72,6 +72,7 @@ export default function PublicationDetail() {
           <div className="pub-actions">
             <a className="btn btn-primary" href={safeHref(p.url)} target="_blank" rel="noopener noreferrer">{p.linkLabel} <ArrowUpRight size={16} /></a>
             {p.pdfUrl && <a className="pub-pill" href={safeHref(p.pdfUrl)} target="_blank" rel="noopener noreferrer"><FileText size={14} /> PDF</a>}
+            {p.doiUrl && <a className="pub-pill" href={safeHref(p.doiUrl)} target="_blank" rel="noopener noreferrer">{p.doiLabel}</a>}
             {p.codeUrl && <a className="pub-pill" href={safeHref(p.codeUrl)} target="_blank" rel="noopener noreferrer">Code</a>}
             <span className="pub-spacer" />
             <button className="pub-pill" onClick={share}>{done === 'share' ? <><Check size={14} /> Link copied</> : <><Share2 size={14} /> Share</>}</button>

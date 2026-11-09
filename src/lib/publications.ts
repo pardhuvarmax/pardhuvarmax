@@ -23,6 +23,7 @@ export interface Pub extends Raw {
   newsList: { date: string; text: string; link?: string; linkLabel?: string }[]; // newest first
   tagList: string[];
   doiUrl?: string;
+  doiLabel: string; // "Zenodo" for Zenodo records, otherwise "DOI"
   pdfUrl?: string;
   codeUrl?: string;
   arxiv?: string;
@@ -41,6 +42,7 @@ function normalise(p: Raw): Pub {
     arxiv,
     doi,
     doiUrl: doi ? `https://doi.org/${doi}` : undefined,
+    doiLabel: /^10\.5281\/zenodo\./i.test(doi) ? 'Zenodo' : 'DOI',
     pdfUrl: pdf || undefined,
     codeUrl: code || undefined,
   };
