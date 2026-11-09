@@ -109,3 +109,20 @@
 .pubd-news time { display: block; margin-bottom: 4px; font: 700 0.68rem/1 var(--mono, monospace); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .pubd-news p { margin: 0; line-height: 1.55; }
 .pubd-news a { display: inline-flex; align-items: center; gap: 3px; margin-left: 6px; color: var(--text); font-weight: 600; }
+
+/* ---------- holographic cover ---------- */
+.holo { --mx: 50%; --my: 40%; --rx: 0deg; --ry: 0deg; --sx: 0px; --sy: 14px; --o: 0; perspective: 800px; touch-action: pan-y; cursor: crosshair; }
+.holo-in { position: relative; transform-style: preserve-3d; transform: rotateX(var(--rx)) rotateY(var(--ry)); transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.2, 1); will-change: transform; box-shadow: var(--sx) var(--sy) 28px -6px rgba(0, 0, 0, 0.55); }
+.holo.live .holo-in { transition: transform 0.07s linear; }
+.holo .pub-cover { transform: translateZ(0); }
+.holo-in > i { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s; }
+.holo-foil { background: repeating-linear-gradient(115deg, #ff2d95 0%, #ff9b2f 9%, #fff23d 18%, #3dffa2 27%, #2bc4ff 36%, #8a5cff 45%, #ff2d95 54%); background-size: 260% 260%; background-position: var(--mx) var(--my); mix-blend-mode: color-dodge; transform: translateZ(2px); }
+.holo-spark { background:
+  radial-gradient(circle at 20% 30%, #fff 0 1.2px, transparent 2px), radial-gradient(circle at 70% 20%, #fff 0 1px, transparent 2px), radial-gradient(circle at 40% 75%, #fff 0 1.4px, transparent 2.4px), radial-gradient(circle at 85% 65%, #fff 0 1px, transparent 2px), radial-gradient(circle at 12% 85%, #fff 0 1px, transparent 2px), radial-gradient(circle at 58% 48%, #fff 0 1.2px, transparent 2px);
+  background-size: 90px 90px; background-position: calc(var(--mx) * -0.6) calc(var(--my) * -0.6); mix-blend-mode: overlay; transform: translateZ(10px); }
+.holo-glare { background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.08) 38%, transparent 62%); mix-blend-mode: overlay; transform: translateZ(14px); }
+.holo.live .holo-foil { opacity: 0.75; }
+.holo.live .holo-spark { opacity: 0.9; }
+.holo.live .holo-glare { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .holo-in { transition: none; } }
+@media (hover: none) { .holo { cursor: default; } }

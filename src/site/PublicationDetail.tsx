@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, Check, Copy, FileText, Share2 } from 'lucide-react';
 import { formatDate, safeHref, site } from '../lib/content';
@@ -8,6 +8,46 @@ import '../styles/pubs.css';
 
 const STAGES = ['Draft', 'Preprint', 'Peer review', 'Published'];
 const stageOf = (status: string) => (/preprint/i.test(status) ? 1 : /prep|draft/i.test(status) ? 0 : /review/i.test(status) ? 2 : /publish/i.test(status) ? 3 : 1);
+
+/** The cover as a holographic trading card: it tilts towards the cursor, a rainbow foil slides across it and a glare follows the pointer. */
+function Holo({ children }: { children: ReactNode }) {
+  const box = useRef<HTMLDivElement>(null);
+  const reduce = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const move = (e: PointerEvent<HTMLDivElement>) => {
+    const el = box.current;
+    if (!el || reduce) return;
+    const r = el.getBoundingClientRect();
+    const x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    const y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
+    el.classList.add('live');
+    const set = (k: string, v: string) => el.style.setProperty(k, v);
+    set('--mx', `${(x * 100).toFixed(1)}%`);
+    set('--my', `${(y * 100).toFixed(1)}%`);
+    set('--rx', `${((0.5 - y) * 20).toFixed(2)}deg`);
+    set('--ry', `${((x - 0.5) * 24).toFixed(2)}deg`);
+    set('--sx', `${((0.5 - x) * 26).toFixed(1)}px`);
+    set('--sy', `${((y - 0.5) * 26 + 14).toFixed(1)}px`);
+    set('--o', '1');
+  };
+  const leave = () => {
+    const el = box.current;
+    if (!el) return;
+    el.classList.remove('live');
+    for (const k of ['--rx', '--ry', '--o']) el.style.removeProperty(k);
+    el.style.setProperty('--sx', '0px');
+    el.style.setProperty('--sy', '14px');
+  };
+  return (
+    <div className="holo" ref={box} onPointerMove={move} onPointerLeave={leave} onPointerCancel={leave}>
+      <div className="holo-in">
+        {children}
+        <i className="holo-foil" aria-hidden="true" />
+        <i className="holo-spark" aria-hidden="true" />
+        <i className="holo-glare" aria-hidden="true" />
+      </div>
+    </div>
+  );
+}
 
 /** One paper on its own page: cover, where it stands, abstract, every way to cite it, and what belongs with it. */
 export default function PublicationDetail() {
@@ -49,7 +89,7 @@ export default function PublicationDetail() {
 
       <div className="pubd-grid">
         <aside className="pubd-side" aria-label="At a glance">
-          <Cover p={p} />
+          <Holo><Cover p={p} /></Holo>
           <dl>
             <div><dt>Status</dt><dd>{p.status}</dd></div>
             <div><dt>Year</dt><dd>{p.year}</dd></div>
