@@ -4,7 +4,6 @@ import { ArrowUpRight, ChevronDown, Check, Copy, Download, FileText, Link2, Quot
 import { safeHref } from '../lib/content';
 import { CITE_FORMATS, allBibtex, allPubs, copyText, downloadText, type Pub } from '../lib/publications';
 import { glow, Reveal } from './Reveal';
-import '../styles/projects.css';
 import '../styles/pubs.css';
 
 /** One small button that shows a tick for a moment after it worked. */
@@ -73,14 +72,7 @@ export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
   );
 }
 
-type Sort = 'newest' | 'oldest' | 'az';
-const SORTS: { id: Sort; label: string }[] = [
-  { id: 'newest', label: 'Newest first' },
-  { id: 'oldest', label: 'Oldest first' },
-  { id: 'az', label: 'A to Z' },
-];
-
-/** The Publications page: search, filter by status and topic, sort, export every citation, and deep links to a single paper. */
+/** The Publications page: big counters that double as filters, one search line, papers grouped by year, and citation export. */
 export function PublicationsExplorer() {
   const [params, setParams] = useSearchParams();
   const { hash } = useLocation();
@@ -88,8 +80,6 @@ export function PublicationsExplorer() {
   const [done, mark] = useDone();
   const q = params.get('q') ?? '';
   const status = params.get('status');
-  const tag = params.get('tag');
-  const sort = (SORTS.some((s) => s.id === params.get('sort')) ? params.get('sort') : 'newest') as Sort;
   const set = (patch: Record<string, string | null>) => {
     const next = new URLSearchParams(params);
     for (const [k, v] of Object.entries(patch)) (v ? next.set(k, v) : next.delete(k));
@@ -110,19 +100,16 @@ export function PublicationsExplorer() {
   }, []);
 
   const statuses = useMemo(() => [...new Set(allPubs.map((p) => p.status).filter(Boolean))], []);
-  const tags = useMemo(() => [...new Set(allPubs.flatMap((p) => p.tagList))].sort(), []);
-  const years = allPubs.map((p) => Number(p.year)).filter(Boolean);
+  const count = (s: string) => allPubs.filter((p) => p.status === s).length;
 
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    let list = allPubs.filter(
-      (p) => (!status || p.status === status) && (!tag || p.tagList.includes(tag)) && (!needle || `${p.title} ${p.authors} ${p.venue} ${p.year} ${p.status} ${p.tagList.join(' ')} ${p.abstract ?? ''}`.toLowerCase().includes(needle)),
-    );
-    if (sort === 'newest') list = [...list].sort((a, b) => Number(b.year) - Number(a.year));
-    else if (sort === 'oldest') list = [...list].sort((a, b) => Number(a.year) - Number(b.year));
-    else list = [...list].sort((a, b) => a.title.localeCompare(b.title));
-    return list;
-  }, [q, status, tag, sort]);
+    return allPubs.filter((p) => (!status || p.status === status) && (!needle || `${p.title} ${p.authors} ${p.venue} ${p.year} ${p.status} ${p.tagList.join(' ')} ${p.abstract ?? ''}`.toLowerCase().includes(needle)));
+  }, [q, status]);
+  const years = useMemo(() => {
+    const ys = [...new Set(shown.map((p) => p.year))].sort((a, b) => Number(b) - Number(a));
+    return ys.map((y) => ({ year: y, list: shown.filter((p) => p.year === y) }));
+  }, [shown]);
 
   // opening /publications#some-paper scrolls to it and gives it a short highlight
   const target = hash.slice(1);
@@ -132,45 +119,30 @@ export function PublicationsExplorer() {
     if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 250);
   }, [target]);
 
-  const filtered = !!(q || status || tag);
-  const count = (s: string) => allPubs.filter((p) => p.status === s).length;
+  const filtered = !!(q || status);
 
   return (
     <>
-      <p className="pub-stats">
-        <b>{allPubs.length}</b> {allPubs.length === 1 ? 'paper' : 'papers'}
-        {statuses.map((s) => <span key={s}> · <b>{count(s)}</b> {s.toLowerCase()}</span>)}
-        {years.length > 0 && <span> · {Math.min(...years) === Math.max(...years) ? Math.min(...years) : `${Math.min(...years)} to ${Math.max(...years)}`}</span>}
-      </p>
+      <div className="pub-tiles" role="group" aria-label="Filter by status">
+        <button className={`pub-tile ${!status ? 'on' : ''}`} onClick={() => set({ status: null })} aria-pressed={!status}>
+          <b>{allPubs.length}</b><span>{allPubs.length === 1 ? 'Paper' : 'Papers'}</span>
+        </button>
+        {statuses.map((s) => (
+          <button key={s} className={`pub-tile ${status === s ? 'on' : ''}`} onClick={() => set({ status: status === s ? null : s })} aria-pressed={status === s}>
+            <b>{count(s)}</b><span>{s}</span>
+          </button>
+        ))}
+      </div>
 
-      <div className="pj-tools">
-        <label className="search">
-          <Search size={17} />
-          <input ref={search} value={q} onChange={(e) => set({ q: e.target.value || null })} placeholder="Search papers  ( / )" aria-label="Search papers" />
-          {q && <button type="button" className="pj-clear" onClick={() => set({ q: null })} aria-label="Clear search"><X size={15} /></button>}
+      <div className="pub-line">
+        <label className="pub-find">
+          <Search size={16} />
+          <input ref={search} value={q} onChange={(e) => set({ q: e.target.value || null })} placeholder="Find a paper  ( / )" aria-label="Search papers" />
+          {q && <button type="button" onClick={() => set({ q: null })} aria-label="Clear search"><X size={15} /></button>}
         </label>
-        <div className="pj-ctl">
-          <select className="pj-sort" value={sort} onChange={(e) => set({ sort: e.target.value === 'newest' ? null : e.target.value })} aria-label="Sort papers">
-            {SORTS.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
-          </select>
-        </div>
-      </div>
-
-      <div className="chips pj-chips" aria-label="Filter by status">
-        <button className={`chip chip-btn ${!status ? 'on' : ''}`} onClick={() => set({ status: null })}>All</button>
-        {statuses.map((s) => <button key={s} className={`chip chip-btn ${status === s ? 'on' : ''}`} onClick={() => set({ status: status === s ? null : s })}>{s} <i>{count(s)}</i></button>)}
-      </div>
-      {tags.length > 0 && (
-        <div className="chips pj-chips" aria-label="Filter by topic">
-          {tags.map((t) => <button key={t} className={`chip chip-btn ${tag === t ? 'on' : ''}`} onClick={() => set({ tag: tag === t ? null : t })}>{t}</button>)}
-        </div>
-      )}
-
-      <div className="pub-bar">
-        <p className="pj-count" aria-live="polite">{shown.length} of {allPubs.length} papers{filtered && <> · <button className="pj-reset" onClick={() => setParams({}, { replace: true })}>clear filters</button></>}</p>
         <span className="pub-spacer" />
         <button className="pub-pill" onClick={() => copyText(allBibtex(shown)).then((ok) => ok && mark('all'))} disabled={!shown.length}>
-          {done === 'all' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy BibTeX{filtered ? ' (shown)' : ' (all)'}</>}
+          {done === 'all' ? <><Check size={14} /> Copied</> : <><Copy size={14} /> Copy BibTeX{filtered ? ' (shown)' : ''}</>}
         </button>
         <button className="pub-pill" onClick={() => downloadText('publications.bib', allBibtex(shown), 'application/x-bibtex')} disabled={!shown.length}>
           <Download size={14} /> .bib
@@ -178,15 +150,20 @@ export function PublicationsExplorer() {
       </div>
 
       {shown.length === 0 ? (
-        <p className="muted">Nothing matches. Try another word or <button className="pj-reset" onClick={() => setParams({}, { replace: true })}>clear the filters</button>.</p>
+        <p className="muted" aria-live="polite">Nothing matches. <button className="pub-reset" onClick={() => setParams({}, { replace: true })}>Clear the filters</button>.</p>
       ) : (
-        <ol className="pubs">
-          {shown.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 0.05}>
-              <PubCard p={p} flash={target === p.slug} />
-            </Reveal>
-          ))}
-        </ol>
+        years.map(({ year, list }) => (
+          <section key={year} className="pub-year-group" aria-label={year}>
+            <h3 className="pub-year-head"><span>{year}</span><i /><em>{list.length}</em></h3>
+            <ol className="pubs">
+              {list.map((p, i) => (
+                <Reveal key={p.slug} delay={i * 0.05}>
+                  <PubCard p={p} flash={target === p.slug} />
+                </Reveal>
+              ))}
+            </ol>
+          </section>
+        ))
       )}
     </>
   );
