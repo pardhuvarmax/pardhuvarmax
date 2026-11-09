@@ -8,6 +8,7 @@ import { experience, formatDate, honors, news, posts, projects, publications, sa
 import { glow, Reveal, SectionHead } from './Reveal';
 import { ProjectCard } from './ProjectsView';
 import { PubCard } from './PublicationsView';
+import { Briefing, ResearchBoard } from './ResearchBoard';
 import { allPubs } from '../lib/publications';
 import { allProjects, homeProjects, repoOf, useGithubStats } from '../lib/projects';
 import { SpiderSprite, type Frame } from './spiderman';
@@ -555,25 +556,17 @@ export function Research() {
       <SectionHead kicker="01 · Research" title={<>What I <em>study</em></>}>
         {site.researchStatement[0]}
       </SectionHead>
-      <div className="bento">
-        {site.interests.map((t, i) => (
-          <Reveal key={t} delay={(i % 3) * 0.06} className={`bento-cell ${i === 0 || i === 3 ? 'wide' : ''}`}>
-            <div className="glow" onPointerMove={glow}>
-              <span className="bento-n">{String(i + 1).padStart(2, '0')}</span>
-              <h3>{t}</h3>
-            </div>
-            {/arch/i.test(t) && /void/i.test(t) && (
-              <span className="distro-logos" aria-hidden="true">
-                <i className="distro arch"><ArchLogo /></i>
-                <i className="distro void"><VoidLogo /></i>
-              </span>
-            )}
-          </Reveal>
-        ))}
-      </div>
-      {site.researchStatement.slice(1).map((p, i) => (
-        <Reveal key={i}><p className="prose-p">{p}</p></Reveal>
-      ))}
+      <ResearchBoard
+        extra={(t) =>
+          /arch/i.test(t) && /void/i.test(t) ? (
+            <span className="distro-logos" aria-hidden="true">
+              <i className="distro arch"><ArchLogo /></i>
+              <i className="distro void"><VoidLogo /></i>
+            </span>
+          ) : null
+        }
+      />
+      <Briefing />
     </section>
   );
 }
