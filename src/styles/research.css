@@ -48,12 +48,4 @@
 @keyframes caseScan { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 0; } }
 @media (hover: none) { .redact::after { animation-delay: calc(0.6s + var(--i, 0) * 0.12s); } }
 
-.briefing { margin-top: 64px; padding: 24px 28px 30px; border: 2px solid var(--ink); background: var(--surface); box-shadow: 5px 5px 0 var(--ink); }
-.briefing header { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 3px double var(--ink); font: 700 0.7rem/1 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.14em; color: var(--muted); }
-.briefing h3 { margin: 18px 0 4px; font-family: var(--display, 'Archivo', 'Arial Black', sans-serif); font-weight: 800; font-size: clamp(1.9rem, 4.4vw, 2.8rem); line-height: 1.05; letter-spacing: -0.025em; }
-.brief-by { margin: 0; font: 500 0.74rem/1.4 var(--mono, 'JetBrains Mono', ui-monospace, monospace); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.brief-body { columns: 2 300px; column-gap: 42px; column-rule: 1px solid var(--line); margin-top: 20px; font-size: 1.02rem; line-height: 1.72; text-align: justify; hyphens: auto; }
-.brief-body p { margin: 0 0 1em; }
-.brief-body p:first-child::first-letter { float: left; padding: 6px 12px 0 0; font: 800 4.4rem/0.8 var(--display, 'Archivo', 'Arial Black', sans-serif); color: #c4161c; }
-
 @media (prefers-reduced-motion: reduce) { .dossier, .dossier-scrim, .case-scan { animation: none; } .case-stamp { animation: none; opacity: 0.85; transform: rotate(-12deg); } .redact::after { animation: none; transform: scaleX(0); } }

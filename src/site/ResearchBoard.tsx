@@ -150,22 +150,3 @@ export function ResearchBoard({ extra }: { extra?: (title: string) => ReactNode 
     </>
   );
 }
-
-/** The research statement set as a newspaper briefing: byline, dateline, two columns and a drop cap. */
-export function Briefing() {
-  const paras = site.researchStatement as string[];
-  const today = formatDate(new Date().toISOString().slice(0, 10));
-  return (
-    <article className="briefing">
-      <header>
-        <span className="brief-kicker">BRIEFING · RESEARCH DESK</span>
-        <span className="brief-date">{today}</span>
-      </header>
-      <h3>The case so far</h3>
-      <p className="brief-by">By {site.name} · {String(site.location || '').split(',')[0] || 'Hyderabad'}</p>
-      <div className="brief-body">
-        {paras.slice(1).map((p, i) => <p key={i}>{p}</p>)}
-      </div>
-    </article>
-  );
-}

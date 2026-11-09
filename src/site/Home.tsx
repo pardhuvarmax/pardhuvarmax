@@ -8,7 +8,7 @@ import { experience, formatDate, honors, news, posts, projects, publications, sa
 import { glow, Reveal, SectionHead } from './Reveal';
 import { ProjectCard } from './ProjectsView';
 import { PubCard } from './PublicationsView';
-import { Briefing, ResearchBoard } from './ResearchBoard';
+import { ResearchBoard } from './ResearchBoard';
 import { allPubs } from '../lib/publications';
 import { allProjects, homeProjects, repoOf, useGithubStats } from '../lib/projects';
 import { SpiderSprite, type Frame } from './spiderman';
@@ -566,7 +566,9 @@ export function Research() {
           ) : null
         }
       />
-      <Briefing />
+      {site.researchStatement.slice(1).map((p, i) => (
+        <Reveal key={i}><p className="prose-p">{p}</p></Reveal>
+      ))}
     </section>
   );
 }
