@@ -101,10 +101,10 @@
 .pub-latest b { margin-right: 8px; padding: 2px 7px; background: var(--text); color: var(--bg, #fff); font: 700 0.62rem/1.4 var(--mono, monospace); letter-spacing: 0.1em; text-transform: uppercase; }
 .pub-latest a { color: var(--text); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .pub-latest time { margin-left: 8px; font: 500 0.72rem/1 var(--mono, monospace); opacity: 0.7; }
-.pubd-news { position: relative; list-style: none; margin: 0; padding: 0 0 0 26px; border-left: 2px solid var(--line, currentColor); }
+.pubd-news { position: relative; list-style: none; margin: 0; padding: 0 0 0 30px; }
 .pubd-news li { position: relative; padding: 0 0 22px; }
 .pubd-news li:last-child { padding-bottom: 0; }
-.pubd-news li::before { content: ''; position: absolute; left: -33px; top: 3px; width: 12px; height: 12px; border: 2px solid var(--text); background: var(--bg, #fff); }
+.pubd-news li::before { content: ''; position: absolute; left: -30px; top: 3px; width: 12px; height: 12px; border: 2px solid var(--text); background: var(--bg, #fff); }
 .pubd-news li.latest::before { background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent); }
 .pubd-news time { display: block; margin-bottom: 4px; font: 700 0.68rem/1 var(--mono, monospace); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .pubd-news p { margin: 0; line-height: 1.55; }
