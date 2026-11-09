@@ -42,10 +42,6 @@
       "code": "https://github.com/pardhuvarmax/rlae-research",
       "news": [
         {
-          "date": "2026-04-26",
-          "text": "Work started on a second paper."
-        },
-        {
           "date": "2026-03",
           "text": "Preprint posted on arXiv, with the code and experiments in the rlae-research repository.",
           "link": "https://arxiv.org/abs/2603.02934",
