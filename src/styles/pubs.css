@@ -53,5 +53,4 @@
 .pub-life-track { display: inline-flex; gap: 4px; }
 .pub-life-track i { width: 26px; height: 5px; background: color-mix(in srgb, var(--text) 18%, transparent); }
 .pub-life-track i.on { background: var(--text); }
-.pub-pill.cited { border-style: dashed; }
 .pub-card:focus-visible { outline: 3px dashed var(--text); outline-offset: 3px; }

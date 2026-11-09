@@ -62,36 +62,10 @@ function Lifecycle({ status }: { status: string }) {
   );
 }
 
-/** How many other works cite it, from OpenAlex. Asked once per DOI per tab and kept quietly: nothing is shown if it fails or is zero. */
-function useCited(p: Pub) {
-  const key = p.doi || (p.arxiv ? `10.48550/arXiv.${p.arxiv}` : '');
-  const [n, setN] = useState<number | null>(() => {
-    try { const v = sessionStorage.getItem(`pubcited:${key}`); return v === null ? null : Number(v); } catch { return null; }
-  });
-  useEffect(() => {
-    if (!key || n !== null) return;
-    const ac = new AbortController();
-    const t = setTimeout(() => ac.abort(), 6000);
-    fetch(`https://api.openalex.org/works/doi:${encodeURIComponent(key)}?select=cited_by_count`, { signal: ac.signal })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((j) => {
-        if (j && typeof j.cited_by_count === 'number') {
-          try { sessionStorage.setItem(`pubcited:${key}`, String(j.cited_by_count)); } catch { /* private mode */ }
-          setN(j.cited_by_count);
-        }
-      })
-      .catch(() => undefined)
-      .finally(() => clearTimeout(t));
-    return () => { ac.abort(); clearTimeout(t); };
-  }, [key, n]);
-  return { n, href: key ? `https://openalex.org/works/doi:${key}` : '' };
-}
-
 export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
   const [open, setOpen] = useState<'' | 'cite' | 'abstract'>('');
   const [fmt, setFmt] = useState<(typeof CITE_FORMATS)[number]['id']>('bibtex');
   const [done, mark] = useDone();
-  const cited = useCited(p);
   const citation = CITE_FORMATS.find((f) => f.id === fmt)!.make(p);
   const permalink = () => `${location.origin}/publications#${p.slug}`;
   const toggle = (k: 'cite' | 'abstract') => setOpen((o) => (o === k ? '' : k));
@@ -128,7 +102,6 @@ export function PubCard({ p, flash = false }: { p: Pub; flash?: boolean }) {
             {p.pdfUrl && <a className="pub-pill" href={safeHref(p.pdfUrl)} target="_blank" rel="noopener noreferrer"><FileText size={14} /> PDF</a>}
             {p.doiUrl && <a className="pub-pill" href={safeHref(p.doiUrl)} target="_blank" rel="noopener noreferrer">DOI</a>}
             {p.codeUrl && <a className="pub-pill" href={safeHref(p.codeUrl)} target="_blank" rel="noopener noreferrer">Code</a>}
-            {cited.n !== null && cited.n > 0 && <a className="pub-pill cited" href={cited.href} target="_blank" rel="noopener noreferrer" title="Citation count from OpenAlex">Cited by {cited.n}</a>}
             <span className="pub-spacer" />
             {p.abstract && (
               <button className={`pub-pill ${open === 'abstract' ? 'on' : ''}`} onClick={() => toggle('abstract')} aria-expanded={open === 'abstract'}>
