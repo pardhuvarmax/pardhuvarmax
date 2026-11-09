@@ -8,6 +8,7 @@ export interface ProjectInput {
   description: string;
   lang: string;
   url: string;
+  private?: boolean; // the repository is private: no link, no GitHub numbers
   status?: string;
   featured?: boolean;
   date?: string;

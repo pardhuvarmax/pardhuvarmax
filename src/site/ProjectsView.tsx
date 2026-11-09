@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowUpRight, LayoutGrid, List, Search, Star, X } from 'lucide-react';
+import { ArrowUpRight, LayoutGrid, List, Lock, Search, Star, X } from 'lucide-react';
 import { safeHref } from '../lib/content';
 import { ago, allProjects, featuredFirst, repoOf, useGithubStats, type Project, type RepoStats } from '../lib/projects';
 import { glow, Reveal } from './Reveal';
@@ -59,7 +59,7 @@ export function ProjectCard({ p, stats, wide = false }: { p: Project; stats?: Re
         </span>
         <span className="pj-meta">
           {stats && stats.stars > 0 && <span className="pj-stars" title={`${stats.stars} stars on GitHub`}><Star size={13} /> {stats.stars}</span>}
-          <a className="pj-ext" href={repo} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on GitHub`}><ArrowUpRight size={18} /></a>
+          {p.private ? <span className="pj-ext pj-private" title="Private repository" aria-label="Private repository"><Lock size={16} /></span> : <a className="pj-ext" href={repo} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} on GitHub`}><ArrowUpRight size={18} /></a>}
         </span>
       </div>
       <h3><Link className="pj-link" to={`/projects/${p.slug}`}>{p.name}</Link></h3>

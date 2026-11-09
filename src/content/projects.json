@@ -170,6 +170,22 @@
       "links": [],
       "relatedPosts": [],
       "logo": "/uploads/pubs/breachpoint.webp"
+    },
+    {
+      "name": "ushell",
+      "description": "A chip-agnostic embedded shell and diagnostic environment for microcontrollers. The repository is private for now.",
+      "status": "Prototype",
+      "featured": false,
+      "date": "2026-09",
+      "lang": "C",
+      "url": "",
+      "private": true,
+      "tags": [
+        "embedded",
+        "shell",
+        "c"
+      ],
+      "body": "ushell is a small shell and diagnostic environment meant to run on microcontrollers regardless of the chip.\n\nThe repository is private at the moment, so there is no link and nothing more to show yet."
     }
   ]
 }
