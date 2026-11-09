@@ -12,7 +12,7 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const clip = (s: string, n = 160) => (s.length <= n ? s : s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…')
 const abs = (u: string) => (/^https?:/i.test(u) ? u : SITE + (u.startsWith('/') ? u : '/' + u))
 
-interface Page { url: string; title: string; description: string; image: string; type: 'website' | 'article'; date?: string }
+interface Page { url: string; title: string; description: string; image: string; type: 'website' | 'article'; date?: string; jsonld?: unknown }
 
 function collect(): { pages: Page[]; posts: (Page & { slug: string })[]; projects: (Page & { slug: string })[] } {
   const site = read('src/content/site.json')
@@ -51,12 +51,32 @@ function collect(): { pages: Page[]; posts: (Page & { slug: string })[]; project
     type: 'website' as const,
     date: undefined,
   }))
+  // machine-readable list of the papers, so search engines can show them as scholarly articles
+  const pubItems: { title: string; authors: string; year: string; url: string; venue: string; status: string }[] = read('src/content/publications.json').items ?? []
+  const pubLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: pubItems.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'ScholarlyArticle',
+        headline: p.title,
+        name: p.title,
+        author: p.authors.split(/\s+and\s+|;|&/i).map((a) => ({ '@type': 'Person', name: a.trim() })).filter((a) => a.name),
+        datePublished: p.year,
+        url: p.url,
+        description: p.venue,
+        ...(p.status === 'In preparation' ? { creativeWorkStatus: 'Draft' } : {}),
+      },
+    })),
+  }
   const firstCover = cassette.albums?.[0]?.cover || cassette.albums?.[0]?.tracks?.[0]?.cover || photo
   const pages: Page[] = [
     { url: '/', title: `${name} | Researcher`, description: clip(`${site.role}. ${site.headline}`), image: photo, type: 'website' },
     { url: '/me', title: `Me | ${name}`, description: clip(site.bio?.[0] || site.headline), image: photo, type: 'website' },
     { url: '/research', title: `Research | ${name}`, description: clip(site.researchStatement?.[0] || site.headline), image: photo, type: 'website' },
-    { url: '/publications', title: `Publications | ${name}`, description: `Publications and preprints by ${name}.`, image: photo, type: 'website' },
+    { url: '/publications', title: `Publications | ${name}`, description: `Publications and preprints by ${name}.`, image: photo, type: 'website', jsonld: pubLd },
     { url: '/projects', title: `Projects | ${name}`, description: `Open-source systems and research code by ${name}.`, image: photo, type: 'website' },
     { url: '/blog', title: `Writing | ${name}`, description: `Working notes and writing by ${name}.`, image: photo, type: 'website' },
     { url: '/cassette', title: `Cassette | ${name}`, description: clip(cassette.intro || `Music on repeat, ${name}.`), image: firstCover, type: 'website' },
@@ -80,6 +100,7 @@ function head(p: Page, site: { name: string }): string {
     `<meta name="twitter:description" content="${esc(p.description)}" data-seo />`,
     `<meta name="twitter:image" content="${esc(abs(p.image))}" data-seo />`,
   ]
+  if (p.jsonld) tags.push(`<script type="application/ld+json" data-seo>${JSON.stringify(p.jsonld).replace(/</g, '\\u003c')}</script>`)
   if (p.date) tags.push(`<meta property="article:published_time" content="${esc(p.date)}" data-seo />`)
   return tags.join('\n    ')
 }

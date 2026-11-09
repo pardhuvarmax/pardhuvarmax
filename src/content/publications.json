@@ -7,7 +7,9 @@
       "year": "2026",
       "status": "Preprint",
       "url": "https://www.preprints.org/manuscript/202610.2818",
-      "linkLabel": "Preprints.org"
+      "linkLabel": "Preprints.org",
+      "code": "https://github.com/pardhuvarmax/kernel-borderlands",
+      "tags": "eBPF, Security, Linux"
     },
     {
       "title": "On the Structural Limitations of Weight-Based Neural Adaptation and the Role of Reversible Behavioral Learning",
@@ -16,7 +18,8 @@
       "year": "2026",
       "status": "Preprint",
       "url": "https://arxiv.org/abs/2603.02934",
-      "linkLabel": "arXiv"
+      "linkLabel": "arXiv",
+      "tags": "Neural adaptation, Behavioral learning"
     },
     {
       "title": "Temporal and Adaptive Dynamics of Latent Behavioral State Machines",
@@ -25,7 +28,8 @@
       "year": "2026",
       "status": "In preparation",
       "url": "https://github.com/pardhuvarmax/lbsm-research",
-      "linkLabel": "Code"
+      "linkLabel": "Code",
+      "tags": "State machines, Adaptive dynamics"
     }
   ]
 }

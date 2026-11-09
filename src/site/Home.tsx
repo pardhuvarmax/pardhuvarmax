@@ -7,6 +7,8 @@ import { ArrowDown, ArrowRight, ArrowUpRight, FileText, Mail } from 'lucide-reac
 import { experience, formatDate, honors, news, posts, projects, publications, safeHref, site, skills } from '../lib/content';
 import { glow, Reveal, SectionHead } from './Reveal';
 import { ProjectCard } from './ProjectsView';
+import { PubCard } from './PublicationsView';
+import { allPubs } from '../lib/publications';
 import { allProjects, homeProjects, repoOf, useGithubStats } from '../lib/projects';
 import { SpiderSprite, type Frame } from './spiderman';
 
@@ -581,17 +583,9 @@ export function Publications() {
     <section id="publications" className="wrap sec">
       <SectionHead kicker="02 · Publications" title={<>Papers &amp; <em>preprints</em></>} />
       <ol className="pubs">
-        {publications.items.map((p, i) => (
-          <Reveal key={p.title} delay={i * 0.06}>
-            <li className="pub glow" onPointerMove={glow}>
-              <div className="pub-top">
-                <span className={`tag ${p.status === 'Preprint' ? 'tag-ok' : ''}`}>{p.status}</span>
-                <span className="pub-year">{p.year}</span>
-              </div>
-              <h3>{p.title}</h3>
-              <p>{p.authors}. {p.venue}.</p>
-              <a className="link-arrow" href={safeHref(p.url)} target="_blank" rel="noopener noreferrer">{p.linkLabel} <ArrowUpRight size={15} /></a>
-            </li>
+        {allPubs.map((p, i) => (
+          <Reveal key={p.slug} delay={i * 0.06}>
+            <PubCard p={p} />
           </Reveal>
         ))}
       </ol>

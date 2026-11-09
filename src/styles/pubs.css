@@ -1,0 +1,29 @@
+/* Publications: cite panel, links, stats, export */
+.pub-card h3 { display: flex; align-items: flex-start; gap: 10px; scroll-margin-top: 90px; }
+.pub-anchor { flex: none; margin-top: 0.35em; display: inline-grid; place-items: center; width: 26px; height: 26px; border: 1.5px solid transparent; background: transparent; color: var(--muted); cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+.pub-card:hover .pub-anchor, .pub-anchor:focus-visible { opacity: 1; }
+.pub-anchor:hover { border-color: currentColor; color: var(--text); }
+@media (hover: none) { .pub-anchor { opacity: 0.7; } }
+.pub-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.pub-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; }
+.pub-actions .link-arrow { margin-top: 0; }
+.pub-spacer { flex: 1; }
+.pub-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border: 2px solid var(--border, currentColor); background: transparent; color: var(--text); font: 700 0.72rem/1 var(--mono, monospace); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+.pub-pill:hover:not(:disabled), .pub-pill.on { background: var(--text); color: var(--bg, #fff); }
+.pub-pill:disabled { opacity: 0.4; cursor: not-allowed; }
+.pub-pill.on .pub-chev { transform: rotate(180deg); }
+.pub-abstract { margin-top: 14px !important; padding: 14px 16px; border-left: 4px solid var(--accent, currentColor); background: color-mix(in srgb, var(--text) 5%, transparent); color: var(--text) !important; font-size: 0.95rem; line-height: 1.65; }
+.pub-cite { margin-top: 14px; border: 2px solid var(--border, currentColor); }
+.pub-cite-bar { display: flex; align-items: center; gap: 4px; padding: 6px; border-bottom: 2px solid var(--border, currentColor); }
+.pub-cite-bar button { padding: 5px 10px; border: 0; background: transparent; color: var(--text); font: 700 0.72rem/1 var(--mono, monospace); letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
+.pub-cite-bar button.on { background: var(--text); color: var(--bg, #fff); }
+.pub-cite-bar .pub-copy { display: inline-flex; align-items: center; gap: 6px; border: 2px solid var(--border, currentColor); }
+.pub-cite pre { margin: 0; padding: 14px 16px; overflow-x: auto; white-space: pre-wrap; word-break: break-word; font: 500 0.8rem/1.6 var(--mono, monospace); color: var(--text); user-select: all; }
+.pub-flash { animation: pubFlash 2.4s ease-out; }
+@keyframes pubFlash { 0%, 30% { box-shadow: 0 0 0 4px var(--accent, currentColor); } 100% { box-shadow: 0 0 0 0 transparent; } }
+.pub-stats { margin: 0 0 18px; font: 500 0.82rem/1.5 var(--mono, monospace); color: var(--muted); }
+.pub-stats b { color: var(--text); }
+.pub-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 4px 0 18px; }
+.pub-bar .pj-count { margin: 0; }
+.chip-btn i { font-style: normal; opacity: 0.6; margin-left: 4px; }
+@media (prefers-reduced-motion: reduce) { .pub-flash { animation: none; } }
