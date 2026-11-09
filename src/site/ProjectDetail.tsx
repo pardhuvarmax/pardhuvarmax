@@ -6,6 +6,9 @@ import { renderMarkdown } from '../lib/markdown';
 import { ago, allProjects, findProject, relatedFor, repoOf, useGithubStats } from '../lib/projects';
 import { LangBar, Sparkline } from './ProjectsView';
 import Terminal from './Terminal';
+import { Holo } from './Holo';
+import { Cover } from './PublicationsView';
+import { pubForProject } from '../lib/publications';
 import '../styles/projects.css';
 
 export default function ProjectDetail() {
@@ -31,6 +34,7 @@ export default function ProjectDetail() {
 
   const st = stats[repoOf(p.url) ?? ''];
   const rel = relatedFor(p);
+  const logo = pubForProject(p);
   const idx = allProjects.indexOf(p);
   const prev = allProjects[idx - 1];
   const next = allProjects[idx + 1];
@@ -70,6 +74,8 @@ export default function ProjectDetail() {
           )}
         </div>
 
+        <div className="pj-rail">
+        {logo && <div className="pj-logo"><Holo image={logo.cover}><Cover p={logo} /></Holo></div>}
         <aside className="pj-side" aria-label="Project facts">
           {st ? (
             <>
@@ -96,6 +102,7 @@ export default function ProjectDetail() {
           )}
           {p.date && <p className="pj-date">Dated {formatDate(p.date)}</p>}
         </aside>
+        </div>
       </div>
 
       {hasRelated && (

@@ -145,3 +145,9 @@
 .holo.has-img.live .holo-foil { opacity: 1; }
 .holo.has-img .holo-glare { background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.35), transparent 40%); mix-blend-mode: screen; transform: translateZ(6px); }
 .holo.has-img .holo-spark { display: none; }
+
+/* the engraved logo on a project page: its own card, above the GitHub card */
+.pj-rail { display: grid; gap: 26px; align-content: start; }
+.site .pj-logo { padding: 20px; border: 2px solid var(--ink); background: var(--surface); box-shadow: 5px 5px 0 var(--accent); }
+.pj-logo .holo { max-width: 220px; margin: 0 auto; }
+.pj-logo .pub-cover { width: 100%; height: auto; aspect-ratio: 3 / 4; border-width: 2px; }

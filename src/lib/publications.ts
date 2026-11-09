@@ -176,3 +176,6 @@ export function relatedFor(p: Pub) {
   const relPosts = posts.filter((post) => projs.some((pr) => norm(`${post.title} ${post.summary}`).includes(norm(pr.name))));
   return { projects: projs, posts: relPosts };
 }
+
+/** The paper whose repository is this project, if any: its artwork doubles as the project's logo. */
+export const pubForProject = (project: { url: string }) => allPubs.find((p) => p.cover && (p.url === project.url || p.codeUrl === project.url));
