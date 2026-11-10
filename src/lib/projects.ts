@@ -15,6 +15,7 @@ export interface ProjectInput {
   tags?: string[];
   cover?: string;
   logo?: string; // engraved plate on the project page
+  notes?: { key: string; note: string }[]; // code blocks: a name or exact piece of code → explanation shown on hover
   cards?: string; // research cards it belongs under, by any part of the card title, e.g. "trustworthy, linux internals"
   install?: string;
   demo?: string;
@@ -26,6 +27,7 @@ export interface Project extends ProjectInput {
   slug: string;
   langs: string[];
   tagList: string[]; // explicit tags, lower-case
+  noteMap: Record<string, string>; // notes by code key
 }
 
 export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -35,6 +37,7 @@ export const allProjects: Project[] = (raw.items as ProjectInput[]).map((p) => (
   slug: slugify(p.name),
   langs: (p.lang || '').split(',').map((l) => l.trim()).filter(Boolean),
   tagList: (p.tags ?? []).map((t) => t.trim().toLowerCase()).filter(Boolean),
+  noteMap: Object.fromEntries((p.notes ?? []).filter((n) => n.key?.trim() && n.note?.trim()).map((n) => [n.key.trim(), n.note.trim()])),
 }));
 
 export const findProject = (slug: string | undefined) => allProjects.find((p) => p.slug === slug);

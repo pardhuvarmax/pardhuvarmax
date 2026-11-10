@@ -138,7 +138,7 @@ export const COLLECTIONS: Collection[] = [
         fields: [
           { key: 'name', label: 'Name', type: 'text', help: 'The page address comes from this, e.g. kernel-borderlands becomes /projects/kernel-borderlands.' },
           { key: 'description', label: 'Short description', type: 'textarea', help: 'One or two sentences, shown on the cards and in link previews.' },
-          { key: 'status', label: 'Status tag', type: 'select', options: ['', 'Active', 'Research', 'Prototype', 'Archived', 'Contribution', 'Hobby'], help: 'Leave blank for no tag.' },
+          { key: 'status', label: 'Status tag', type: 'select', options: ['', 'Active', 'Research', 'Prototype', 'Archived', 'Contribution', 'Hobby', 'Event', 'Inactive'], help: 'Leave blank for no tag.' },
           { key: 'featured', label: 'Featured', type: 'boolean', help: 'Featured projects come first, get a wider card, and are the ones shown on the home page.' },
           { key: 'date', label: 'Date (YYYY-MM, optional)', type: 'text', help: 'Used for the Newest sort.' },
           { key: 'lang', label: 'Languages (2-4, comma separated)', type: 'text' },
@@ -148,6 +148,16 @@ export const COLLECTIONS: Collection[] = [
           { key: 'tags', label: 'Tags', type: 'strings', help: 'Used for filtering and for linking related projects and posts.' },
           { key: 'cover', label: 'Cover image (optional)', type: 'image' },
           { key: 'logo', label: 'Logo plate (optional)', type: 'image', help: 'A portrait picture, about 3:4, usually the logo on black. Shown on the project page as an engraved metal plate that tilts with the cursor.' },
+          {
+            key: 'notes',
+            label: 'Code notes (optional)',
+            type: 'list',
+            titleKey: 'key',
+            fields: [
+              { key: 'key', label: 'Code', type: 'text', help: 'A function, constant or variable name from a code block in the write-up, or an exact piece of code or comment, e.g. vTaskDelay, 150 or // non-blocking. A plain name is coloured by its kind; anything else is matched as typed.' },
+              { key: 'note', label: 'Explanation', type: 'textarea', rows: 3, help: 'Shown when a visitor hovers or taps that code. Also findable from the search bar with code: followed by a word.' },
+            ],
+          },
           { key: 'install', label: 'Quick start (optional)', type: 'textarea', rows: 4, help: 'Commands shown in a copyable box on the project page, one per line.' },
           { key: 'demo', label: 'Terminal replay (optional)', type: 'textarea', rows: 8, help: 'An animated terminal on the project page. Start a line with $ to have it typed as a command; any other line is printed as output; # lines are comments. Leave empty to replay the quick start instead.' },
           { key: 'body', label: 'Write-up (Markdown)', type: 'textarea', rows: 14, help: 'The long description on the project page: the problem, the approach, results. Headings, lists, links and code blocks work.' },

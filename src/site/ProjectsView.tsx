@@ -15,7 +15,7 @@ export function LangBar({ langs, legend = false }: { langs: { name: string; pct:
     <div className="pj-langs">
       <div className="pj-langbar" role="img" aria-label={langs.map((l) => `${l.name} ${l.pct}%`).join(', ')}>
         {langs.map((l, i) => (
-          <i key={l.name} title={`${l.name} ${l.pct}%`} style={{ width: `${l.pct}%`, background: SEG[i % SEG.length], opacity: i < 4 ? 1 : 0.5 }} />
+          <i key={l.name} data-tip={`${l.name} ${l.pct}%`} style={{ width: `${l.pct}%`, background: SEG[i % SEG.length], opacity: i < 4 ? 1 : 0.5 }} />
         ))}
       </div>
       {legend && (

@@ -17,3 +17,5 @@
 .site .pal-foot kbd { margin-right: 2px; }
 .site .pal-toast { position: fixed; left: 50%; bottom: 28px; z-index: 510; transform: translateX(-50%); padding: 10px 18px; border: 2px solid var(--ink); background: var(--accent); color: var(--on-accent, #fff); font-weight: 700; box-shadow: 4px 4px 0 var(--ink); }
 @media (max-width: 560px) { .site .pal-gr { display: none; } .site .pal-back { padding-top: 8vh; } }
+
+.site .pal-lb.pal-code { font-family: var(--mono); font-size: 0.84rem; max-width: 46%; }
