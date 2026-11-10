@@ -192,3 +192,11 @@ html[data-codenotes="off"] .tk-tip { display: none; }
 .site .pj-langbar i:last-child:not(:first-child):hover::after { transform: none; }
 /* the card's stretched link covers everything (z-index 1); lift the bar above it so it can be hovered */
 .site .pj-langbar { position: relative; z-index: 2; }
+
+/* Light theme: darker kind colours, dark text on the glass */
+:root[data-theme='light'] { --tk-comment: #0891b2; --tk-value: #e11d48; --tk-string: #65a30d; --tk-logic: #ca8a04; --tk-function: #2563eb; --tk-constant: #d97706; --tk-type: #059669; --tk-keyword: #db2777; --tk-variable: #7c3aed; }
+:root[data-theme='light'] .prose pre .tk-alt { background: color-mix(in srgb, var(--k) 16%, transparent); }
+:root[data-theme='light'] .prose pre .tk-alt.tk-on { color: #111; background: color-mix(in srgb, var(--k) 38%, rgba(255, 255, 255, .5)); box-shadow: 4px 4px 0 #111; border-color: #111; }
+:root[data-theme='light'] .tk-tip.tk-alt { background: color-mix(in srgb, var(--c) 42%, rgba(255, 255, 255, .78)); color: #111; border-color: #111; box-shadow: 6px 6px 0 #111; text-shadow: none; }
+:root[data-theme='light'] .tk-tip.tk-alt .tk-head code, :root[data-theme='light'] .tk-tip.tk-alt .tk-foot { color: #111; }
+:root[data-theme='light'] .tk-tip.tk-alt .tk-badge { background: #111; color: #fff; }
