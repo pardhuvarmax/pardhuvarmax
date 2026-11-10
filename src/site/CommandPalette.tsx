@@ -110,7 +110,7 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
   const codeItems = useMemo<Item[]>(() => {
     const out: Item[] = [];
     for (const p of allProjects) {
-      for (const [key, note] of Object.entries(p.notes ?? {})) {
+      for (const [key, note] of Object.entries(p.noteMap)) {
         out.push({ id: `code:${p.slug}:${key}`, group: 'Code', label: key, hint: `${p.name} · ${note}`, keywords: `${p.name} ${note}`, badge: noteKind(key, p.body ?? ''), icon: <Code size={16} />, run: () => { setCodeNotes(true); navigate(`/projects/${p.slug}`, { state: { note: key } }); } });
       }
     }

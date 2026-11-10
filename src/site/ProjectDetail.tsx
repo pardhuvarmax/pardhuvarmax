@@ -16,7 +16,7 @@ export default function ProjectDetail() {
   const p = findProject(slug);
   const stats = useGithubStats();
   const bodyRef = useRef<HTMLElement>(null);
-  const rendered = useMemo(() => (p?.body?.trim() ? renderMarkdown(p.body, p.notes) : null), [p]);
+  const rendered = useMemo(() => (p?.body?.trim() ? renderMarkdown(p.body, p.noteMap) : null), [p]);
 
   useCodeTips(bodyRef, rendered);
 
