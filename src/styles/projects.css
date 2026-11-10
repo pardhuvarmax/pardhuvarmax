@@ -19,7 +19,7 @@
 .site .pj-star { color: var(--accent-text); border-color: var(--accent); }
 .site .pj-cover { display: block; width: calc(100% + 48px); max-width: none; margin: -24px -24px 18px; height: auto; object-fit: cover; border-bottom: 2px solid var(--ink); }
 .site .pj-foot { display: grid; gap: 10px; margin-top: auto; padding-top: 18px; }
-.site .pj-langbar { display: flex; height: 12px; border: 1px solid var(--ink); overflow: hidden; }
+.site .pj-langbar { display: flex; height: 12px; border: 1px solid var(--ink); }
 .site .pj-langbar i { display: block; height: 100%; flex: 0 1 auto; min-width: 5px; border-right: 1px solid var(--ink); }
 .site .pj-langbar i:last-child { border-right: 0; }
 .site .pj-langs ul { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 10px 0 0; padding: 0; list-style: none; font-size: 0.78rem; color: var(--muted); }
@@ -180,3 +180,13 @@
 /* Code notes switched off: the code reads as plain code */
 html[data-codenotes="off"] .prose pre .tk { cursor: auto; text-decoration: none; background: none; box-shadow: none; border-color: transparent; padding: 0; margin: 0; transform: none; -webkit-backdrop-filter: none; backdrop-filter: none; color: inherit; }
 html[data-codenotes="off"] .tk-tip { display: none; }
+
+/* Language bar: hover a colour to see which language it is */
+.site .pj-langbar i { position: relative; cursor: default; transition: filter .12s; }
+.site .pj-langbar i:hover { filter: brightness(1.25); z-index: 6; }
+.site .pj-langbar i::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translate(-50%, 3px); white-space: nowrap; pointer-events: none; opacity: 0; background: var(--ink); color: var(--bg); font: 700 0.7rem/1 var(--mono); padding: 5px 8px; border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--accent); transition: opacity .1s, transform .1s; }
+.site .pj-langbar i:hover::after { opacity: 1; transform: translate(-50%, 0); }
+.site .pj-langbar i:first-child::after { left: 0; transform: translate(0, 3px); }
+.site .pj-langbar i:first-child:hover::after { transform: none; }
+.site .pj-langbar i:last-child:not(:first-child)::after { left: auto; right: 0; transform: translate(0, 3px); }
+.site .pj-langbar i:last-child:not(:first-child):hover::after { transform: none; }
