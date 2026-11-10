@@ -4,13 +4,13 @@
 export type Notes = Record<string, string>;
 export type Kind = 'function' | 'constant' | 'type' | 'keyword' | 'variable' | 'comment' | 'value' | 'string' | 'logic';
 
-const KEYWORDS = new Set(['if', 'else', 'for', 'while', 'return', 'break', 'continue', 'const', 'void', 'static', 'new', 'true', 'false', 'NULL', 'nullptr', 'int', 'bool', 'auto', 'struct', 'class', 'sizeof']);
+const KEYWORDS = new Set(['if', 'else', 'for', 'while', 'return', 'break', 'continue', 'const', 'void', 'static', 'new', 'true', 'false', 'NULL', 'nullptr', 'int', 'bool', 'auto', 'struct', 'class', 'sizeof', 'def', 'import', 'from', 'try', 'except', 'with', 'in', 'not', 'and', 'or', 'is', 'global', 'raise', 'elif', 'lambda', 'func', 'switch', 'case', 'go', 'defer', 'var', 'readonly', 'property', 'then', 'fi', 'do', 'done']);
 const TYPES = new Set(['String', 'AsyncWebSocket', 'AsyncWebSocketClient', 'AwsEventType', 'AwsFrameInfo', 'StaticJsonDocument', 'DynamicJsonDocument', 'size_t']);
 
 function kindOf(id: string, next: string): Kind {
   if (KEYWORDS.has(id)) return 'keyword';
   if (/_t$/.test(id) || TYPES.has(id)) return 'type';
-  if (/^[A-Z][A-Z0-9]*(_[A-Z0-9]+)+$/.test(id) || /^(ESP|WIFI|WS)_/.test(id)) return 'constant';
+  if (/^[A-Z][A-Z0-9_]{2,}$/.test(id) || /^(ESP|WIFI|WS)_/.test(id)) return 'constant';
   if (next.startsWith('(')) return 'function';
   return 'variable';
 }
@@ -24,9 +24,9 @@ const rx = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // Notes whose key is not a plain identifier explain a literal piece of code: a comment, a number, a string, an expression.
 function phraseKind(key: string): Kind {
-  if (key.startsWith('//')) return 'comment';
+  if (key.startsWith('//') || key.startsWith('#')) return 'comment';
   if (/^[0-9]/.test(key)) return 'value';
-  if (key.startsWith('"')) return 'string';
+  if (/^["']/.test(key)) return 'string';
   return 'logic';
 }
 
@@ -36,7 +36,7 @@ function annotate(code: string, notes: Notes): string {
     const e = rx(escText(k));
     return (/^\w/.test(k) ? '(?<![\\w])' : '') + e + (/\w$/.test(k) ? '(?![\\w])' : '');
   });
-  const re = new RegExp(`(${lit.length ? lit.join('|') : '(?!)'})|(&[a-z]+;)|(\\/\\/[^\\n]*)|(\"[^\"\\n]*\")|([A-Za-z_][A-Za-z0-9_]*)`, 'g');
+  const re = new RegExp(`(${lit.length ? lit.join('|') : '(?!)'})|(&[a-z]+;)|((?:\\/\\/|#)[^\\n]*)|(\"[^\"\\n]*\"|'[^'\\n]*')|([A-Za-z_][A-Za-z0-9_]*)`, 'g');
   const byEsc = new Map(phrases.map((k) => [escText(k), k]));
   return code.replace(re, (m, lt: string | undefined, _ent, _cmt, _str, id: string | undefined, off: number) => {
     if (lt) {
