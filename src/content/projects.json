@@ -285,7 +285,7 @@
     },
     {
       "name": "phishvault",
-      "status": "Prototype",
+      "status": "Inactive",
       "featured": false,
       "date": "2025-05",
       "lang": "Go, TypeScript, Rust",
