@@ -139,7 +139,7 @@
 .prose pre .tk-variable.tk-on { background: var(--tk-variable); }
 .prose pre .tk:focus-visible { box-shadow: 0 0 0 2px var(--text, #fff); }
 
-.tk-tip { position: fixed; z-index: 400; max-width: min(340px, calc(100vw - 24px)); padding: 12px 14px; background: #0b0b0d; color: #f3f3f5; border: 2px solid var(--c, #fff); box-shadow: 5px 5px 0 var(--c, #fff); font-family: var(--sans, system-ui, sans-serif); pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .12s, transform .12s; }
+.tk-tip { position: fixed; z-index: 400; max-width: min(430px, calc(100vw - 24px)); padding: 12px 14px; background: #0b0b0d; color: #f3f3f5; border: 2px solid var(--c, #fff); box-shadow: 5px 5px 0 var(--c, #fff); font-family: var(--sans, system-ui, sans-serif); pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .12s, transform .12s; }
 .tk-tip.show { opacity: 1; transform: none; }
 .tk-tip.tk-function { --c: var(--tk-function); }
 .tk-tip.tk-constant { --c: var(--tk-constant); }
@@ -169,3 +169,7 @@
 .tk-tip.tk-value { --c: var(--tk-value); }
 .tk-tip.tk-string { --c: var(--tk-string); }
 .tk-tip.tk-logic { --c: var(--tk-logic); }
+.tk-tip { overflow: hidden; }
+.tk-head { align-items: flex-start; }
+.tk-badge { flex: none; margin-top: 1px; }
+.tk-head code { min-width: 0; overflow-wrap: anywhere; word-break: break-word; line-height: 1.3; }
