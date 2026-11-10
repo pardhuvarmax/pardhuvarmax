@@ -1,4 +1,5 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { useCodeTips } from './codetips';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, GitFork, Lock, Star } from 'lucide-react';
 import { formatDate, safeHref, site } from '../lib/content';
@@ -14,7 +15,10 @@ export default function ProjectDetail() {
   const { slug } = useParams();
   const p = findProject(slug);
   const stats = useGithubStats();
-  const rendered = useMemo(() => (p?.body?.trim() ? renderMarkdown(p.body) : null), [p]);
+  const bodyRef = useRef<HTMLElement>(null);
+  const rendered = useMemo(() => (p?.body?.trim() ? renderMarkdown(p.body, p.notes) : null), [p]);
+
+  useCodeTips(bodyRef, rendered);
 
   useEffect(() => {
     document.title = p ? `${p.name} | ${site.name}` : `Not found | ${site.name}`;
@@ -67,7 +71,7 @@ export default function ProjectDetail() {
             <Terminal key={p.slug} script={(p.demo?.trim() || p.install!.trim())} fromDemo={!!p.demo?.trim()} title={p.demo?.trim() ? 'Demo' : 'Quick start'} />
           )}
           {rendered ? (
-            <article className="prose" dangerouslySetInnerHTML={{ __html: rendered.html }} />
+            <article className="prose" ref={bodyRef} dangerouslySetInnerHTML={{ __html: rendered.html }} />
           ) : (
             <p className="muted">A full write-up is on the way. The repository has the details in the meantime.</p>
           )}

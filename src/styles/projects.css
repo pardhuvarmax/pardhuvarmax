@@ -120,3 +120,59 @@
 .site .chip-carousel:hover .cc-btn:not(.off), .site .cc-btn:focus-visible { opacity: 1; }
 .site .cc-btn.off { visibility: hidden; pointer-events: none; }
 @media (hover: none) { .site .cc-btn { display: none; } }
+
+/* Code notes: a noted token is underlined in its kind colour; hover fills it and opens the explanation */
+:root {
+  --tk-function: #3b82f6; --tk-constant: #f59e0b; --tk-type: #10b981; --tk-keyword: #ec4899; --tk-variable: #a78bfa;
+}
+.prose pre .tk { cursor: help; border-radius: 3px; padding: 0 2px; margin: 0 -2px; text-decoration: underline dotted 2px; text-underline-offset: 4px; outline: none; transition: background .12s, color .12s; }
+.prose pre .tk-function { text-decoration-color: var(--tk-function); }
+.prose pre .tk-constant { text-decoration-color: var(--tk-constant); }
+.prose pre .tk-type { text-decoration-color: var(--tk-type); }
+.prose pre .tk-keyword { text-decoration-color: var(--tk-keyword); }
+.prose pre .tk-variable { text-decoration-color: var(--tk-variable); }
+.prose pre .tk.tk-on { color: #070708; text-decoration: none; }
+.prose pre .tk-function.tk-on { background: var(--tk-function); }
+.prose pre .tk-constant.tk-on { background: var(--tk-constant); }
+.prose pre .tk-type.tk-on { background: var(--tk-type); }
+.prose pre .tk-keyword.tk-on { background: var(--tk-keyword); }
+.prose pre .tk-variable.tk-on { background: var(--tk-variable); }
+.prose pre .tk:focus-visible { box-shadow: 0 0 0 2px var(--text, #fff); }
+
+.tk-tip { position: fixed; z-index: 400; max-width: min(340px, calc(100vw - 24px)); padding: 12px 14px; background: #0b0b0d; color: #f3f3f5; border: 2px solid var(--c, #fff); box-shadow: 5px 5px 0 var(--c, #fff); font-family: var(--sans, system-ui, sans-serif); pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity .12s, transform .12s; }
+.tk-tip.show { opacity: 1; transform: none; }
+.tk-tip.tk-function { --c: var(--tk-function); }
+.tk-tip.tk-constant { --c: var(--tk-constant); }
+.tk-tip.tk-type { --c: var(--tk-type); }
+.tk-tip.tk-keyword { --c: var(--tk-keyword); }
+.tk-tip.tk-variable { --c: var(--tk-variable); }
+.tk-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.tk-badge { background: var(--c); color: #070708; font: 700 10px/1 var(--mono, monospace); letter-spacing: .08em; text-transform: uppercase; padding: 3px 6px; }
+.tk-head code { font: 600 13px var(--mono, monospace); color: var(--c); background: none; padding: 0; }
+.tk-tip p { margin: 0; font-size: 13.5px; line-height: 1.5; }
+.tk-foot { margin-top: 8px; font: 11px var(--mono, monospace); color: #9a9aa3; }
+
+/* Notes on literal code (comments, numbers, strings, expressions): a different motion from identifiers.
+   Wavy underline that flows at rest, and on hover an ink slab springs across behind the text with a hard offset shadow. */
+:root { --tk-comment: #22d3ee; --tk-value: #fb7185; --tk-string: #a3e635; --tk-logic: #f5f5f4; }
+.prose pre .tk-alt { position: relative; isolation: isolate; text-decoration: none; padding: 0 3px; margin: 0 -3px; background-image: linear-gradient(90deg, var(--k) 50%, transparent 50%); background-size: 8px 2px; background-repeat: repeat-x; background-position: 0 100%; animation: tk-flow 1.1s linear infinite; }
+.prose pre .tk-comment { --k: var(--tk-comment); }
+.prose pre .tk-value { --k: var(--tk-value); }
+.prose pre .tk-string { --k: var(--tk-string); }
+.prose pre .tk-logic { --k: var(--tk-logic); }
+.prose pre .tk-alt::before { content: ''; position: absolute; inset: -2px -4px; z-index: -1; background: var(--k); border: 2px solid #070708; box-shadow: 3px 3px 0 var(--k); transform-origin: 0 50%; transform: scaleX(0) skewX(-14deg); border-radius: 2px 14px 2px 14px; transition: transform .38s cubic-bezier(.34, 1.56, .64, 1), box-shadow .38s cubic-bezier(.34, 1.56, .64, 1), border-radius .38s; }
+.prose pre .tk-alt.tk-on { color: #070708; background-image: none; animation: none; }
+.prose pre .tk-alt.tk-on::before { transform: scaleX(1) skewX(-14deg); box-shadow: 4px 4px 0 #070708, 4px 4px 0 2px var(--k); border-radius: 14px 2px 14px 2px; }
+@keyframes tk-flow { to { background-position: 8px 100%; } }
+
+.tk-tip.tk-alt { transform-origin: 0 100%; border-radius: 2px 18px 2px 18px; background: var(--c); color: #070708; border-color: #070708; box-shadow: 6px 6px 0 #070708; }
+.tk-tip.tk-alt.show { animation: tk-pop .45s cubic-bezier(.34, 1.56, .64, 1) both; }
+.tk-tip.tk-comment { --c: var(--tk-comment); }
+.tk-tip.tk-value { --c: var(--tk-value); }
+.tk-tip.tk-string { --c: var(--tk-string); }
+.tk-tip.tk-logic { --c: var(--tk-logic); }
+.tk-tip.tk-alt .tk-badge { background: #070708; color: var(--c); }
+.tk-tip.tk-alt .tk-head code { color: #070708; font-weight: 700; }
+.tk-tip.tk-alt .tk-foot { color: #070708; opacity: .7; }
+@keyframes tk-pop { 0% { opacity: 0; transform: translateY(10px) scale(.7) rotate(-3deg); } 60% { opacity: 1; } 100% { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .prose pre .tk-alt, .tk-tip.tk-alt.show { animation: none; } .prose pre .tk-alt::before { transition: none; } }

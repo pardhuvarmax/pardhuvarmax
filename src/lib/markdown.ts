@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { annotateCode, type Notes } from './codeview';
 
 export interface TocItem {
   id: string;
@@ -30,7 +31,7 @@ const slug = (t: string) =>
     .replace(/^-+|-+$/g, '');
 
 /** Render Markdown to sanitized HTML; h2/h3 get ids and are returned as a table of contents. */
-export function renderMarkdown(md: string): { html: string; toc: TocItem[] } {
+export function renderMarkdown(md: string, notes?: Notes): { html: string; toc: TocItem[] } {
   ensureHook();
   const raw = marked.parse(md, { async: false, gfm: true }) as string;
   const clean = DOMPurify.sanitize(raw, { USE_PROFILES: { html: true } });
@@ -41,7 +42,7 @@ export function renderMarkdown(md: string): { html: string; toc: TocItem[] } {
     toc.push({ id, text, level: Number(lvl) });
     return `<h${lvl} id="${id}">${inner}</h${lvl}>`;
   });
-  return { html, toc };
+  return { html: annotateCode(html, notes), toc };
 }
 
 export function readingTime(md: string): number {

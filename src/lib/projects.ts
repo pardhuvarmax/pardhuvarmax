@@ -15,6 +15,7 @@ export interface ProjectInput {
   tags?: string[];
   cover?: string;
   logo?: string; // engraved plate on the project page
+  notes?: Record<string, string>; // code blocks: identifier → explanation shown on hover
   cards?: string; // research cards it belongs under, by any part of the card title, e.g. "trustworthy, linux internals"
   install?: string;
   demo?: string;
