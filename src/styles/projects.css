@@ -152,16 +152,19 @@
 .tk-tip p { margin: 0; font-size: 13.5px; line-height: 1.5; }
 .tk-foot { margin-top: 8px; font: 11px var(--mono, monospace); color: #9a9aa3; }
 
-/* Notes on literal code (comments, numbers, strings, expressions): translucent tint instead of a solid fill. */
-:root { --tk-comment: #22d3ee; --tk-value: #fb7185; --tk-string: #a3e635; --tk-logic: #e7e5e4; }
-.prose pre .tk-alt { text-decoration: none; padding: 1px 3px; margin: 0 -3px; border-radius: 2px; background: color-mix(in srgb, var(--k) 10%, transparent); box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--k) 55%, transparent); transition: background .15s, box-shadow .15s; }
+/* Notes on literal code (comments, numbers, strings, expressions): coloured frosted glass with hard neo-brutalist edges. */
+:root { --tk-comment: #22d3ee; --tk-value: #fb7185; --tk-string: #a3e635; --tk-logic: #facc15; }
+.prose pre .tk-alt { text-decoration: none; padding: 1px 4px; margin: 0 -4px; border: 2px solid transparent; background: color-mix(in srgb, var(--k) 14%, transparent); box-shadow: inset 0 -2px 0 var(--k); transition: background .15s, border-color .15s, box-shadow .15s, transform .15s; }
 .prose pre .tk-comment { --k: var(--tk-comment); }
 .prose pre .tk-value { --k: var(--tk-value); }
 .prose pre .tk-string { --k: var(--tk-string); }
 .prose pre .tk-logic { --k: var(--tk-logic); }
-.prose pre .tk-alt.tk-on { color: inherit; background: color-mix(in srgb, var(--k) 28%, transparent); box-shadow: inset 0 0 0 2px var(--k); }
+.prose pre .tk-alt.tk-on { color: #fff; background: color-mix(in srgb, var(--k) 42%, transparent); -webkit-backdrop-filter: blur(5px) saturate(1.8); backdrop-filter: blur(5px) saturate(1.8); border-color: var(--k); box-shadow: 4px 4px 0 var(--k); transform: translate(-2px, -2px); position: relative; z-index: 1; }
 
-.tk-tip.tk-alt { background: color-mix(in srgb, var(--c) 16%, rgba(11, 11, 13, .72)); -webkit-backdrop-filter: blur(10px) saturate(1.4); backdrop-filter: blur(10px) saturate(1.4); color: #f3f3f5; border-color: var(--c); box-shadow: 5px 5px 0 color-mix(in srgb, var(--c) 45%, transparent); }
+.tk-tip.tk-alt { background: color-mix(in srgb, var(--c) 40%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.9); backdrop-filter: blur(14px) saturate(1.9); color: #fff; border: 3px solid var(--c); box-shadow: 7px 7px 0 var(--c); text-shadow: 0 1px 0 rgba(0, 0, 0, .55); }
+.tk-tip.tk-alt .tk-badge { background: var(--c); color: #070708; text-shadow: none; }
+.tk-tip.tk-alt .tk-head code { color: #fff; }
+.tk-tip.tk-alt .tk-foot { color: #fff; opacity: .85; }
 .tk-tip.tk-comment { --c: var(--tk-comment); }
 .tk-tip.tk-value { --c: var(--tk-value); }
 .tk-tip.tk-string { --c: var(--tk-string); }
