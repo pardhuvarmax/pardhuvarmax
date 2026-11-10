@@ -167,7 +167,7 @@
       "lang": "Python, HTML, Shell",
       "url": "https://github.com/pardhuvarmax/lease-manager-bpctf2",
       "featured": false,
-      "status": "Archived",
+      "status": "Event",
       "date": "2026-10",
       "tags": [
         "ctf",
@@ -204,7 +204,7 @@
     },
     {
       "name": "ndra-pii",
-      "status": "Active",
+      "status": "Inactive",
       "featured": false,
       "date": "2025-12",
       "lang": "Python, HTML, Dockerfile",
@@ -387,7 +387,7 @@
     },
     {
       "name": "phishtrap",
-      "status": "Archived",
+      "status": "Event",
       "featured": false,
       "date": "2025-04",
       "lang": "Python, HTML, Shell",

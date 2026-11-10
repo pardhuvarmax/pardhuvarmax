@@ -138,7 +138,7 @@ export const COLLECTIONS: Collection[] = [
         fields: [
           { key: 'name', label: 'Name', type: 'text', help: 'The page address comes from this, e.g. kernel-borderlands becomes /projects/kernel-borderlands.' },
           { key: 'description', label: 'Short description', type: 'textarea', help: 'One or two sentences, shown on the cards and in link previews.' },
-          { key: 'status', label: 'Status tag', type: 'select', options: ['', 'Active', 'Research', 'Prototype', 'Archived', 'Contribution', 'Hobby'], help: 'Leave blank for no tag.' },
+          { key: 'status', label: 'Status tag', type: 'select', options: ['', 'Active', 'Research', 'Prototype', 'Archived', 'Contribution', 'Hobby', 'Event', 'Inactive'], help: 'Leave blank for no tag.' },
           { key: 'featured', label: 'Featured', type: 'boolean', help: 'Featured projects come first, get a wider card, and are the ones shown on the home page.' },
           { key: 'date', label: 'Date (YYYY-MM, optional)', type: 'text', help: 'Used for the Newest sort.' },
           { key: 'lang', label: 'Languages (2-4, comma separated)', type: 'text' },
