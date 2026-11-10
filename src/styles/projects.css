@@ -190,3 +190,5 @@ html[data-codenotes="off"] .tk-tip { display: none; }
 .site .pj-langbar i:first-child:hover::after { transform: none; }
 .site .pj-langbar i:last-child:not(:first-child)::after { left: auto; right: 0; transform: translate(0, 3px); }
 .site .pj-langbar i:last-child:not(:first-child):hover::after { transform: none; }
+/* the card's stretched link covers everything (z-index 1); lift the bar above it so it can be hovered */
+.site .pj-langbar { position: relative; z-index: 2; }
