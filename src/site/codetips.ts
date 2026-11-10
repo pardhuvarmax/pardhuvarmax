@@ -58,6 +58,7 @@ export function useCodeTips(root: RefObject<HTMLElement>, dep: unknown) {
     };
 
     const over = (e: Event) => {
+      if (document.documentElement.dataset.codenotes === 'off') return;
       const el = (e.target as HTMLElement).closest?.('.tk') as HTMLElement | null;
       if (el && host.contains(el)) show(el);
     };

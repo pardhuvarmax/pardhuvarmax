@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useCodeTips } from './codetips';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, GitFork, Lock, Star } from 'lucide-react';
 import { formatDate, safeHref, site } from '../lib/content';
 import { renderMarkdown } from '../lib/markdown';
@@ -20,10 +20,28 @@ export default function ProjectDetail() {
 
   useCodeTips(bodyRef, rendered);
 
+
   useEffect(() => {
     document.title = p ? `${p.name} | ${site.name}` : `Not found | ${site.name}`;
     window.scrollTo(0, 0);
   }, [p]);
+
+  // arriving from the palette's code search: scroll to the token and open its note
+  const note = (useLocation().state as { note?: string } | null)?.note;
+  useEffect(() => {
+    if (!note || !bodyRef.current) return;
+    const el = [...bodyRef.current.querySelectorAll<HTMLElement>('.tk')].find((n) => n.dataset.id === note);
+    if (!el) return;
+    // the layout resets the scroll to the top on a route change, so wait for that, then scroll;
+    // scrolling closes any open note, so open this one once the scrolling has stopped
+    const open = () => el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+    const go = setTimeout(() => {
+      window.addEventListener('scrollend', open, { once: true });
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }, 150);
+    const t = setTimeout(open, 1800);
+    return () => { clearTimeout(go); clearTimeout(t); window.removeEventListener('scrollend', open); };
+  }, [note, rendered]);
 
   if (!p) {
     return (

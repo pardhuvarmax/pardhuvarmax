@@ -7,7 +7,7 @@ export type Kind = 'function' | 'constant' | 'type' | 'keyword' | 'variable' | '
 const KEYWORDS = new Set(['if', 'else', 'for', 'while', 'return', 'break', 'continue', 'const', 'void', 'static', 'new', 'true', 'false', 'NULL', 'nullptr', 'int', 'bool', 'auto', 'struct', 'class', 'sizeof', 'def', 'import', 'from', 'try', 'except', 'with', 'in', 'not', 'and', 'or', 'is', 'global', 'raise', 'elif', 'lambda', 'func', 'switch', 'case', 'go', 'defer', 'var', 'readonly', 'property', 'then', 'fi', 'do', 'done']);
 const TYPES = new Set(['String', 'AsyncWebSocket', 'AsyncWebSocketClient', 'AwsEventType', 'AwsFrameInfo', 'StaticJsonDocument', 'DynamicJsonDocument', 'size_t']);
 
-function kindOf(id: string, next: string): Kind {
+export function kindOf(id: string, next: string): Kind {
   if (KEYWORDS.has(id)) return 'keyword';
   if (/_t$/.test(id) || TYPES.has(id)) return 'type';
   if (/^[A-Z][A-Z0-9_]{2,}$/.test(id) || /^(ESP|WIFI|WS)_/.test(id)) return 'constant';
@@ -23,6 +23,10 @@ const escText = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 const rx = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // Notes whose key is not a plain identifier explain a literal piece of code: a comment, a number, a string, an expression.
+export function noteKind(key: string, body: string): Kind {
+  return IDENT.test(key) ? kindOf(key, body.includes(`${key}(`) ? '(' : '') : phraseKind(key);
+}
+
 function phraseKind(key: string): Kind {
   if (key.startsWith('//') || key.startsWith('#')) return 'comment';
   if (/^[0-9]/.test(key)) return 'value';

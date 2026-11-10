@@ -173,3 +173,7 @@
 .tk-head { align-items: flex-start; }
 .tk-badge { flex: none; margin-top: 1px; }
 .tk-head code { min-width: 0; overflow-wrap: anywhere; word-break: break-word; line-height: 1.3; }
+
+/* Code notes switched off: the code reads as plain code */
+html[data-codenotes="off"] .prose pre .tk { cursor: auto; text-decoration: none; background: none; box-shadow: none; border-color: transparent; padding: 0; margin: 0; transform: none; -webkit-backdrop-filter: none; backdrop-filter: none; color: inherit; }
+html[data-codenotes="off"] .tk-tip { display: none; }

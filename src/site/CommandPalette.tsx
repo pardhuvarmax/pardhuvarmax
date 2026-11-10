@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRight, Copy, FileText, FolderGit2, Home, Moon, Music, Search, Sun, ExternalLink } from 'lucide-react';
+import { ArrowRight, Copy, FileText, FolderGit2, Home, Moon, Music, Search, Sun, ExternalLink, Code } from 'lucide-react';
 import { posts, safeHref, site } from '../lib/content';
 import { allProjects } from '../lib/projects';
+import { noteKind } from '../lib/codeview';
+import { apply as applyCodeNotes, codeNotesOn, onCodeNotesChange, setCodeNotes } from '../lib/codenotes';
 import { allBibtex, allPubs, bibtex, copyText } from '../lib/publications';
 import { albums, player } from '../lib/player';
 import '../styles/palette.css';
@@ -15,6 +17,8 @@ interface Item {
   label: string;
   hint?: string;
   keywords?: string;
+  badge?: string; // shown at the right instead of the group
+  keep?: boolean; // leave the palette open after running
   icon: JSX.Element;
   run: () => void;
 }
@@ -37,6 +41,9 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
   const [q, setQ] = useState('');
   const [sel, setSel] = useState(0);
   const [toast, setToast] = useState('');
+  const [notesOn, setNotesOn] = useState(codeNotesOn);
+  useEffect(() => { applyCodeNotes(); }, []);
+  useEffect(() => onCodeNotesChange(() => setNotesOn(codeNotesOn())), []);
   const input = useRef<HTMLInputElement>(null);
   const list = useRef<HTMLUListElement>(null);
 
@@ -91,16 +98,36 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
         out.push({ id: `song:${a}:${i}`, group: 'Songs', label: `Play ${t.title}`, hint: t.artist || al.artist, keywords: `song music listen cassette ${al.title}`, icon: <Music size={16} />, run: () => player.playTrack(a, i) }),
       ),
     );
+    out.push({ id: 'act:code', group: 'Actions', label: `Code notes: ${notesOn ? 'on' : 'off'}`, hint: notesOn ? 'Turn off the hover explanations on code' : 'Turn on the hover explanations on code', badge: 'Code', keywords: 'code snippets notes explain explanations hover tooltips enable disable toggle on off', icon: <Code size={16} />, run: () => { setCodeNotes(!notesOn); flash(notesOn ? 'Code notes off' : 'Code notes on'); } });
+    out.push({ id: 'act:codesearch', group: 'Actions', label: 'Search code explanations', hint: 'Type code: then a function, constant or comment', badge: 'Code', keywords: 'code snippets search functions explain', icon: <Code size={16} />, keep: true, run: () => { setQ('code: '); setTimeout(() => input.current?.focus(), 0); } });
     out.push({ id: 'act:theme', group: 'Actions', label: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme', hint: 'Theme', keywords: 'theme dark light mode colours paper', icon: theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />, run: toggleTheme });
     out.push({ id: 'act:email', group: 'Actions', label: 'Copy email address', hint: site.email, keywords: 'email mail contact copy', icon: <Copy size={16} />, run: () => { navigator.clipboard?.writeText(site.email).then(() => flash('Email copied'), () => flash(site.email)); } });
     for (const l of site.links as { label: string; href: string }[]) out.push({ id: `link:${l.label}`, group: 'Actions', label: `Open ${l.label}`, hint: 'External link', keywords: `link profile ${l.href}`, icon: <ExternalLink size={16} />, run: () => window.open(safeHref(l.href), '_blank', 'noopener,noreferrer') });
     return out;
-  }, [navigate, theme, toggleTheme]);
+  }, [navigate, theme, toggleTheme, notesOn]);
+
+  // "code: ..." lists only the explained bits of code from the project pages
+  const codeItems = useMemo<Item[]>(() => {
+    const out: Item[] = [];
+    for (const p of allProjects) {
+      for (const [key, note] of Object.entries(p.notes ?? {})) {
+        out.push({ id: `code:${p.slug}:${key}`, group: 'Code', label: key, hint: `${p.name} · ${note}`, keywords: `${p.name} ${note}`, badge: noteKind(key, p.body ?? ''), icon: <Code size={16} />, run: () => { setCodeNotes(true); navigate(`/projects/${p.slug}`, { state: { note: key } }); } });
+      }
+    }
+    return out;
+  }, [navigate]);
 
   const results = useMemo(() => {
-    const tokens = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const m = /^\s*code:\s*(.*)$/i.exec(q);
+    const codeMode = !!m;
+    let tokens = (m ? m[1] : q).trim().toLowerCase().split(/\s+/).filter(Boolean);
+    let pool = items;
+    if (codeMode) {
+      pool = codeItems;
+      if (!tokens.length) return codeItems.slice(0, 60);
+    }
     if (!tokens.length) return items.filter((i) => i.group !== 'Songs' || i.id.endsWith(':0')).slice(0, 40);
-    return items
+    return pool
       .map((it, order) => {
         const label = it.label.toLowerCase();
         const hay = `${label} ${(it.hint ?? '').toLowerCase()} ${(it.keywords ?? '').toLowerCase()} ${it.group.toLowerCase()}`;
@@ -110,9 +137,9 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
       })
       .filter((x): x is { it: Item; score: number; order: number } => !!x)
       .sort((a, b) => a.score - b.score || a.order - b.order)
-      .slice(0, 40)
+      .slice(0, codeMode ? 60 : 40)
       .map((x) => x.it);
-  }, [items, q]);
+  }, [items, codeItems, q]);
 
   useEffect(() => setSel(0), [q]);
   useEffect(() => {
@@ -121,7 +148,7 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
 
   const run = (it?: Item) => {
     if (!it) return;
-    setOpen(false);
+    if (!it.keep) setOpen(false);
     it.run();
   };
 
@@ -139,17 +166,17 @@ export default function CommandPalette({ theme, toggleTheme }: { theme: 'light' 
           <div className="pal" role="dialog" aria-modal="true" aria-label="Command palette" onMouseDown={(e) => e.stopPropagation()} onKeyDown={onKeyDown}>
             <label className="pal-in">
               <Search size={18} />
-              <input ref={input} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Go to a page, open a project, play a song..." aria-label="Search" aria-controls="pal-list" aria-activedescendant={results[sel] ? `pal-${results[sel].id}` : undefined} role="combobox" aria-expanded="true" autoComplete="off" spellCheck={false} />
+              <input ref={input} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Go to a page, open a project, or type code..." aria-label="Search" aria-controls="pal-list" aria-activedescendant={results[sel] ? `pal-${results[sel].id}` : undefined} role="combobox" aria-expanded="true" autoComplete="off" spellCheck={false} />
               <kbd>Esc</kbd>
             </label>
             <ul id="pal-list" ref={list} role="listbox" className="pal-list">
-              {results.length === 0 && <li className="pal-empty">Nothing matches. Try &ldquo;play friends&rdquo;, &ldquo;theme&rdquo;, &ldquo;projects&rdquo; or &ldquo;email&rdquo;.</li>}
+              {results.length === 0 && <li className="pal-empty">Nothing matches. Try &ldquo;play friends&rdquo;, &ldquo;theme&rdquo;, &ldquo;projects&rdquo;, &ldquo;email&rdquo; or &ldquo;code&rdquo;. Use &ldquo;code: retry&rdquo; to search code explanations.</li>}
               {results.map((it, i) => (
                 <li key={it.id} id={`pal-${it.id}`} role="option" aria-selected={i === sel} className={i === sel ? 'on' : ''} onMouseMove={() => setSel(i)} onClick={() => run(it)}>
                   <span className="pal-ic">{it.icon}</span>
-                  <span className="pal-lb">{it.label}</span>
+                  <span className={`pal-lb${it.group === 'Code' ? ' pal-code' : ''}`}>{it.label}</span>
                   {it.hint && <span className="pal-ht">{it.hint}</span>}
-                  <span className="pal-gr">{it.group}</span>
+                  <span className="pal-gr">{it.badge ?? it.group}</span>
                 </li>
               ))}
             </ul>
